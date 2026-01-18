@@ -143,6 +143,7 @@ const HomePage: React.FC = () => {
       description: t('service.disaster-support.desc'),
       path: '/disaster-support',
       gradient: 'from-red-500 to-orange-500',
+      
       hasChat: true
     }
   ];
