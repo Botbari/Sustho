@@ -37,6 +37,10 @@ const translations = {
     bn: 'স্বাস্থ্য বিষয়ক রোগ',
     en: 'Health & Disease'
   },
+  'nav.tree-health': {
+  bn: 'গাছের রোগ ও যত্ন',
+  en: 'Tree Health Care'
+},
   'nav.pregnancy-support': {
     bn: 'গর্ভাবস্থা সহায়তা',
     en: 'Pregnancy Support'
@@ -254,6 +258,14 @@ const translations = {
     bn: 'সাশ্রয়ী সাবস্ক্রিপশন প্ল্যান ও দান',
     en: 'Affordable plans and donations'
   },
+  'service.tree-health.title': {
+  bn: 'গাছের রোগ ও যত্ন',
+  en: 'Tree Health Care'
+},
+'service.tree-health.desc': {
+  bn: 'পাতার ছবি বা সমস্যা দিয়ে গাছের রোগ শনাক্ত করুন',
+  en: 'Detect tree diseases using leaf images or symptoms'
+},
 
   // Common elements
   'common.ai-chat-support': {
@@ -546,6 +558,68 @@ const translations = {
     bn: 'সাধারণ স্বাস্থ্য সমস্যা সম্পর্কে জানুন এবং AI সহায়তা নিন। রোগ সিলেক্ট করুন অথবা টেস্ট রিপোর্ট আপলোড করে বিশ্লেষণ করান।',
     en: 'Learn about common health problems and get AI assistance. Select diseases or upload test reports for analysis.'
   },
+    // Tree Health Page
+  'tree-health.title': {
+    bn: 'গাছের স্বাস্থ্য সহায়তা',
+    en: 'Tree Health Support'
+  },
+  'tree-health.subtitle': {
+    bn: 'গাছের রোগ, পোকামাকড় ও যত্ন সম্পর্কে AI ভিত্তিক পরামর্শ নিন',
+    en: 'Get AI-based advice on tree diseases, pests, and proper care'
+  },
+
+  // Tree Health Sections
+  'tree-health.common-problems.title': {
+    bn: 'সাধারণ সমস্যা',
+    en: 'Common Problems'
+  },
+  'tree-health.common-problems.desc': {
+    bn: 'গাছের সাধারণ রোগ ও সমস্যাগুলো সিলেক্ট করুন',
+    en: 'Select common tree diseases and problems'
+  },
+
+  'tree-health.care-tips.title': {
+    bn: 'গাছের যত্ন টিপস',
+    en: 'Tree Care Tips'
+  },
+  'tree-health.care-tips.desc': {
+    bn: 'গাছ সুস্থ রাখার জন্য প্রয়োজনীয় পরামর্শ',
+    en: 'Essential tips to keep trees healthy'
+  },
+
+  'tree-health.medicine.title': {
+    bn: 'চিকিৎসা ও সমাধান',
+    en: 'Treatment & Solutions'
+  },
+  'tree-health.medicine.desc': {
+    bn: 'AI থেকে প্রাপ্ত গাছের চিকিৎসা ও প্রতিকার',
+    en: 'AI-recommended treatments and remedies for trees'
+  },
+
+  // Tree Health Chatbot
+  'tree-health.chat.title': {
+    bn: 'AI গাছ স্বাস্থ্য সহায়ক',
+    en: 'AI Tree Health Assistant'
+  },
+  'tree-health.chat.subtitle': {
+    bn: 'গাছের সমস্যা লিখুন বা ছবি দিয়ে পরামর্শ নিন',
+    en: 'Describe tree problems or upload images for advice'
+  },
+
+  // Tree Health Actions
+  'tree-health.button.send-problem': {
+    bn: 'সমস্যা পাঠান',
+    en: 'Send Problem'
+  },
+  'tree-health.button.analyze': {
+    bn: 'বিশ্লেষণ করুন',
+    en: 'Analyze'
+  },
+  'tree-health.button.get-advice': {
+    bn: 'পরামর্শ নিন',
+    en: 'Get Advice'
+  },
+
 
   // Common Buttons
   'button.send': {
@@ -713,6 +787,8 @@ const translations = {
     en: '© 2025 Sustho Ane Shastho. All rights reserved.'
   }
 };
+
+
 
 interface LanguageProviderProps {
   children: ReactNode;
