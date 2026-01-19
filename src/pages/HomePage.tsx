@@ -23,7 +23,8 @@ import {
   Mic,
   Truck,
   Eye,
-  CreditCard
+  CreditCard,
+  Leaf
 } from 'lucide-react';
 
 const HomePage: React.FC = () => {
@@ -144,7 +145,15 @@ const HomePage: React.FC = () => {
       path: '/disaster-support',
       gradient: 'from-red-500 to-orange-500',
       hasChat: true
-    }
+    },
+    {
+  icon: Leaf,
+ title: t('service.tree-health.title'),
+ description: t('service.tree-health.desc'),
+  path: '/tree-health',
+  gradient: 'from-green-600 to-emerald-600',
+  hasChat: true
+}
   ];
 
   return (

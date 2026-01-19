@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Menu, X, Home, Globe } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { label } from 'framer-motion/client';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,7 +16,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const menuItems = [
     { path: '/', label: t('nav.home'), icon: Home },
-    { path: '/health-disease', label: t('nav.health-disease') },
+    { path: '/health-disease', label: t('nav.health-disease') }, 
+    { path: '/tree-health', label: t('nav.tree-health') },
     { path: '/pregnancy-support', label: t('nav.pregnancy-support') },
     { path: '/period-support', label: t('nav.period-support') },
     { path: '/animal-bite', label: t('nav.animal-bite') },
@@ -32,7 +34,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { path: '/about', label: t('nav.about') },
     { path: '/feedback', label: t('nav.feedback') },
     { path: '/notification', label: t('nav.notification') },
-    { path: '/price', label: t('nav.price') },
+    { path: '/price', label: t('nav.price') }
+
   ];
 
   return (
