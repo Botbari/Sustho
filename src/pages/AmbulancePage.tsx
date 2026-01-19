@@ -2,6 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Truck, MapPin, Phone, Clock, Star, Send, Mic, MicOff, Loader2, User, Bot, Navigation, Search, Filter, Heart, Snowflake, Activity, AlertTriangle, Play, Volume2, ThumbsUp, ThumbsDown, Share2, Copy, CheckCircle, X, Plus, Calendar, Users, Shield } from 'lucide-react';
 import { generateHealthResponse } from '../utils/geminiApi';
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import img1 from "../assets/image/diseases.jpg";
+import img2 from "../assets/image/diseases1.jpg";
+import img3 from "../assets/image/diseases2.jpg";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 interface Message {
   id: string;
@@ -526,22 +533,56 @@ const AmbulancePage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <motion.div 
+          <motion.div
             className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white mb-6 shadow-2xl"
             whileHover={{ scale: 1.1, rotate: 10 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
             <Truck className="w-12 h-12" />
           </motion.div>
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">AmbulanceBot</h1>
+          <h1 className="text-5xl font-bold text-gray-800 mb-4">
+            AmbulanceBot
+          </h1>
           <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            জরুরি অবস্থায় তাৎক্ষণিক এম্বুলেন্স সেবা খুঁজে পান। AI সহায়তা ও লাইভ লোকেশন শেয়ার করুন।
+            জরুরি অবস্থায় তাৎক্ষণিক এম্বুলেন্স সেবা খুঁজে পান। AI সহায়তা ও
+            লাইভ লোকেশন শেয়ার করুন।
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2 space-y-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-3xl shadow-2xl border border-gray-100"
+            >
+              <Swiper
+                pagination={{
+                  dynamicBullets: true,
+                }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
+                modules={[Pagination, Autoplay]}
+                className="mySwiper rounded-3xl"
+                loop={true}
+                speed={1600}
+              >
+                <SwiperSlide className="h-[400px]">
+                  <img src={img1} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="h-[400px]">
+                  <img src={img2} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="h-[400px]">
+                  <img src={img3} alt="" />
+                </SwiperSlide>
+                {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
+              </Swiper>
+            </motion.div>
             {/* Auto Location Share Section */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -556,10 +597,14 @@ const AmbulancePage: React.FC = () => {
                 >
                   <MapPin className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-red-800 mb-2">জরুরি লোকেশন শেয়ার</h2>
-                <p className="text-red-600">তাৎক্ষণিক এম্বুলেন্স সেবার জন্য আপনার অবস্থান শেয়ার করুন</p>
+                <h2 className="text-3xl font-bold text-red-800 mb-2">
+                  জরুরি লোকেশন শেয়ার
+                </h2>
+                <p className="text-red-600">
+                  তাৎক্ষণিক এম্বুলেন্স সেবার জন্য আপনার অবস্থান শেয়ার করুন
+                </p>
               </div>
-              
+
               {!userLocation ? (
                 <div className="text-center">
                   <motion.button
@@ -596,10 +641,15 @@ const AmbulancePage: React.FC = () => {
                         <CheckCircle className="w-6 h-6" />
                       </motion.div>
                       <div className="flex-1">
-                        <h3 className="font-bold text-red-800 mb-2">আপনার বর্তমান অবস্থান:</h3>
-                        <p className="text-red-700 mb-2">{userLocation.address}</p>
+                        <h3 className="font-bold text-red-800 mb-2">
+                          আপনার বর্তমান অবস্থান:
+                        </h3>
+                        <p className="text-red-700 mb-2">
+                          {userLocation.address}
+                        </p>
                         <p className="text-red-600 text-sm">
-                          Latitude: {userLocation.lat.toFixed(6)}, Longitude: {userLocation.lng.toFixed(6)}
+                          Latitude: {userLocation.lat.toFixed(6)}, Longitude:{" "}
+                          {userLocation.lng.toFixed(6)}
                         </p>
                       </div>
                     </div>
@@ -636,7 +686,9 @@ const AmbulancePage: React.FC = () => {
                       className="bg-green-50 rounded-2xl p-6 border border-green-200"
                     >
                       <div className="flex items-start justify-between mb-4">
-                        <h3 className="font-bold text-green-800">শেয়ার করার জন্য প্রস্তুত:</h3>
+                        <h3 className="font-bold text-green-800">
+                          শেয়ার করার জন্য প্রস্তুত:
+                        </h3>
                         <motion.button
                           onClick={copyLocationText}
                           className="bg-green-500 text-white px-4 py-2 rounded-xl font-medium hover:bg-green-600 transition-all flex items-center space-x-2"
@@ -672,10 +724,14 @@ const AmbulancePage: React.FC = () => {
                 >
                   <Search className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-gray-800 mb-2">এম্বুলেন্স সেবা খুঁজুন</h2>
-                <p className="text-gray-600">আপনার এলাকার এম্বুলেন্স সেবা খুঁজে নিন</p>
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                  এম্বুলেন্স সেবা খুঁজুন
+                </h2>
+                <p className="text-gray-600">
+                  আপনার এলাকার এম্বুলেন্স সেবা খুঁজে নিন
+                </p>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -693,8 +749,10 @@ const AmbulancePage: React.FC = () => {
                   className="px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="all">সব জেলা</option>
-                  {districts.map(district => (
-                    <option key={district} value={district}>{district}</option>
+                  {districts.map((district) => (
+                    <option key={district} value={district}>
+                      {district}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -709,8 +767,12 @@ const AmbulancePage: React.FC = () => {
             >
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-800">এম্বুলেন্স সেবা ডিরেক্টরি</h2>
-                  <p className="text-gray-600 text-sm">আপনার এলাকার এম্বুলেন্স সেবা</p>
+                  <h2 className="text-xl font-bold text-gray-800">
+                    এম্বুলেন্স সেবা ডিরেক্টরি
+                  </h2>
+                  <p className="text-gray-600 text-sm">
+                    আপনার এলাকার এম্বুলেন্স সেবা
+                  </p>
                 </div>
                 <motion.button
                   onClick={() => setShowAddAmbulanceModal(true)}
@@ -722,7 +784,7 @@ const AmbulancePage: React.FC = () => {
                   <span>এম্বুলেন্স যোগ করুন</span>
                 </motion.button>
               </div>
-              
+
               <div className="grid md:grid-cols-3 gap-4">
                 {filteredServices.map((service, index) => (
                   <motion.div
@@ -735,7 +797,9 @@ const AmbulancePage: React.FC = () => {
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className="text-base font-bold text-gray-800 mb-1">{service.name}</h3>
+                        <h3 className="text-base font-bold text-gray-800 mb-1">
+                          {service.name}
+                        </h3>
                         <div className="flex items-center space-x-2 mb-1">
                           <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">
                             {service.types[0]}
@@ -753,7 +817,7 @@ const AmbulancePage: React.FC = () => {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="space-y-1 text-xs mb-3">
                       <div className="flex items-center text-gray-600">
                         <MapPin className="w-3 h-3 mr-1 text-red-500" />
@@ -772,7 +836,7 @@ const AmbulancePage: React.FC = () => {
                         <span>{service.responseTime}</span>
                       </div>
                     </div>
-                    
+
                     <div className="flex space-x-1">
                       <motion.a
                         href={`tel:${service.phone}`}
@@ -802,8 +866,10 @@ const AmbulancePage: React.FC = () => {
               transition={{ delay: 0.5 }}
               className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
             >
-              <h2 className="text-xl font-bold text-gray-800 mb-4">এম্বুলেন্সের ধরন</h2>
-              
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                এম্বুলেন্সের ধরন
+              </h2>
+
               <div className="grid md:grid-cols-4 gap-4">
                 {ambulanceTypes.map((type, index) => (
                   <motion.div
@@ -814,13 +880,17 @@ const AmbulancePage: React.FC = () => {
                     className={`text-center bg-gradient-to-br ${type.color} rounded-xl p-4 border border-gray-200 hover:shadow-md transition-all duration-300`}
                     whileHover={{ scale: 1.02, y: -2 }}
                   >
-                    <div className="text-2xl mb-2">
-                      {type.icon}
-                    </div>
-                    <h3 className="font-bold text-gray-800 mb-2 text-sm">{type.type}</h3>
-                    <p className="text-gray-600 text-xs mb-2">{type.description}</p>
+                    <div className="text-2xl mb-2">{type.icon}</div>
+                    <h3 className="font-bold text-gray-800 mb-2 text-sm">
+                      {type.type}
+                    </h3>
+                    <p className="text-gray-600 text-xs mb-2">
+                      {type.description}
+                    </p>
                     <div className="bg-white/60 rounded-lg p-2">
-                      <p className="text-gray-700 font-medium text-xs">{type.price}</p>
+                      <p className="text-gray-700 font-medium text-xs">
+                        {type.price}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
@@ -834,8 +904,10 @@ const AmbulancePage: React.FC = () => {
               transition={{ delay: 0.6 }}
               className="bg-yellow-50 rounded-2xl shadow-lg p-6 border border-yellow-200"
             >
-              <h2 className="text-xl font-bold text-yellow-800 mb-4">জরুরি টিপস</h2>
-              
+              <h2 className="text-xl font-bold text-yellow-800 mb-4">
+                জরুরি টিপস
+              </h2>
+
               <div className="grid md:grid-cols-3 gap-4">
                 {emergencyTips.map((tip, index) => (
                   <motion.div
@@ -845,13 +917,20 @@ const AmbulancePage: React.FC = () => {
                     transition={{ delay: 0.1 * index }}
                     className="bg-white/60 rounded-xl p-4 backdrop-blur-sm border border-yellow-200"
                   >
-                    <div className={`w-8 h-8 bg-gradient-to-r ${tip.color} rounded-lg flex items-center justify-center text-white mb-3 shadow-md`}>
+                    <div
+                      className={`w-8 h-8 bg-gradient-to-r ${tip.color} rounded-lg flex items-center justify-center text-white mb-3 shadow-md`}
+                    >
                       <tip.icon className="w-4 h-4" />
                     </div>
-                    <h3 className="font-bold text-yellow-800 mb-3 text-sm">{tip.title}</h3>
+                    <h3 className="font-bold text-yellow-800 mb-3 text-sm">
+                      {tip.title}
+                    </h3>
                     <div className="space-y-1">
                       {tip.tips.map((item, i) => (
-                        <div key={i} className="text-yellow-700 text-xs flex items-center">
+                        <div
+                          key={i}
+                          className="text-yellow-700 text-xs flex items-center"
+                        >
                           <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
                           {item}
                         </div>
@@ -869,8 +948,10 @@ const AmbulancePage: React.FC = () => {
               transition={{ delay: 0.7 }}
               className="bg-purple-50 rounded-2xl shadow-lg p-6 border border-purple-200"
             >
-              <h2 className="text-xl font-bold text-purple-800 mb-4">ভিডিও গাইড</h2>
-              
+              <h2 className="text-xl font-bold text-purple-800 mb-4">
+                ভিডিও গাইড
+              </h2>
+
               <div className="grid md:grid-cols-3 gap-4">
                 {videoGuides.map((video, index) => (
                   <motion.div
@@ -889,10 +970,16 @@ const AmbulancePage: React.FC = () => {
                         <Play className="w-5 h-5 ml-1" />
                       </motion.div>
                     </div>
-                    <h3 className="font-bold text-purple-800 mb-2 text-sm">{video.title}</h3>
-                    <p className="text-purple-600 text-xs mb-2">{video.description}</p>
+                    <h3 className="font-bold text-purple-800 mb-2 text-sm">
+                      {video.title}
+                    </h3>
+                    <p className="text-purple-600 text-xs mb-2">
+                      {video.description}
+                    </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-purple-500 font-medium text-xs">{video.duration}</span>
+                      <span className="text-purple-500 font-medium text-xs">
+                        {video.duration}
+                      </span>
                       <motion.button
                         className="bg-purple-500 text-white px-3 py-1 rounded-lg font-medium text-xs hover:bg-purple-600 transition-all flex items-center space-x-1"
                         whileHover={{ scale: 1.05 }}
@@ -920,7 +1007,7 @@ const AmbulancePage: React.FC = () => {
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden min-h-[600px]">
                 <div className="bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 text-white p-6 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-red-400/20 to-yellow-400/20 animate-pulse" />
-                  
+
                   <div className="relative flex items-center space-x-4">
                     <motion.div
                       className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm shadow-2xl"
@@ -931,7 +1018,9 @@ const AmbulancePage: React.FC = () => {
                     </motion.div>
                     <div>
                       <h3 className="text-2xl font-bold mb-2">AmbulanceBot</h3>
-                      <p className="text-red-100 text-sm">এম্বুলেন্স সেবা সহায়ক</p>
+                      <p className="text-red-100 text-sm">
+                        এম্বুলেন্স সেবা সহায়ক
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -944,42 +1033,56 @@ const AmbulancePage: React.FC = () => {
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                        transition={{
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 30,
+                        }}
+                        className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                       >
-                        <div className={`flex items-start space-x-3 max-w-xs ${
-                          message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                        }`}>
-                          <motion.div 
+                        <div
+                          className={`flex items-start space-x-3 max-w-xs ${
+                            message.sender === "user"
+                              ? "flex-row-reverse space-x-reverse"
+                              : ""
+                          }`}
+                        >
+                          <motion.div
                             className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-lg ${
-                            message.sender === 'user' 
-                              ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white' 
-                              : 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white'
+                              message.sender === "user"
+                                ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
+                                : "bg-gradient-to-r from-yellow-500 to-orange-500 text-white"
                             }`}
                             whileHover={{ scale: 1.1 }}
                           >
-                            {message.sender === 'user' ? (
+                            {message.sender === "user" ? (
                               <User className="w-4 h-4" />
                             ) : (
                               <Bot className="w-4 h-4" />
                             )}
                           </motion.div>
 
-                          <motion.div 
+                          <motion.div
                             className={`rounded-2xl p-3 shadow-lg backdrop-blur-sm ${
-                            message.sender === 'user'
-                              ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white'
-                              : 'bg-white/80 text-gray-800 border border-gray-200'
+                              message.sender === "user"
+                                ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
+                                : "bg-white/80 text-gray-800 border border-gray-200"
                             }`}
                             whileHover={{ scale: 1.02 }}
                           >
-                            <p className="text-xs leading-relaxed whitespace-pre-line">{message.text}</p>
-                            <p className={`text-xs mt-2 ${
-                              message.sender === 'user' ? 'text-red-100' : 'text-gray-500'
-                            }`}>
-                              {message.timestamp.toLocaleTimeString('bn-BD', { 
-                                hour: '2-digit', 
-                                minute: '2-digit' 
+                            <p className="text-xs leading-relaxed whitespace-pre-line">
+                              {message.text}
+                            </p>
+                            <p
+                              className={`text-xs mt-2 ${
+                                message.sender === "user"
+                                  ? "text-red-100"
+                                  : "text-gray-500"
+                              }`}
+                            >
+                              {message.timestamp.toLocaleTimeString("bn-BD", {
+                                hour: "2-digit",
+                                minute: "2-digit",
                               })}
                             </p>
                           </motion.div>
@@ -1001,7 +1104,9 @@ const AmbulancePage: React.FC = () => {
                         <div className="bg-white/80 rounded-2xl p-3 shadow-lg backdrop-blur-sm border border-gray-200">
                           <div className="flex items-center space-x-2">
                             <Loader2 className="w-3 h-3 animate-spin text-red-500" />
-                            <span className="text-xs text-gray-600">উত্তর তৈরি করছি...</span>
+                            <span className="text-xs text-gray-600">
+                              উত্তর তৈরি করছি...
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -1018,12 +1123,14 @@ const AmbulancePage: React.FC = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       className="mb-3 flex items-center justify-center space-x-2 text-red-500 bg-red-50 rounded-xl p-2"
                     >
-                      <motion.div 
+                      <motion.div
                         className="w-2 h-2 bg-red-500 rounded-full"
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ repeat: Infinity, duration: 1 }}
                       />
-                      <span className="text-xs font-medium">রেকর্ড করছি... {formatTime(recordingTime)}</span>
+                      <span className="text-xs font-medium">
+                        রেকর্ড করছি... {formatTime(recordingTime)}
+                      </span>
                     </motion.div>
                   )}
 
@@ -1033,7 +1140,9 @@ const AmbulancePage: React.FC = () => {
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        onKeyPress={(e) =>
+                          e.key === "Enter" && handleSendMessage()
+                        }
                         placeholder="এম্বুলেন্স সেবা সম্পর্কে প্রশ্ন করুন..."
                         className="w-full p-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all text-sm"
                         disabled={isLoading}
@@ -1042,9 +1151,9 @@ const AmbulancePage: React.FC = () => {
 
                     <motion.button
                       className={`p-2 rounded-xl transition-colors ${
-                        isRecording 
-                          ? 'bg-red-500 text-white hover:bg-red-600' 
-                          : 'text-orange-600 hover:bg-orange-50'
+                        isRecording
+                          ? "bg-red-500 text-white hover:bg-red-600"
+                          : "text-orange-600 hover:bg-orange-50"
                       }`}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
@@ -1052,7 +1161,11 @@ const AmbulancePage: React.FC = () => {
                       onMouseUp={stopRecording}
                       onMouseLeave={stopRecording}
                     >
-                      {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                      {isRecording ? (
+                        <MicOff className="w-4 h-4" />
+                      ) : (
+                        <Mic className="w-4 h-4" />
+                      )}
                     </motion.button>
 
                     <motion.button
@@ -1116,7 +1229,7 @@ const AmbulancePage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setShowAddAmbulanceModal(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1136,8 +1249,12 @@ const AmbulancePage: React.FC = () => {
                         <Truck className="w-8 h-8" />
                       </motion.div>
                       <div>
-                        <h3 className="text-3xl font-bold">এম্বুলেন্স সেবা যোগ করুন</h3>
-                        <p className="text-blue-100 text-lg">নতুন এম্বুলেন্স সেবা নিবন্ধন করুন</p>
+                        <h3 className="text-3xl font-bold">
+                          এম্বুলেন্স সেবা যোগ করুন
+                        </h3>
+                        <p className="text-blue-100 text-lg">
+                          নতুন এম্বুলেন্স সেবা নিবন্ধন করুন
+                        </p>
                       </div>
                     </div>
                     <motion.button
@@ -1156,36 +1273,59 @@ const AmbulancePage: React.FC = () => {
                   <div className="grid md:grid-cols-2 gap-6">
                     {/* Service Information */}
                     <div className="space-y-6">
-                      <h4 className="text-2xl font-bold text-gray-800 mb-4">সেবার তথ্য</h4>
-                      
+                      <h4 className="text-2xl font-bold text-gray-800 mb-4">
+                        সেবার তথ্য
+                      </h4>
+
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">সেবার নাম *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          সেবার নাম *
+                        </label>
                         <input
                           type="text"
                           value={newAmbulance.name}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, name: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              name: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="যেমন: ঢাকা এম্বুলেন্স সেবা"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">ফোন নম্বর *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          ফোন নম্বর *
+                        </label>
                         <input
                           type="tel"
                           value={newAmbulance.phone}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, phone: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              phone: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="০১৭xxxxxxxx"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">এলাকা *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          এলাকা *
+                        </label>
                         <input
                           type="text"
                           value={newAmbulance.area}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, area: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              area: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="যেমন: ঢাকা, চট্টগ্রাম"
                         />
@@ -1194,13 +1334,22 @@ const AmbulancePage: React.FC = () => {
 
                     {/* Service Details */}
                     <div className="space-y-6">
-                      <h4 className="text-2xl font-bold text-gray-800 mb-4">সেবার বিবরণ</h4>
-                      
+                      <h4 className="text-2xl font-bold text-gray-800 mb-4">
+                        সেবার বিবরণ
+                      </h4>
+
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">এম্বুলেন্সের ধরন *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          এম্বুলেন্সের ধরন *
+                        </label>
                         <select
                           value={newAmbulance.type}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, type: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              type: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                         >
                           <option value="Regular">Regular Ambulance</option>
@@ -1211,22 +1360,36 @@ const AmbulancePage: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">মূল্য *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          মূল্য *
+                        </label>
                         <input
                           type="text"
                           value={newAmbulance.price}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, price: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              price: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="যেমন: ৫০০-১০০০ টাকা"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">রেসপন্স টাইম</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          রেসপন্স টাইম
+                        </label>
                         <input
                           type="text"
                           value={newAmbulance.responseTime}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, responseTime: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              responseTime: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="যেমন: ১৫-২০ মিনিট"
                         />
@@ -1237,10 +1400,18 @@ const AmbulancePage: React.FC = () => {
                           type="checkbox"
                           id="available24"
                           checked={newAmbulance.available24}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, available24: e.target.checked }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              available24: e.target.checked,
+                            }))
+                          }
                           className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                         />
-                        <label htmlFor="available24" className="ml-3 text-lg font-medium text-gray-700">
+                        <label
+                          htmlFor="available24"
+                          className="ml-3 text-lg font-medium text-gray-700"
+                        >
                           ২৪/৭ উপলব্ধ
                         </label>
                       </div>
@@ -1284,7 +1455,7 @@ const AmbulancePage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setShowBookingForm(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1303,7 +1474,9 @@ const AmbulancePage: React.FC = () => {
                       </motion.div>
                       <div>
                         <h3 className="text-2xl font-bold">এম্বুলেন্স বুকিং</h3>
-                        <p className="text-blue-100">আগে থেকে এম্বুলেন্স বুক করুন</p>
+                        <p className="text-blue-100">
+                          আগে থেকে এম্বুলেন্স বুক করুন
+                        </p>
                       </div>
                     </div>
                     <motion.button
@@ -1320,35 +1493,58 @@ const AmbulancePage: React.FC = () => {
                 <div className="p-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                      <h4 className="text-xl font-bold text-gray-800">ব্যক্তিগত তথ্য</h4>
-                      
+                      <h4 className="text-xl font-bold text-gray-800">
+                        ব্যক্তিগত তথ্য
+                      </h4>
+
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">নাম *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          নাম *
+                        </label>
                         <input
                           type="text"
                           value={bookingForm.name}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, name: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              name: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="আপনার পূর্ণ নাম"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">মোবাইল নম্বর *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          মোবাইল নম্বর *
+                        </label>
                         <input
                           type="tel"
                           value={bookingForm.phone}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, phone: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              phone: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="০১৭xxxxxxxx"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">ঠিকানা *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          ঠিকানা *
+                        </label>
                         <textarea
                           value={bookingForm.address}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, address: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              address: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 h-20 resize-none"
                           placeholder="বিস্তারিত ঠিকানা লিখুন"
                         />
@@ -1356,27 +1552,45 @@ const AmbulancePage: React.FC = () => {
                     </div>
 
                     <div className="space-y-4">
-                      <h4 className="text-xl font-bold text-gray-800">সেবার তথ্য</h4>
-                      
+                      <h4 className="text-xl font-bold text-gray-800">
+                        সেবার তথ্য
+                      </h4>
+
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">এম্বুলেন্সের ধরন *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          এম্বুলেন্সের ধরন *
+                        </label>
                         <select
                           value={bookingForm.ambulanceType}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, ambulanceType: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              ambulanceType: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           <option value="">নির্বাচন করুন</option>
-                          {ambulanceTypes.map(type => (
-                            <option key={type.type} value={type.type}>{type.type}</option>
+                          {ambulanceTypes.map((type) => (
+                            <option key={type.type} value={type.type}>
+                              {type.type}
+                            </option>
                           ))}
                         </select>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">জরুরি অবস্থা</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          জরুরি অবস্থা
+                        </label>
                         <select
                           value={bookingForm.urgency}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, urgency: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              urgency: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           <option value="জরুরি">জরুরি</option>
@@ -1386,21 +1600,35 @@ const AmbulancePage: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">রোগীর অবস্থা</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          রোগীর অবস্থা
+                        </label>
                         <input
                           type="text"
                           value={bookingForm.patientCondition}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, patientCondition: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              patientCondition: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="যেমন: হার্ট অ্যাটাক, দুর্ঘটনা"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">অতিরিক্ত তথ্য</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          অতিরিক্ত তথ্য
+                        </label>
                         <textarea
                           value={bookingForm.notes}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, notes: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              notes: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 h-20 resize-none"
                           placeholder="অন্য কোন বিশেষ তথ্য"
                         />
@@ -1444,7 +1672,7 @@ const AmbulancePage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setBookingSubmitted(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -1459,9 +1687,12 @@ const AmbulancePage: React.FC = () => {
                   >
                     <CheckCircle className="w-10 h-10" />
                   </motion.div>
-                  <h3 className="text-2xl font-bold text-green-800 mb-4">বুকিং সফল!</h3>
+                  <h3 className="text-2xl font-bold text-green-800 mb-4">
+                    বুকিং সফল!
+                  </h3>
                   <p className="text-green-600 text-lg mb-6">
-                    আপনার এম্বুলেন্স বুকিং সফলভাবে সম্পন্ন হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।
+                    আপনার এম্বুলেন্স বুকিং সফলভাবে সম্পন্ন হয়েছে। আমরা শীঘ্রই
+                    আপনার সাথে যোগাযোগ করব।
                   </p>
                   <motion.button
                     onClick={() => setBookingSubmitted(false)}

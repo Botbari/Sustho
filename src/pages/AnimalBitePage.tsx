@@ -3,6 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, AlertTriangle, Clock, Phone, Send, Mic, MicOff, Loader2, User, Bot, Upload, Image, MapPin, Navigation, Guitar as Hospital, Stethoscope, Pill, Home } from 'lucide-react';
 import { generateHealthResponse, analyzeImage } from '../utils/geminiApi';
 import { useLanguage } from '../contexts/LanguageContext';
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import img1 from "../assets/image/diseases.jpg";
+import img2 from "../assets/image/diseases1.jpg";
+import img3 from "../assets/image/diseases2.jpg";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 interface Message {
   id: string;
@@ -295,22 +302,55 @@ const AnimalBitePage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <motion.div 
+          <motion.div
             className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 text-white mb-6 shadow-2xl"
             whileHover={{ scale: 1.1, rotate: 10 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
             <Shield className="w-10 h-10" />
           </motion.div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">প্রাণীর কামড়</h1>
+          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+            প্রাণীর কামড়
+          </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('bite.subtitle')}
+            {t("bite.subtitle")}
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Compact Content */}
           <div className="lg:col-span-2 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-3xl shadow-2xl border border-gray-100"
+            >
+              <Swiper
+                pagination={{
+                  dynamicBullets: true,
+                }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
+                modules={[Pagination, Autoplay]}
+                className="mySwiper rounded-3xl"
+                loop={true}
+                speed={1600}
+              >
+                <SwiperSlide className="h-[500px]">
+                  <img src={img1} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="h-[500px]">
+                  <img src={img2} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="h-[500px]">
+                  <img src={img3} alt="" />
+                </SwiperSlide>
+                {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
+              </Swiper>
+            </motion.div>
             {/* Compact First Aid Steps */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -318,7 +358,9 @@ const AnimalBitePage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
             >
-              <h2 className="text-xl font-bold text-gray-800 mb-4">প্রাথমিক চিকিৎসা</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                প্রাথমিক চিকিৎসা
+              </h2>
               <div className="grid md:grid-cols-3 gap-4">
                 {firstAidSteps.map((step, index) => (
                   <motion.div
@@ -329,13 +371,15 @@ const AnimalBitePage: React.FC = () => {
                     className="text-center bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-4 border border-yellow-200 hover:shadow-md transition-all"
                     whileHover={{ scale: 1.02, y: -2 }}
                   >
-                    <motion.div 
+                    <motion.div
                       className="w-10 h-10 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-sm mb-3 mx-auto shadow-md"
                       whileHover={{ rotate: 10, scale: 1.1 }}
                     >
                       {step.step}
                     </motion.div>
-                    <h3 className="font-bold text-gray-800 mb-2 text-sm">{step.title}</h3>
+                    <h3 className="font-bold text-gray-800 mb-2 text-sm">
+                      {step.title}
+                    </h3>
                     <p className="text-gray-600 text-xs">{step.action}</p>
                   </motion.div>
                 ))}
@@ -349,7 +393,9 @@ const AnimalBitePage: React.FC = () => {
               transition={{ delay: 0.3 }}
               className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
             >
-              <h2 className="text-xl font-bold text-gray-800 mb-4">প্রাণী অনুযায়ী চিকিৎসা</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                প্রাণী অনুযায়ী চিকিৎসা
+              </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 {animalTypes.map((animal, index) => (
                   <motion.div
@@ -361,16 +407,24 @@ const AnimalBitePage: React.FC = () => {
                     whileHover={{ scale: 1.02, y: -2 }}
                   >
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="font-bold text-gray-800">{animal.animal}</h3>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        animal.risk === 'অত্যন্ত উচ্চ' ? 'bg-red-100 text-red-800' :
-                        animal.risk === 'উচ্চ' ? 'bg-orange-100 text-orange-800' :
-                        'bg-yellow-100 text-yellow-800'
-                      }`}>
+                      <h3 className="font-bold text-gray-800">
+                        {animal.animal}
+                      </h3>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          animal.risk === "অত্যন্ত উচ্চ"
+                            ? "bg-red-100 text-red-800"
+                            : animal.risk === "উচ্চ"
+                              ? "bg-orange-100 text-orange-800"
+                              : "bg-yellow-100 text-yellow-800"
+                        }`}
+                      >
                         {animal.risk}
                       </span>
                     </div>
-                    <p className="text-gray-600 text-sm mb-2">{animal.treatment}</p>
+                    <p className="text-gray-600 text-sm mb-2">
+                      {animal.treatment}
+                    </p>
                     <div className="flex items-center text-red-600 text-xs">
                       <Clock className="w-3 h-3 mr-1" />
                       {animal.timeline}
@@ -387,7 +441,9 @@ const AnimalBitePage: React.FC = () => {
               transition={{ delay: 0.4 }}
               className="bg-red-50 rounded-2xl shadow-lg p-6 border border-red-200"
             >
-              <h2 className="text-xl font-bold text-red-800 mb-4">সতর্কতা সংকেত</h2>
+              <h2 className="text-xl font-bold text-red-800 mb-4">
+                সতর্কতা সংকেত
+              </h2>
               <div className="grid md:grid-cols-2 gap-3">
                 {warningSignals.map((signal, index) => (
                   <motion.div
@@ -411,7 +467,9 @@ const AnimalBitePage: React.FC = () => {
               transition={{ delay: 0.5 }}
               className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
             >
-              <h2 className="text-xl font-bold text-gray-800 mb-4">জরুরি যোগাযোগ</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                জরুরি যোগাযোগ
+              </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 {emergencyContacts.map((contact, index) => (
                   <motion.div
@@ -422,7 +480,9 @@ const AnimalBitePage: React.FC = () => {
                     className="flex items-center justify-between bg-gradient-to-br from-gray-50 to-blue-50 rounded-xl p-4 border border-gray-200"
                   >
                     <div>
-                      <h3 className="font-bold text-gray-800 text-sm">{contact.name}</h3>
+                      <h3 className="font-bold text-gray-800 text-sm">
+                        {contact.name}
+                      </h3>
                       <p className="text-gray-600 text-xs">জরুরি সেবা</p>
                     </div>
                     <motion.a
@@ -447,7 +507,9 @@ const AnimalBitePage: React.FC = () => {
               className="bg-blue-50 rounded-2xl shadow-lg p-6 border border-blue-200"
             >
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold text-blue-800">নিকটস্থ হাসপাতাল</h2>
+                <h2 className="text-xl font-bold text-blue-800">
+                  নিকটস্থ হাসপাতাল
+                </h2>
                 <motion.button
                   className="bg-blue-500 text-white px-4 py-2 rounded-xl font-medium text-sm hover:bg-blue-600 transition-all flex items-center space-x-2"
                   whileHover={{ scale: 1.05 }}
@@ -457,7 +519,7 @@ const AnimalBitePage: React.FC = () => {
                   <span>আমার লোকেশন</span>
                 </motion.button>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-4">
                 {nearbyHospitals.map((hospital, index) => (
                   <motion.div
@@ -470,7 +532,9 @@ const AnimalBitePage: React.FC = () => {
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className="font-bold text-blue-800 text-sm mb-1">{hospital.name}</h3>
+                        <h3 className="font-bold text-blue-800 text-sm mb-1">
+                          {hospital.name}
+                        </h3>
                         <div className="flex items-center text-blue-600 text-xs mb-1">
                           <MapPin className="w-3 h-3 mr-1" />
                           <span>{hospital.address}</span>
@@ -484,7 +548,7 @@ const AnimalBitePage: React.FC = () => {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex space-x-2">
                       <motion.a
                         href={`tel:${hospital.phone}`}
@@ -522,7 +586,7 @@ const AnimalBitePage: React.FC = () => {
                 {/* Chat Header */}
                 <div className="bg-gradient-to-r from-yellow-600 via-orange-600 to-red-600 text-white p-8 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-yellow-400/20 to-red-400/20 animate-pulse" />
-                  
+
                   <div className="relative flex items-center space-x-4">
                     <motion.div
                       className="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center backdrop-blur-sm shadow-2xl"
@@ -533,7 +597,9 @@ const AnimalBitePage: React.FC = () => {
                     </motion.div>
                     <div>
                       <h3 className="text-3xl font-bold mb-2">BiteBot</h3>
-                      <p className="text-yellow-100 text-lg">প্রাণীর কামড় বিশেষজ্ঞ</p>
+                      <p className="text-yellow-100 text-lg">
+                        প্রাণীর কামড় বিশেষজ্ঞ
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -547,49 +613,63 @@ const AnimalBitePage: React.FC = () => {
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                        transition={{
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 30,
+                        }}
+                        className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                       >
-                        <div className={`flex items-start space-x-3 max-w-xs ${
-                          message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                        }`}>
-                          <motion.div 
+                        <div
+                          className={`flex items-start space-x-3 max-w-xs ${
+                            message.sender === "user"
+                              ? "flex-row-reverse space-x-reverse"
+                              : ""
+                          }`}
+                        >
+                          <motion.div
                             className={`w-10 h-10 rounded-2xl flex items-center justify-center shadow-lg ${
-                            message.sender === 'user' 
-                              ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white' 
-                              : 'bg-gradient-to-r from-orange-500 to-red-500 text-white'
+                              message.sender === "user"
+                                ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white"
+                                : "bg-gradient-to-r from-orange-500 to-red-500 text-white"
                             }`}
                             whileHover={{ scale: 1.1 }}
                           >
-                            {message.sender === 'user' ? (
+                            {message.sender === "user" ? (
                               <User className="w-5 h-5" />
                             ) : (
                               <Bot className="w-5 h-5" />
                             )}
                           </motion.div>
 
-                          <motion.div 
+                          <motion.div
                             className={`rounded-3xl p-4 shadow-lg backdrop-blur-sm ${
-                            message.sender === 'user'
-                              ? 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white'
-                              : 'bg-white/80 text-gray-800 border border-gray-200'
+                              message.sender === "user"
+                                ? "bg-gradient-to-r from-yellow-500 to-orange-500 text-white"
+                                : "bg-white/80 text-gray-800 border border-gray-200"
                             }`}
                             whileHover={{ scale: 1.02 }}
                           >
-                            {message.type === 'image' && message.imageUrl && (
-                              <img 
-                                src={message.imageUrl} 
-                                alt="Animal bite" 
+                            {message.type === "image" && message.imageUrl && (
+                              <img
+                                src={message.imageUrl}
+                                alt="Animal bite"
                                 className="w-full h-32 object-cover rounded-2xl mb-3"
                               />
                             )}
-                            <p className="text-sm leading-relaxed">{message.text}</p>
-                            <p className={`text-xs mt-2 ${
-                              message.sender === 'user' ? 'text-yellow-100' : 'text-gray-500'
-                            }`}>
-                              {message.timestamp.toLocaleTimeString('bn-BD', { 
-                                hour: '2-digit', 
-                                minute: '2-digit' 
+                            <p className="text-sm leading-relaxed">
+                              {message.text}
+                            </p>
+                            <p
+                              className={`text-xs mt-2 ${
+                                message.sender === "user"
+                                  ? "text-yellow-100"
+                                  : "text-gray-500"
+                              }`}
+                            >
+                              {message.timestamp.toLocaleTimeString("bn-BD", {
+                                hour: "2-digit",
+                                minute: "2-digit",
                               })}
                             </p>
                           </motion.div>
@@ -612,7 +692,9 @@ const AnimalBitePage: React.FC = () => {
                         <div className="bg-white/80 rounded-3xl p-4 shadow-lg backdrop-blur-sm border border-gray-200">
                           <div className="flex items-center space-x-2">
                             <Loader2 className="w-4 h-4 animate-spin text-yellow-500" />
-                            <span className="text-sm text-gray-600">উত্তর তৈরি করছি...</span>
+                            <span className="text-sm text-gray-600">
+                              উত্তর তৈরি করছি...
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -631,12 +713,14 @@ const AnimalBitePage: React.FC = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       className="mb-4 flex items-center justify-center space-x-3 text-red-500 bg-red-50 rounded-2xl p-3"
                     >
-                      <motion.div 
+                      <motion.div
                         className="w-3 h-3 bg-red-500 rounded-full"
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ repeat: Infinity, duration: 1 }}
                       />
-                      <span className="text-sm font-medium">রেকর্ড করছি... {formatTime(recordingTime)}</span>
+                      <span className="text-sm font-medium">
+                        রেকর্ড করছি... {formatTime(recordingTime)}
+                      </span>
                     </motion.div>
                   )}
 
@@ -656,7 +740,9 @@ const AnimalBitePage: React.FC = () => {
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        onKeyPress={(e) =>
+                          e.key === "Enter" && handleSendMessage()
+                        }
                         placeholder="প্রাণীর কামড় সম্পর্কে প্রশ্ন করুন..."
                         className="w-full p-4 bg-gray-50 border border-gray-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all"
                         disabled={isLoading}
@@ -665,9 +751,9 @@ const AnimalBitePage: React.FC = () => {
 
                     <motion.button
                       className={`p-3 rounded-2xl transition-colors ${
-                        isRecording 
-                          ? 'bg-red-500 text-white hover:bg-red-600' 
-                          : 'text-orange-600 hover:bg-orange-50'
+                        isRecording
+                          ? "bg-red-500 text-white hover:bg-red-600"
+                          : "text-orange-600 hover:bg-orange-50"
                       }`}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
@@ -675,7 +761,11 @@ const AnimalBitePage: React.FC = () => {
                       onMouseUp={stopRecording}
                       onMouseLeave={stopRecording}
                     >
-                      {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                      {isRecording ? (
+                        <MicOff className="w-5 h-5" />
+                      ) : (
+                        <Mic className="w-5 h-5" />
+                      )}
                     </motion.button>
 
                     <motion.button
