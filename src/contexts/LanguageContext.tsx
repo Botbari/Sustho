@@ -351,8 +351,8 @@ const translations = {
     en: 'Why our platform is different'
   },
   'about.team.title': {
-    bn: 'আমাদের টিম',
-    en: 'Our Team'
+    bn: 'আমাদের টেকনিক্যাল টিম - ০১',
+    en: 'Our Technical Team - 01'
   },
   'about.team.subtitle': {
     bn: 'অভিজ্ঞ পেশাদারদের একটি দল',
