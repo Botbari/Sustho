@@ -26,7 +26,6 @@ import {
   CreditCard,
   Leaf
 } from 'lucide-react';
-} from "lucide-react";
 
 const HomePage: React.FC = () => {
   const [isAIPopupOpen, setIsAIPopupOpen] = React.useState(false);
