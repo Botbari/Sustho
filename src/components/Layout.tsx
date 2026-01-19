@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Menu, X, Home, Globe } from 'lucide-react';
+import { Heart, Menu, X, Home, Globe, Coins } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 import { label } from 'framer-motion/client';
 
@@ -112,8 +112,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               >
                 <Globe className="w-4 h-4" />
                 <span>{language === 'bn' ? 'English' : 'বাংলা'}</span>
+                
               </motion.button>
-              
+              <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500 font-bold">
+  3000 Points
+</div>
+
             </nav>
 
             {/* Mobile Menu Button */}
