@@ -2,6 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Baby, Heart, Shield, AlertTriangle, Phone, MapPin, Navigation, Loader2, Copy, Share2, CheckCircle, User, UserCheck, Star, Calendar, Plus, X, Check, Send, Mic, MicOff, Bot, Upload, Edit, Save, Clock, Activity, FileText, Stethoscope, Pill, Users, BookOpen, Apple, Droplets, Moon, Sun, TrendingUp, BarChart3, ClipboardList } from 'lucide-react';
 import { generateHealthResponse, analyzeImage } from '../utils/geminiApi';
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import img1 from "../assets/image/diseases.jpg";
+import img2 from "../assets/image/diseases1.jpg";
+import img3 from "../assets/image/diseases2.jpg";
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 interface UserProfile {
   name: string;
@@ -532,15 +539,49 @@ const PregnancySupportPage: React.FC = () => {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white mb-6 shadow-2xl">
             <Baby className="w-10 h-10" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">গর্ভাবস্থা সহায়তা</h1>
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            গর্ভাবস্থা সহায়তা
+          </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            গর্ভাবস্থায় মা ও শিশুর সুস্বাস্থ্যের জন্য AI চালিত সম্পূর্ণ গাইডলাইন ও পরামর্শ
+            গর্ভাবস্থায় মা ও শিশুর সুস্বাস্থ্যের জন্য AI চালিত সম্পূর্ণ
+            গাইডলাইন ও পরামর্শ
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Information Cards */}
           <div className="lg:col-span-2 space-y-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-3xl shadow-2xl border border-gray-100"
+            >
+              <Swiper
+                pagination={{
+                  dynamicBullets: true,
+                }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
+                modules={[Pagination, Autoplay]}
+                className="mySwiper rounded-3xl"
+                loop={true}
+                speed={1600}
+              >
+                <SwiperSlide className="h-[400px]">
+                  <img src={img1} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="h-[400px]">
+                  <img src={img2} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="h-[400px]">
+                  <img src={img3} alt="" />
+                </SwiperSlide>
+                {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
+              </Swiper>
+            </motion.div>
             {/* Emergency Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -559,8 +600,10 @@ const PregnancySupportPage: React.FC = () => {
                   <Phone className="w-10 h-10" />
                 </motion.div>
                 <h2 className="text-3xl font-bold mb-4">🆘 জরুরি সহায়তা</h2>
-                <p className="text-red-100 mb-8 text-lg">গর্ভাবস্থায় জরুরি অবস্থায় তাৎক্ষণিক সাহায্যের জন্য</p>
-                
+                <p className="text-red-100 mb-8 text-lg">
+                  গর্ভাবস্থায় জরুরি অবস্থায় তাৎক্ষণিক সাহায্যের জন্য
+                </p>
+
                 <motion.button
                   onClick={getEmergencyLocation}
                   disabled={isGettingLocation}
@@ -573,7 +616,11 @@ const PregnancySupportPage: React.FC = () => {
                       <motion.div
                         className="w-8 h-8 border-4 border-red-600 border-t-transparent rounded-full"
                         animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        transition={{
+                          duration: 1,
+                          repeat: Infinity,
+                          ease: "linear",
+                        }}
                       />
                       <span>লোকেশন নিচ্ছি...</span>
                     </>
@@ -585,7 +632,7 @@ const PregnancySupportPage: React.FC = () => {
                     </>
                   )}
                 </motion.button>
-                
+
                 <p className="text-red-100 text-sm mt-4">
                   বাটনে ক্লিক করলে আপনার লোকেশন নিয়ে জরুরি সেবায় কল করবে
                 </p>
@@ -610,7 +657,9 @@ const PregnancySupportPage: React.FC = () => {
                     <User className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800">প্রোফাইল সেটআপ</h3>
+                    <h3 className="text-lg font-bold text-gray-800">
+                      প্রোফাইল সেটআপ
+                    </h3>
                     <p className="text-gray-600 text-sm">আপনার তথ্য যোগ করুন</p>
                   </div>
                 </div>
@@ -627,7 +676,9 @@ const PregnancySupportPage: React.FC = () => {
                     <Edit className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-800">দ্রুত আপডেট</h3>
+                    <h3 className="text-lg font-bold text-gray-800">
+                      দ্রুত আপডেট
+                    </h3>
                     <p className="text-gray-600 text-sm">সাপ্তাহিক তথ্য দিন</p>
                   </div>
                 </div>
@@ -648,10 +699,14 @@ const PregnancySupportPage: React.FC = () => {
                 >
                   <Apple className="w-6 h-6" />
                 </motion.div>
-                <h2 className="text-xl font-bold text-gray-800 mb-2">পুষ্টি ও যত্ন</h2>
-                <p className="text-gray-600 text-sm">গর্ভাবস্থায় সঠিক পুষ্টি</p>
+                <h2 className="text-xl font-bold text-gray-800 mb-2">
+                  পুষ্টি ও যত্ন
+                </h2>
+                <p className="text-gray-600 text-sm">
+                  গর্ভাবস্থায় সঠিক পুষ্টি
+                </p>
               </div>
-              
+
               <div className="grid md:grid-cols-3 gap-4">
                 {nutritionTips.map((tip, index) => (
                   <motion.div
@@ -662,17 +717,24 @@ const PregnancySupportPage: React.FC = () => {
                     className={`text-center bg-gradient-to-br ${tip.bgColor} rounded-xl p-4 hover:shadow-lg transition-all duration-300 border ${tip.borderColor}`}
                     whileHover={{ scale: 1.05, y: -3 }}
                   >
-                    <motion.div 
+                    <motion.div
                       className={`w-10 h-10 bg-gradient-to-br ${tip.color} rounded-xl flex items-center justify-center text-white mx-auto mb-3 shadow-lg`}
                       whileHover={{ rotate: 15, scale: 1.15 }}
                     >
                       <tip.icon className="w-5 h-5" />
                     </motion.div>
-                    <h3 className="font-bold text-gray-800 mb-2 text-sm">{tip.title}</h3>
-                    <p className="text-gray-600 text-xs mb-3">{tip.description}</p>
+                    <h3 className="font-bold text-gray-800 mb-2 text-sm">
+                      {tip.title}
+                    </h3>
+                    <p className="text-gray-600 text-xs mb-3">
+                      {tip.description}
+                    </p>
                     <div className="space-y-1">
                       {tip.foods.map((food, i) => (
-                        <div key={i} className="text-gray-700 text-xs bg-white/60 rounded-lg p-1">
+                        <div
+                          key={i}
+                          className="text-gray-700 text-xs bg-white/60 rounded-lg p-1"
+                        >
                           • {food}
                         </div>
                       ))}
@@ -696,10 +758,14 @@ const PregnancySupportPage: React.FC = () => {
                 >
                   <AlertTriangle className="w-6 h-6" />
                 </motion.div>
-                <h2 className="text-xl font-bold text-red-800 mb-2">জরুরি সতর্কতা</h2>
-                <p className="text-red-600 text-sm">এই লক্ষণগুলো দেখা দিলে দ্রুত ডাক্তার দেখান</p>
+                <h2 className="text-xl font-bold text-red-800 mb-2">
+                  জরুরি সতর্কতা
+                </h2>
+                <p className="text-red-600 text-sm">
+                  এই লক্ষণগুলো দেখা দিলে দ্রুত ডাক্তার দেখান
+                </p>
               </div>
-              
+
               <div className="grid md:grid-cols-3 gap-4">
                 {warningSignals.map((signal, index) => (
                   <motion.div
@@ -710,17 +776,24 @@ const PregnancySupportPage: React.FC = () => {
                     className={`text-center bg-gradient-to-br ${signal.bgColor} rounded-xl p-4 hover:shadow-lg transition-all duration-300 border ${signal.borderColor}`}
                     whileHover={{ scale: 1.05, y: -3 }}
                   >
-                    <motion.div 
+                    <motion.div
                       className={`w-10 h-10 bg-gradient-to-br ${signal.color} rounded-xl flex items-center justify-center text-white mx-auto mb-3 shadow-lg`}
                       whileHover={{ rotate: 15, scale: 1.15 }}
                     >
                       <signal.icon className="w-5 h-5" />
                     </motion.div>
-                    <h3 className="font-bold text-gray-800 mb-2 text-sm">{signal.title}</h3>
-                    <p className="text-gray-600 text-xs mb-3">{signal.description}</p>
+                    <h3 className="font-bold text-gray-800 mb-2 text-sm">
+                      {signal.title}
+                    </h3>
+                    <p className="text-gray-600 text-xs mb-3">
+                      {signal.description}
+                    </p>
                     <div className="space-y-1">
                       {signal.actions.map((action, i) => (
-                        <div key={i} className="text-red-700 text-xs bg-white/60 rounded-lg p-1">
+                        <div
+                          key={i}
+                          className="text-red-700 text-xs bg-white/60 rounded-lg p-1"
+                        >
                           • {action}
                         </div>
                       ))}
@@ -745,8 +818,12 @@ const PregnancySupportPage: React.FC = () => {
                   >
                     <TrendingUp className="w-8 h-8" />
                   </motion.div>
-                  <h2 className="text-3xl font-bold text-indigo-800 mb-2">সাপ্তাহিক আপডেট</h2>
-                  <p className="text-indigo-600">আপনার গর্ভাবস্থার সাপ্তাহিক রেকর্ড</p>
+                  <h2 className="text-3xl font-bold text-indigo-800 mb-2">
+                    সাপ্তাহিক আপডেট
+                  </h2>
+                  <p className="text-indigo-600">
+                    আপনার গর্ভাবস্থার সাপ্তাহিক রেকর্ড
+                  </p>
                 </div>
                 <motion.button
                   onClick={() => setShowWeeklyModal(true)}
@@ -768,8 +845,12 @@ const PregnancySupportPage: React.FC = () => {
                   >
                     <BarChart3 className="w-10 h-10" />
                   </motion.div>
-                  <p className="text-indigo-500 text-lg">এখনো কোন সাপ্তাহিক আপডেট নেই</p>
-                  <p className="text-indigo-400 text-sm mt-2">চ্যাটবটে টেস্ট রিপোর্ট বা খাবারের তথ্য দিলে অটো আপডেট হবে</p>
+                  <p className="text-indigo-500 text-lg">
+                    এখনো কোন সাপ্তাহিক আপডেট নেই
+                  </p>
+                  <p className="text-indigo-400 text-sm mt-2">
+                    চ্যাটবটে টেস্ট রিপোর্ট বা খাবারের তথ্য দিলে অটো আপডেট হবে
+                  </p>
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 gap-6">
@@ -783,12 +864,14 @@ const PregnancySupportPage: React.FC = () => {
                       whileHover={{ scale: 1.02, y: -2 }}
                     >
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-bold text-indigo-800">সপ্তাহ {update.week}</h3>
+                        <h3 className="text-xl font-bold text-indigo-800">
+                          সপ্তাহ {update.week}
+                        </h3>
                         <span className="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
                           {update.date}
                         </span>
                       </div>
-                      
+
                       <div className="space-y-3">
                         {update.tests.length > 0 && (
                           <div>
@@ -798,14 +881,19 @@ const PregnancySupportPage: React.FC = () => {
                             </h4>
                             <div className="flex flex-wrap gap-1">
                               {update.tests.slice(0, 3).map((test, i) => (
-                                <span key={i} className="px-2 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs">
-                                  {test.length > 20 ? test.substring(0, 20) + '...' : test}
+                                <span
+                                  key={i}
+                                  className="px-2 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs"
+                                >
+                                  {test.length > 20
+                                    ? test.substring(0, 20) + "..."
+                                    : test}
                                 </span>
                               ))}
                             </div>
                           </div>
                         )}
-                        
+
                         {update.foods.length > 0 && (
                           <div>
                             <h4 className="font-semibold text-indigo-700 mb-2 flex items-center">
@@ -814,14 +902,19 @@ const PregnancySupportPage: React.FC = () => {
                             </h4>
                             <div className="flex flex-wrap gap-1">
                               {update.foods.slice(0, 3).map((food, i) => (
-                                <span key={i} className="px-2 py-1 bg-green-100 text-green-800 rounded-lg text-xs">
-                                  {food.length > 15 ? food.substring(0, 15) + '...' : food}
+                                <span
+                                  key={i}
+                                  className="px-2 py-1 bg-green-100 text-green-800 rounded-lg text-xs"
+                                >
+                                  {food.length > 15
+                                    ? food.substring(0, 15) + "..."
+                                    : food}
                                 </span>
                               ))}
                             </div>
                           </div>
                         )}
-                        
+
                         {update.symptoms.length > 0 && (
                           <div>
                             <h4 className="font-semibold text-indigo-700 mb-2 flex items-center">
@@ -830,14 +923,19 @@ const PregnancySupportPage: React.FC = () => {
                             </h4>
                             <div className="flex flex-wrap gap-1">
                               {update.symptoms.slice(0, 2).map((symptom, i) => (
-                                <span key={i} className="px-2 py-1 bg-orange-100 text-orange-800 rounded-lg text-xs">
-                                  {symptom.length > 15 ? symptom.substring(0, 15) + '...' : symptom}
+                                <span
+                                  key={i}
+                                  className="px-2 py-1 bg-orange-100 text-orange-800 rounded-lg text-xs"
+                                >
+                                  {symptom.length > 15
+                                    ? symptom.substring(0, 15) + "..."
+                                    : symptom}
                                 </span>
                               ))}
                             </div>
                           </div>
                         )}
-                        
+
                         {update.weight && (
                           <div className="flex items-center text-indigo-700 text-sm">
                             <Activity className="w-4 h-4 mr-2" />
@@ -849,7 +947,7 @@ const PregnancySupportPage: React.FC = () => {
                   ))}
                 </div>
               )}
-              
+
               {weeklyUpdates.length > 4 && (
                 <div className="text-center mt-6">
                   <motion.button
@@ -878,8 +976,12 @@ const PregnancySupportPage: React.FC = () => {
                 >
                   <UserCheck className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-gray-800 mb-2">ডাক্তার পরামর্শ</h2>
-                <p className="text-gray-600">AI থেকে প্রাপ্ত ডাক্তারের পরামর্শ</p>
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                  ডাক্তার পরামর্শ
+                </h2>
+                <p className="text-gray-600">
+                  AI থেকে প্রাপ্ত ডাক্তারের পরামর্শ
+                </p>
               </div>
 
               {doctorSuggestions.length === 0 ? (
@@ -891,8 +993,12 @@ const PregnancySupportPage: React.FC = () => {
                   >
                     <Stethoscope className="w-10 h-10" />
                   </motion.div>
-                  <p className="text-gray-500 text-lg">এখনো কোন ডাক্তারের পরামর্শ নেই</p>
-                  <p className="text-gray-400 text-sm mt-2">চ্যাটবট থেকে ডাক্তারের পরামর্শ নিন</p>
+                  <p className="text-gray-500 text-lg">
+                    এখনো কোন ডাক্তারের পরামর্শ নেই
+                  </p>
+                  <p className="text-gray-400 text-sm mt-2">
+                    চ্যাটবট থেকে ডাক্তারের পরামর্শ নিন
+                  </p>
                 </div>
               ) : (
                 <div className="grid md:grid-cols-2 gap-6">
@@ -907,9 +1013,15 @@ const PregnancySupportPage: React.FC = () => {
                     >
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
-                          <h3 className="text-lg font-bold text-gray-800">{doctor.name}</h3>
-                          <p className="text-blue-600 font-medium">{doctor.specialty}</p>
-                          <p className="text-gray-600 text-sm">{doctor.hospital}</p>
+                          <h3 className="text-lg font-bold text-gray-800">
+                            {doctor.name}
+                          </h3>
+                          <p className="text-blue-600 font-medium">
+                            {doctor.specialty}
+                          </p>
+                          <p className="text-gray-600 text-sm">
+                            {doctor.hospital}
+                          </p>
                         </div>
                         <div className="flex items-center space-x-1">
                           {Array.from({ length: 5 }, (_, i) => (
@@ -917,26 +1029,30 @@ const PregnancySupportPage: React.FC = () => {
                               key={i}
                               className={`w-4 h-4 ${
                                 i < Math.floor(doctor.rating)
-                                  ? 'text-yellow-400 fill-current'
-                                  : 'text-gray-300'
+                                  ? "text-yellow-400 fill-current"
+                                  : "text-gray-300"
                               }`}
                             />
                           ))}
-                          <span className="text-sm text-gray-600 ml-1">{doctor.rating}</span>
+                          <span className="text-sm text-gray-600 ml-1">
+                            {doctor.rating}
+                          </span>
                         </div>
                       </div>
-                      
+
                       <div className="space-y-2 text-sm mb-4">
                         <div className="flex items-center">
                           <Clock className="w-4 h-4 mr-2 text-blue-500" />
-                          <span className="text-gray-600">অভিজ্ঞতা: {doctor.experience}</span>
+                          <span className="text-gray-600">
+                            অভিজ্ঞতা: {doctor.experience}
+                          </span>
                         </div>
                         <div className="flex items-center">
                           <Phone className="w-4 h-4 mr-2 text-green-500" />
                           <span className="text-gray-600">{doctor.phone}</span>
                         </div>
                       </div>
-                      
+
                       <div className="flex space-x-2">
                         <motion.a
                           href={`tel:${doctor.phone}`}
@@ -956,10 +1072,10 @@ const PregnancySupportPage: React.FC = () => {
                           <span>অ্যাপয়েন্টমেন্ট</span>
                         </motion.button>
                       </div>
-                      
+
                       <div className="mt-3 pt-3 border-t border-blue-200">
                         <p className="text-xs text-gray-500">
-                          AI পরামর্শ: {doctor.timestamp.toLocaleString('bn-BD')}
+                          AI পরামর্শ: {doctor.timestamp.toLocaleString("bn-BD")}
                         </p>
                       </div>
                     </motion.div>
@@ -989,7 +1105,9 @@ const PregnancySupportPage: React.FC = () => {
                       <Bot className="w-6 h-6" />
                     </motion.div>
                     <div>
-                      <h3 className="text-xl font-bold">AI গর্ভাবস্থা সহায়ক</h3>
+                      <h3 className="text-xl font-bold">
+                        AI গর্ভাবস্থা সহায়ক
+                      </h3>
                       <p className="text-pink-100 text-sm">২৪/৭ পরামর্শ সেবা</p>
                     </div>
                   </div>
@@ -1002,33 +1120,39 @@ const PregnancySupportPage: React.FC = () => {
                       key={message.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={`flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
+                      className={`flex ${message.isUser ? "justify-end" : "justify-start"}`}
                     >
-                      <div className={`max-w-[80%] ${
-                        message.isUser 
-                          ? 'bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-2xl rounded-br-md' 
-                          : 'bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-bl-md shadow-sm'
-                      } p-4`}>
+                      <div
+                        className={`max-w-[80%] ${
+                          message.isUser
+                            ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-2xl rounded-br-md"
+                            : "bg-white border border-gray-200 text-gray-800 rounded-2xl rounded-bl-md shadow-sm"
+                        } p-4`}
+                      >
                         {message.imageUrl && (
-                          <img 
-                            src={message.imageUrl} 
-                            alt="Uploaded" 
+                          <img
+                            src={message.imageUrl}
+                            alt="Uploaded"
                             className="w-full h-32 object-cover rounded-xl mb-3"
                           />
                         )}
-                        <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.text}</p>
-                        <p className={`text-xs mt-2 ${
-                          message.isUser ? 'text-pink-100' : 'text-gray-500'
-                        }`}>
-                          {message.timestamp.toLocaleTimeString('bn-BD', { 
-                            hour: '2-digit', 
-                            minute: '2-digit' 
+                        <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                          {message.text}
+                        </p>
+                        <p
+                          className={`text-xs mt-2 ${
+                            message.isUser ? "text-pink-100" : "text-gray-500"
+                          }`}
+                        >
+                          {message.timestamp.toLocaleTimeString("bn-BD", {
+                            hour: "2-digit",
+                            minute: "2-digit",
                           })}
                         </p>
                       </div>
                     </motion.div>
                   ))}
-                  
+
                   {isLoading && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
@@ -1040,17 +1164,29 @@ const PregnancySupportPage: React.FC = () => {
                           <motion.div
                             className="w-2 h-2 bg-pink-500 rounded-full"
                             animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ repeat: Infinity, duration: 1, delay: 0 }}
+                            transition={{
+                              repeat: Infinity,
+                              duration: 1,
+                              delay: 0,
+                            }}
                           />
                           <motion.div
                             className="w-2 h-2 bg-pink-500 rounded-full"
                             animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ repeat: Infinity, duration: 1, delay: 0.2 }}
+                            transition={{
+                              repeat: Infinity,
+                              duration: 1,
+                              delay: 0.2,
+                            }}
                           />
                           <motion.div
                             className="w-2 h-2 bg-pink-500 rounded-full"
                             animate={{ scale: [1, 1.2, 1] }}
-                            transition={{ repeat: Infinity, duration: 1, delay: 0.4 }}
+                            transition={{
+                              repeat: Infinity,
+                              duration: 1,
+                              delay: 0.4,
+                            }}
                           />
                         </div>
                       </div>
@@ -1063,9 +1199,9 @@ const PregnancySupportPage: React.FC = () => {
                 <div className="p-6 bg-white border-t border-gray-100">
                   {uploadedImage && (
                     <div className="mb-4 relative">
-                      <img 
-                        src={uploadedImage} 
-                        alt="Preview" 
+                      <img
+                        src={uploadedImage}
+                        alt="Preview"
                         className="w-20 h-20 object-cover rounded-xl border-2 border-pink-200"
                       />
                       <motion.button
@@ -1078,7 +1214,7 @@ const PregnancySupportPage: React.FC = () => {
                       </motion.button>
                     </div>
                   )}
-                  
+
                   <div className="flex items-end space-x-3">
                     <div className="flex-1">
                       <textarea
@@ -1090,7 +1226,7 @@ const PregnancySupportPage: React.FC = () => {
                         rows={2}
                       />
                     </div>
-                    
+
                     <div className="flex flex-col space-y-2">
                       <input
                         type="file"
@@ -1099,7 +1235,7 @@ const PregnancySupportPage: React.FC = () => {
                         accept="image/*"
                         className="hidden"
                       />
-                      
+
                       <motion.button
                         onClick={() => fileInputRef.current?.click()}
                         className="w-12 h-12 bg-gray-100 text-gray-600 rounded-2xl flex items-center justify-center hover:bg-gray-200 transition-all"
@@ -1108,20 +1244,24 @@ const PregnancySupportPage: React.FC = () => {
                       >
                         <Upload className="w-5 h-5" />
                       </motion.button>
-                      
+
                       <motion.button
                         onClick={isRecording ? stopRecording : startRecording}
                         className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all ${
-                          isRecording 
-                            ? 'bg-red-500 text-white' 
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                          isRecording
+                            ? "bg-red-500 text-white"
+                            : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                         }`}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                       >
-                        {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                        {isRecording ? (
+                          <MicOff className="w-5 h-5" />
+                        ) : (
+                          <Mic className="w-5 h-5" />
+                        )}
                       </motion.button>
-                      
+
                       <motion.button
                         onClick={handleSendMessage}
                         disabled={!inputMessage.trim() && !uploadedImage}
@@ -1133,10 +1273,12 @@ const PregnancySupportPage: React.FC = () => {
                       </motion.button>
                     </div>
                   </div>
-                  
+
                   {isRecording && (
                     <div className="mt-3 text-center">
-                      <p className="text-red-500 text-sm">রেকর্ডিং চলছে... {recordingTime}s</p>
+                      <p className="text-red-500 text-sm">
+                        রেকর্ডিং চলছে... {recordingTime}s
+                      </p>
                     </div>
                   )}
                 </div>
@@ -1156,7 +1298,7 @@ const PregnancySupportPage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setShowProfileModal(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1175,7 +1317,9 @@ const PregnancySupportPage: React.FC = () => {
                       </motion.div>
                       <div>
                         <h3 className="text-3xl font-bold">প্রোফাইল সেটআপ</h3>
-                        <p className="text-blue-100 text-lg">আপনার গর্ভাবস্থার তথ্য দিন</p>
+                        <p className="text-blue-100 text-lg">
+                          আপনার গর্ভাবস্থার তথ্য দিন
+                        </p>
                       </div>
                     </div>
                     <motion.button
@@ -1193,33 +1337,54 @@ const PregnancySupportPage: React.FC = () => {
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">নাম *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          নাম *
+                        </label>
                         <input
                           type="text"
-                          value={userProfile?.name || ''}
-                          onChange={(e) => setUserProfile(prev => ({ ...prev!, name: e.target.value }))}
+                          value={userProfile?.name || ""}
+                          onChange={(e) =>
+                            setUserProfile((prev) => ({
+                              ...prev!,
+                              name: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="আপনার নাম"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">বয়স</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          বয়স
+                        </label>
                         <input
                           type="number"
-                          value={userProfile?.age || ''}
-                          onChange={(e) => setUserProfile(prev => ({ ...prev!, age: parseInt(e.target.value) }))}
+                          value={userProfile?.age || ""}
+                          onChange={(e) =>
+                            setUserProfile((prev) => ({
+                              ...prev!,
+                              age: parseInt(e.target.value),
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="বয়স"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">গর্ভাবস্থার সপ্তাহ *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          গর্ভাবস্থার সপ্তাহ *
+                        </label>
                         <input
                           type="number"
-                          value={userProfile?.currentWeek || ''}
-                          onChange={(e) => setUserProfile(prev => ({ ...prev!, currentWeek: parseInt(e.target.value) }))}
+                          value={userProfile?.currentWeek || ""}
+                          onChange={(e) =>
+                            setUserProfile((prev) => ({
+                              ...prev!,
+                              currentWeek: parseInt(e.target.value),
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="কত সপ্তাহ"
                           min="1"
@@ -1228,11 +1393,18 @@ const PregnancySupportPage: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">ওজন (কেজি)</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          ওজন (কেজি)
+                        </label>
                         <input
                           type="number"
-                          value={userProfile?.weight || ''}
-                          onChange={(e) => setUserProfile(prev => ({ ...prev!, weight: parseFloat(e.target.value) }))}
+                          value={userProfile?.weight || ""}
+                          onChange={(e) =>
+                            setUserProfile((prev) => ({
+                              ...prev!,
+                              weight: parseFloat(e.target.value),
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="বর্তমান ওজন"
                         />
@@ -1241,10 +1413,17 @@ const PregnancySupportPage: React.FC = () => {
 
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">রক্তের গ্রুপ</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          রক্তের গ্রুপ
+                        </label>
                         <select
-                          value={userProfile?.bloodGroup || ''}
-                          onChange={(e) => setUserProfile(prev => ({ ...prev!, bloodGroup: e.target.value }))}
+                          value={userProfile?.bloodGroup || ""}
+                          onChange={(e) =>
+                            setUserProfile((prev) => ({
+                              ...prev!,
+                              bloodGroup: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                         >
                           <option value="">নির্বাচন করুন</option>
@@ -1260,31 +1439,52 @@ const PregnancySupportPage: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">শেষ মাসিকের তারিখ</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          শেষ মাসিকের তারিখ
+                        </label>
                         <input
                           type="date"
-                          value={userProfile?.lastPeriod || ''}
-                          onChange={(e) => setUserProfile(prev => ({ ...prev!, lastPeriod: e.target.value }))}
+                          value={userProfile?.lastPeriod || ""}
+                          onChange={(e) =>
+                            setUserProfile((prev) => ({
+                              ...prev!,
+                              lastPeriod: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">প্রত্যাশিত প্রসবের তারিখ</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          প্রত্যাশিত প্রসবের তারিখ
+                        </label>
                         <input
                           type="date"
-                          value={userProfile?.dueDate || ''}
-                          onChange={(e) => setUserProfile(prev => ({ ...prev!, dueDate: e.target.value }))}
+                          value={userProfile?.dueDate || ""}
+                          onChange={(e) =>
+                            setUserProfile((prev) => ({
+                              ...prev!,
+                              dueDate: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">জরুরি যোগাযোগ</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          জরুরি যোগাযোগ
+                        </label>
                         <input
                           type="tel"
-                          value={userProfile?.emergencyContact || ''}
-                          onChange={(e) => setUserProfile(prev => ({ ...prev!, emergencyContact: e.target.value }))}
+                          value={userProfile?.emergencyContact || ""}
+                          onChange={(e) =>
+                            setUserProfile((prev) => ({
+                              ...prev!,
+                              emergencyContact: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="০১৭xxxxxxxx"
                         />
@@ -1328,7 +1528,7 @@ const PregnancySupportPage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setShowUpdateModal(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1347,7 +1547,9 @@ const PregnancySupportPage: React.FC = () => {
                       </motion.div>
                       <div>
                         <h3 className="text-3xl font-bold">দ্রুত আপডেট</h3>
-                        <p className="text-green-100 text-lg">এই সপ্তাহের তথ্য দিন</p>
+                        <p className="text-green-100 text-lg">
+                          এই সপ্তাহের তথ্য দিন
+                        </p>
                       </div>
                     </div>
                     <motion.button
@@ -1365,11 +1567,18 @@ const PregnancySupportPage: React.FC = () => {
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">সপ্তাহ নম্বর *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          সপ্তাহ নম্বর *
+                        </label>
                         <input
                           type="number"
                           value={updateData.week}
-                          onChange={(e) => setUpdateData(prev => ({ ...prev, week: e.target.value }))}
+                          onChange={(e) =>
+                            setUpdateData((prev) => ({
+                              ...prev,
+                              week: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-green-300 focus:border-green-500"
                           placeholder="যেমন: ১২"
                           min="1"
@@ -1378,21 +1587,35 @@ const PregnancySupportPage: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">এই সপ্তাহে খাওয়া খাবার</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          এই সপ্তাহে খাওয়া খাবার
+                        </label>
                         <textarea
                           value={updateData.foods}
-                          onChange={(e) => setUpdateData(prev => ({ ...prev, foods: e.target.value }))}
+                          onChange={(e) =>
+                            setUpdateData((prev) => ({
+                              ...prev,
+                              foods: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-green-300 focus:border-green-500 h-24 resize-none"
                           placeholder="যেমন: দুধ, ডিম, মাছ, শাকসবজি (কমা দিয়ে আলাদা করুন)"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">বর্তমান ওজন (কেজি)</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          বর্তমান ওজন (কেজি)
+                        </label>
                         <input
                           type="number"
                           value={updateData.weight}
-                          onChange={(e) => setUpdateData(prev => ({ ...prev, weight: e.target.value }))}
+                          onChange={(e) =>
+                            setUpdateData((prev) => ({
+                              ...prev,
+                              weight: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-green-300 focus:border-green-500"
                           placeholder="৫৫"
                           step="0.1"
@@ -1402,30 +1625,51 @@ const PregnancySupportPage: React.FC = () => {
 
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">লক্ষণ ও সমস্যা</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          লক্ষণ ও সমস্যা
+                        </label>
                         <textarea
                           value={updateData.symptoms}
-                          onChange={(e) => setUpdateData(prev => ({ ...prev, symptoms: e.target.value }))}
+                          onChange={(e) =>
+                            setUpdateData((prev) => ({
+                              ...prev,
+                              symptoms: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-green-300 focus:border-green-500 h-24 resize-none"
                           placeholder="যেমন: বমি ভাব, মাথা ব্যথা, পেট ব্যথা (কমা দিয়ে আলাদা করুন)"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">করা পরীক্ষা</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          করা পরীক্ষা
+                        </label>
                         <textarea
                           value={updateData.tests}
-                          onChange={(e) => setUpdateData(prev => ({ ...prev, tests: e.target.value }))}
+                          onChange={(e) =>
+                            setUpdateData((prev) => ({
+                              ...prev,
+                              tests: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-green-300 focus:border-green-500 h-24 resize-none"
                           placeholder="যেমন: আল্ট্রাসাউন্ড, ব্লাড টেস্ট, ইউরিন টেস্ট (কমা দিয়ে আলাদা করুন)"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">অতিরিক্ত নোট</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          অতিরিক্ত নোট
+                        </label>
                         <textarea
                           value={updateData.notes}
-                          onChange={(e) => setUpdateData(prev => ({ ...prev, notes: e.target.value }))}
+                          onChange={(e) =>
+                            setUpdateData((prev) => ({
+                              ...prev,
+                              notes: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-green-300 focus:border-green-500 h-20 resize-none"
                           placeholder="অন্যান্য গুরুত্বপূর্ণ তথ্য..."
                         />
@@ -1469,7 +1713,7 @@ const PregnancySupportPage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setShowWeeklyModal(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1490,7 +1734,9 @@ const PregnancySupportPage: React.FC = () => {
                       </motion.div>
                       <div>
                         <h3 className="text-3xl font-bold">সাপ্তাহিক আপডেট</h3>
-                        <p className="text-indigo-100 text-lg">এই সপ্তাহের তথ্য যোগ করুন</p>
+                        <p className="text-indigo-100 text-lg">
+                          এই সপ্তাহের তথ্য যোগ করুন
+                        </p>
                       </div>
                     </div>
                     <motion.button
@@ -1509,14 +1755,23 @@ const PregnancySupportPage: React.FC = () => {
                   <div className="grid md:grid-cols-2 gap-6">
                     {/* Basic Information */}
                     <div className="space-y-6">
-                      <h4 className="text-2xl font-bold text-gray-800 mb-4">মৌলিক তথ্য</h4>
-                      
+                      <h4 className="text-2xl font-bold text-gray-800 mb-4">
+                        মৌলিক তথ্য
+                      </h4>
+
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">গর্ভাবস্থার সপ্তাহ *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          গর্ভাবস্থার সপ্তাহ *
+                        </label>
                         <input
                           type="number"
                           value={weeklyData.week}
-                          onChange={(e) => setWeeklyData(prev => ({ ...prev, week: e.target.value }))}
+                          onChange={(e) =>
+                            setWeeklyData((prev) => ({
+                              ...prev,
+                              week: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                           placeholder="যেমন: ১২"
                           min="1"
@@ -1526,11 +1781,18 @@ const PregnancySupportPage: React.FC = () => {
 
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-lg font-medium text-gray-700 mb-2">ওজন (কেজি)</label>
+                          <label className="block text-lg font-medium text-gray-700 mb-2">
+                            ওজন (কেজি)
+                          </label>
                           <input
                             type="number"
                             value={weeklyData.weight}
-                            onChange={(e) => setWeeklyData(prev => ({ ...prev, weight: e.target.value }))}
+                            onChange={(e) =>
+                              setWeeklyData((prev) => ({
+                                ...prev,
+                                weight: e.target.value,
+                              }))
+                            }
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                             placeholder="৫৫"
                             step="0.1"
@@ -1538,11 +1800,18 @@ const PregnancySupportPage: React.FC = () => {
                         </div>
 
                         <div>
-                          <label className="block text-lg font-medium text-gray-700 mb-2">রক্তচাপ</label>
+                          <label className="block text-lg font-medium text-gray-700 mb-2">
+                            রক্তচাপ
+                          </label>
                           <input
                             type="text"
                             value={weeklyData.bloodPressure}
-                            onChange={(e) => setWeeklyData(prev => ({ ...prev, bloodPressure: e.target.value }))}
+                            onChange={(e) =>
+                              setWeeklyData((prev) => ({
+                                ...prev,
+                                bloodPressure: e.target.value,
+                              }))
+                            }
                             className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                             placeholder="১২০/৮০"
                           />
@@ -1550,10 +1819,17 @@ const PregnancySupportPage: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">এই সপ্তাহের খাবার</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          এই সপ্তাহের খাবার
+                        </label>
                         <textarea
                           value={weeklyData.foods}
-                          onChange={(e) => setWeeklyData(prev => ({ ...prev, foods: e.target.value }))}
+                          onChange={(e) =>
+                            setWeeklyData((prev) => ({
+                              ...prev,
+                              foods: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 h-24 resize-none"
                           placeholder="যেমন: দুধ, ডিম, মাছ, শাকসবজি (কমা দিয়ে আলাদা করুন)"
                         />
@@ -1562,43 +1838,73 @@ const PregnancySupportPage: React.FC = () => {
 
                     {/* Medical Information */}
                     <div className="space-y-6">
-                      <h4 className="text-2xl font-bold text-gray-800 mb-4">মেডিকেল তথ্য</h4>
-                      
+                      <h4 className="text-2xl font-bold text-gray-800 mb-4">
+                        মেডিকেল তথ্য
+                      </h4>
+
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">এই সপ্তাহের টেস্ট</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          এই সপ্তাহের টেস্ট
+                        </label>
                         <textarea
                           value={weeklyData.tests}
-                          onChange={(e) => setWeeklyData(prev => ({ ...prev, tests: e.target.value }))}
+                          onChange={(e) =>
+                            setWeeklyData((prev) => ({
+                              ...prev,
+                              tests: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 h-24 resize-none"
                           placeholder="যেমন: আল্ট্রাসাউন্ড, ব্লাড টেস্ট, ইউরিন টেস্ট (কমা দিয়ে আলাদা করুন)"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">টেস্টের ফলাফল</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          টেস্টের ফলাফল
+                        </label>
                         <textarea
                           value={weeklyData.testResults}
-                          onChange={(e) => setWeeklyData(prev => ({ ...prev, testResults: e.target.value }))}
+                          onChange={(e) =>
+                            setWeeklyData((prev) => ({
+                              ...prev,
+                              testResults: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 h-24 resize-none"
                           placeholder="টেস্টের ফলাফল বিস্তারিত লিখুন"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">লক্ষণ ও সমস্যা</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          লক্ষণ ও সমস্যা
+                        </label>
                         <textarea
                           value={weeklyData.symptoms}
-                          onChange={(e) => setWeeklyData(prev => ({ ...prev, symptoms: e.target.value }))}
+                          onChange={(e) =>
+                            setWeeklyData((prev) => ({
+                              ...prev,
+                              symptoms: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 h-24 resize-none"
                           placeholder="যেমন: বমি ভাব, মাথা ব্যথা, পেট ব্যথা (কমা দিয়ে আলাদা করুন)"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">অতিরিক্ত নোট</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          অতিরিক্ত নোট
+                        </label>
                         <textarea
                           value={weeklyData.notes}
-                          onChange={(e) => setWeeklyData(prev => ({ ...prev, notes: e.target.value }))}
+                          onChange={(e) =>
+                            setWeeklyData((prev) => ({
+                              ...prev,
+                              notes: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500 h-20 resize-none"
                           placeholder="অন্যান্য গুরুত্বপূর্ণ তথ্য..."
                         />
@@ -1643,7 +1949,7 @@ const PregnancySupportPage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setLocationShared(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1663,8 +1969,12 @@ const PregnancySupportPage: React.FC = () => {
                         <Navigation className="w-8 h-8" />
                       </motion.div>
                       <div>
-                        <h3 className="text-3xl font-bold">🆘 জরুরি বার্তা প্রস্তুত</h3>
-                        <p className="text-red-100 text-lg">নিচের বার্তা কপি করে শেয়ার করুন</p>
+                        <h3 className="text-3xl font-bold">
+                          🆘 জরুরি বার্তা প্রস্তুত
+                        </h3>
+                        <p className="text-red-100 text-lg">
+                          নিচের বার্তা কপি করে শেয়ার করুন
+                        </p>
                       </div>
                     </div>
                     <motion.button
