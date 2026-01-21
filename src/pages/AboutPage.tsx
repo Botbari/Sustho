@@ -66,27 +66,29 @@ const AboutPage: React.FC = () => {
 
   const team = [
     {
-      name: 'Md All Asmoule C. ',
-      role: 'Entrepreneur, AI Helper & Author',
-      qualification: 'B. Sc. in Software Engineering ',
-      experience: ' 7 বছর +',
-      image: 'https://knowledgepanelservice.com/wp-content/uploads/2023/10/IMG_5537-scaled-e1698578825600-683x1024.jpg'
+      name: "Md All Asmoule C. ",
+      role: "Entrepreneur, AI Helper & Author",
+      qualification: "B. Sc. in Software Engineering ",
+      experience: " 7 বছর +",
+      image:
+        "https://knowledgepanelservice.com/wp-content/uploads/2023/10/IMG_5537-scaled-e1698578825600-683x1024.jpg",
     },
     {
-      name: 'Tasrif Nur Himel',
-      role: 'Machine Learning Engineer',
-      qualification: 'B. Sc. in Software Engineering',
-      experience: '3 বছর',
-      image: 'https://i.postimg.cc/KvF1wY99/hero.webp'
+      name: "Masuma Akter Akhi",
+      role: "Front-end Developer",
+      qualification: "B. Sc. in Software Engineering",
+      experience: "2 বছর",
+      image:
+        "https://masuma-portfolio-website.netlify.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fphoto.4daccbc8.png&w=384&q=90",
     },
-    
+
     {
-      name: 'Muntasir Fuad  Rahat',
-      role: 'Web Developer',
-      qualification: 'B. Sc. in Software Engineering',
-      experience: '2 বছর',
-      image: 'https://fuad-rahat.netlify.app/formal.png'
-    }
+      name: "Md Raihan Chowdhuory",
+      role: "Back-end Developer",
+      qualification: "B. Sc. in Software Engineering",
+      experience: "2 বছর",
+      image: "https://avatars.githubusercontent.com/u/145869865?v=4",
+    },
   ];
 
   const values = [
@@ -268,7 +270,7 @@ const AboutPage: React.FC = () => {
             >
               <Users className="w-10 h-10" />
             </motion.div>
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">আমাদের টিম</h2>
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">{t('about.team.title')}</h2>
             <p className="text-xl text-gray-600">{t('about.team.subtitle')}</p>
           </div>
           

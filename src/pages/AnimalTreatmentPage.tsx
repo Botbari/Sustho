@@ -3,6 +3,13 @@ import { motion } from 'framer-motion';
 import { Stethoscope, Heart, AlertTriangle, Shield } from 'lucide-react';
 import AIChat from '../components/AIChat';
 import { useLanguage } from '../contexts/LanguageContext';
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import img1 from "../assets/image/diseases.jpg";
+import img2 from "../assets/image/diseases1.jpg";
+import img3 from "../assets/image/diseases2.jpg";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const AnimalTreatmentPage: React.FC = () => {
   const { t } = useLanguage();
@@ -96,13 +103,44 @@ const AnimalTreatmentPage: React.FC = () => {
           </div>
           <h1 className="text-4xl font-bold text-gray-800 mb-4">পশু চিকিৎসা</h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('animal.subtitle')}
+            {t("animal.subtitle")}
           </p>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8">
           {/* Left Column - Animal Treatment Info */}
           <div className="lg:col-span-2 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-3xl shadow-2xl border border-gray-100"
+            >
+              <Swiper
+                pagination={{
+                  dynamicBullets: true,
+                }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
+                modules={[Pagination, Autoplay]}
+                className="mySwiper rounded-3xl"
+                loop={true}
+                speed={1600}
+              >
+                <SwiperSlide className="h-[500px]">
+                  <img src={img1} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="h-[500px]">
+                  <img src={img2} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="h-[500px]">
+                  <img src={img3} alt="" />
+                </SwiperSlide>
+                {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
+              </Swiper>
+            </motion.div>
             {/* Compact Animal Types */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -110,7 +148,9 @@ const AnimalTreatmentPage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
             >
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">পশু পাখির রোগ</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                পশু পাখির রোগ
+              </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 {animalTypes.map((animal, index) => (
                   <motion.div
@@ -119,18 +159,20 @@ const AnimalTreatmentPage: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 * index }}
                     className={`group relative bg-gradient-to-br ${animal.bgColor} rounded-2xl p-4 border border-green-200 hover:shadow-lg transition-all duration-300 overflow-hidden`}
-                    whileHover={{ 
-                      scale: 1.02, 
+                    whileHover={{
+                      scale: 1.02,
                       y: -3,
-                      boxShadow: '0 15px 30px rgba(34, 197, 94, 0.15)'
+                      boxShadow: "0 15px 30px rgba(34, 197, 94, 0.15)",
                     }}
                     style={{
-                      transform: 'perspective(500px) rotateX(1deg)',
+                      transform: "perspective(500px) rotateX(1deg)",
                     }}
                   >
                     {/* 3D Background Effect */}
-                    <div className={`absolute inset-0 bg-gradient-to-r ${animal.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
-                    
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-r ${animal.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
+                    />
+
                     {/* Animal Icon */}
                     <motion.div
                       className="text-4xl mb-3 text-center"
@@ -139,11 +181,11 @@ const AnimalTreatmentPage: React.FC = () => {
                     >
                       {animal.icon}
                     </motion.div>
-                    
+
                     <h3 className="text-lg font-bold text-gray-800 mb-3 text-center group-hover:text-green-600 transition-colors">
                       {animal.name}
                     </h3>
-                    
+
                     <div className="mb-3">
                       <h4 className="font-semibold text-gray-700 mb-2 text-sm flex items-center justify-center">
                         <span className="w-2 h-2 bg-red-500 rounded-full mr-2"></span>
@@ -151,13 +193,16 @@ const AnimalTreatmentPage: React.FC = () => {
                       </h4>
                       <div className="space-y-1">
                         {animal.diseases.map((disease, i) => (
-                          <div key={i} className="text-gray-600 text-xs bg-white/60 rounded-lg p-2 text-center">
+                          <div
+                            key={i}
+                            className="text-gray-600 text-xs bg-white/60 rounded-lg p-2 text-center"
+                          >
                             {disease}
                           </div>
                         ))}
                       </div>
                     </div>
-                    
+
                     <div>
                       <h4 className="font-semibold text-gray-700 mb-2 text-sm flex items-center justify-center">
                         <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
@@ -165,7 +210,10 @@ const AnimalTreatmentPage: React.FC = () => {
                       </h4>
                       <div className="space-y-1">
                         {animal.prevention.map((prevention, i) => (
-                          <div key={i} className="text-gray-600 text-xs bg-white/60 rounded-lg p-2 text-center">
+                          <div
+                            key={i}
+                            className="text-gray-600 text-xs bg-white/60 rounded-lg p-2 text-center"
+                          >
                             {prevention}
                           </div>
                         ))}
@@ -183,7 +231,9 @@ const AnimalTreatmentPage: React.FC = () => {
               transition={{ delay: 0.4 }}
               className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
             >
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">জরুরি তথ্য</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                জরুরি তথ্য
+              </h2>
               <div className="grid md:grid-cols-3 gap-4">
                 {emergencySignals.map((signal, index) => (
                   <motion.div
@@ -192,13 +242,13 @@ const AnimalTreatmentPage: React.FC = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 * index }}
                     className={`group text-center bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl p-4 hover:shadow-lg transition-all duration-300 border border-green-100`}
-                    whileHover={{ 
-                      scale: 1.05, 
+                    whileHover={{
+                      scale: 1.05,
                       y: -3,
-                      boxShadow: '0 15px 30px rgba(34, 197, 94, 0.1)'
+                      boxShadow: "0 15px 30px rgba(34, 197, 94, 0.1)",
                     }}
                   >
-                    <motion.div 
+                    <motion.div
                       className={`w-12 h-12 bg-gradient-to-r ${signal.color} rounded-xl flex items-center justify-center text-white mx-auto mb-3 shadow-lg`}
                       whileHover={{ rotate: 10, scale: 1.1 }}
                       transition={{ type: "spring", stiffness: 400 }}
@@ -210,7 +260,10 @@ const AnimalTreatmentPage: React.FC = () => {
                     </h3>
                     <div className="space-y-1">
                       {signal.signs.map((sign, i) => (
-                        <div key={i} className="text-gray-600 text-xs bg-white/60 rounded-lg p-2">
+                        <div
+                          key={i}
+                          className="text-gray-600 text-xs bg-white/60 rounded-lg p-2"
+                        >
                           • {sign}
                         </div>
                       ))}
@@ -227,55 +280,63 @@ const AnimalTreatmentPage: React.FC = () => {
               transition={{ delay: 0.6 }}
               className="bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 rounded-3xl shadow-2xl p-8 border-2 border-purple-200 relative overflow-hidden"
               style={{
-                transform: 'perspective(1000px) rotateX(2deg)',
-                transformStyle: 'preserve-3d'
+                transform: "perspective(1000px) rotateX(2deg)",
+                transformStyle: "preserve-3d",
               }}
             >
               {/* 3D Background Effects */}
               <div className="absolute inset-0 bg-gradient-to-r from-purple-400/5 to-blue-400/5 animate-pulse" />
-              
+
               {/* Floating particles */}
               <div className="absolute top-4 right-4 w-3 h-3 bg-purple-300/50 rounded-full animate-bounce" />
               <div className="absolute bottom-6 left-6 w-2 h-2 bg-indigo-300/50 rounded-full animate-pulse" />
               <div className="absolute top-1/2 right-8 w-1.5 h-1.5 bg-blue-300/50 rounded-full animate-ping" />
-              
+
               <div className="relative">
                 <div className="text-center mb-8">
                   <motion.div
                     className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 text-white mb-6 shadow-2xl"
-                    whileHover={{ 
-                      scale: 1.15, 
+                    whileHover={{
+                      scale: 1.15,
                       rotate: 15,
-                      boxShadow: '0 25px 50px rgba(99, 102, 241, 0.4)'
+                      boxShadow: "0 25px 50px rgba(99, 102, 241, 0.4)",
                     }}
                     transition={{ type: "spring", stiffness: 400 }}
                     style={{
-                      transform: 'perspective(500px) rotateX(10deg)',
+                      transform: "perspective(500px) rotateX(10deg)",
                     }}
                   >
                     <span className="text-3xl">💉</span>
                   </motion.div>
-                  <h2 className="text-4xl font-bold text-purple-800 mb-3">টিকা সূচি</h2>
-                  <p className="text-purple-600 text-xl">পশু পাখির টিকার সময়সূচি</p>
+                  <h2 className="text-4xl font-bold text-purple-800 mb-3">
+                    টিকা সূচি
+                  </h2>
+                  <p className="text-purple-600 text-xl">
+                    পশু পাখির টিকার সময়সূচি
+                  </p>
                 </div>
-                
+
                 <div className="space-y-8">
                   {vaccinationSchedule.map((schedule, index) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, y: 20, rotateX: 10 }}
                       animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                      transition={{ delay: 0.2 * index, type: "spring", stiffness: 200 }}
+                      transition={{
+                        delay: 0.2 * index,
+                        type: "spring",
+                        stiffness: 200,
+                      }}
                       className="group bg-white/70 backdrop-blur-sm rounded-3xl p-8 border-2 border-purple-200/50 hover:bg-white/90 transition-all duration-500 hover:shadow-2xl"
-                      whileHover={{ 
-                        scale: 1.02, 
+                      whileHover={{
+                        scale: 1.02,
                         y: -8,
                         rotateY: 2,
-                        boxShadow: '0 30px 60px rgba(147, 51, 234, 0.2)'
+                        boxShadow: "0 30px 60px rgba(147, 51, 234, 0.2)",
                       }}
                       style={{
-                        transform: 'perspective(800px) rotateX(1deg)',
-                        transformStyle: 'preserve-3d'
+                        transform: "perspective(800px) rotateX(1deg)",
+                        transformStyle: "preserve-3d",
                       }}
                     >
                       <div className="flex items-center mb-6">
@@ -293,19 +354,23 @@ const AnimalTreatmentPage: React.FC = () => {
                           <p className="text-purple-600">টিকা কার্যক্রম</p>
                         </div>
                       </div>
-                      
+
                       <div className="grid md:grid-cols-3 gap-4">
                         {schedule.vaccines.map((vaccine, i) => (
                           <motion.div
                             key={i}
                             initial={{ opacity: 0, scale: 0.8 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.1 * i, type: "spring", stiffness: 300 }}
+                            transition={{
+                              delay: 0.1 * i,
+                              type: "spring",
+                              stiffness: 300,
+                            }}
                             className="bg-white/80 rounded-2xl p-6 border border-purple-200/50 hover:shadow-lg transition-all duration-300"
-                            whileHover={{ 
-                              scale: 1.05, 
+                            whileHover={{
+                              scale: 1.05,
                               y: -3,
-                              boxShadow: '0 15px 30px rgba(147, 51, 234, 0.1)'
+                              boxShadow: "0 15px 30px rgba(147, 51, 234, 0.1)",
                             }}
                           >
                             <div className="flex items-center mb-3">
@@ -313,7 +378,9 @@ const AnimalTreatmentPage: React.FC = () => {
                                 className={`w-4 h-4 ${vaccine.color} rounded-full mr-3 shadow-sm`}
                                 whileHover={{ scale: 1.2 }}
                               />
-                              <h4 className="font-bold text-purple-800 text-lg">{vaccine.name}</h4>
+                              <h4 className="font-bold text-purple-800 text-lg">
+                                {vaccine.name}
+                              </h4>
                             </div>
                             <p className="text-purple-600 bg-purple-50 rounded-xl p-3 text-center font-medium">
                               {vaccine.schedule}
@@ -321,7 +388,7 @@ const AnimalTreatmentPage: React.FC = () => {
                           </motion.div>
                         ))}
                       </div>
-                      
+
                       {/* Hover Effect Border */}
                       <div className="absolute inset-0 rounded-3xl border-2 border-transparent group-hover:border-purple-300 transition-colors duration-300" />
                     </motion.div>
