@@ -32,6 +32,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { path: '/ambulance', label: t('nav.ambulance') },
     { path: '/contact', label: t('nav.contact') },
     { path: '/about', label: t('nav.about') },
+    { path: '/sustho-card', label: t('nav.sustho-card')},
     { path: '/feedback', label: t('nav.feedback') },
     { path: '/notification', label: t('nav.notification') },
     { path: '/price', label: t('nav.price') }
@@ -114,10 +115,18 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 <span>{language === 'bn' ? 'English' : 'বাংলা'}</span>
                 
               </motion.button>
-              <div className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-green-500 font-bold">
-  3000 Points
-</div>
-
+          
+                        <Link
+                to="/sustho-card"
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  location.pathname === '/sustho-card'
+                    ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white shadow-lg'
+                    : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                }`}
+              >
+                {t('nav.sustho-card')}
+              </Link>
+             
             </nav>
 
             {/* Mobile Menu Button */}
