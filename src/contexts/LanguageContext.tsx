@@ -41,6 +41,10 @@ const translations = {
   bn: 'গাছের রোগ ও যত্ন',
   en: 'Tree Health Care'
 },
+'nav.sustho-card':{
+  bn: 'Sustho Card',
+  en: 'sustho Card'
+},
   'nav.pregnancy-support': {
     bn: 'গর্ভাবস্থা সহায়তা',
     en: 'Pregnancy Support'
