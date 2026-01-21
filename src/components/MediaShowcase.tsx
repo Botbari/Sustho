@@ -1,5 +1,6 @@
 
 import React from 'react';
+import sasthoseba from '../assets/image/sastho-seba.jpeg'
 
 const MediaShowcase: React.FC = () => {
   return (
@@ -12,7 +13,7 @@ const MediaShowcase: React.FC = () => {
             {/* Image Box */}
             <div className="overflow-hidden rounded-[24px] shadow-md group">
               <img
-                src="https://images.unsplash.com/photo-1516589174184-c685265142ec?auto=format&fit=crop&w=800&q=80"
+                src={sasthoseba}
                 alt="Health Mission"
                 className="w-full h-[300px] object-cover transform group-hover:scale-110 transition-transform duration-700"
               />

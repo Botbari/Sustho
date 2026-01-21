@@ -1,6 +1,6 @@
 
 import React from 'react';
-import cardImg from '../img/sustho-card-img.jpeg';
+import cardImg from '../assets/image/sustho-card-img.jpeg';
 
 interface HeroProps {
   onOpenBenefits: () => void;
