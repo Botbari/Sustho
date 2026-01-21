@@ -27,6 +27,7 @@ import {
   Leaf
 } from 'lucide-react';
 
+
 const HomePage: React.FC = () => {
   const [isAIPopupOpen, setIsAIPopupOpen] = React.useState(false);
   const [isVoiceChatbotOpen, setIsVoiceChatbotOpen] = React.useState(false);
