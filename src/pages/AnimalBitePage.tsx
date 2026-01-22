@@ -1,8 +1,27 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, AlertTriangle, Clock, Phone, Send, Mic, MicOff, Loader2, User, Bot, Upload, Image, MapPin, Navigation, Guitar as Hospital, Stethoscope, Pill, Home } from 'lucide-react';
-import { generateHealthResponse, analyzeImage } from '../utils/geminiApi';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Shield,
+  AlertTriangle,
+  Clock,
+  Phone,
+  Send,
+  Mic,
+  MicOff,
+  Loader2,
+  User,
+  Bot,
+  Upload,
+  Image,
+  MapPin,
+  Navigation,
+  Guitar as Hospital,
+  Stethoscope,
+  Pill,
+  Home,
+} from "lucide-react";
+import { generateHealthResponse, analyzeImage } from "../utils/openaiApi";
+import { useLanguage } from "../contexts/LanguageContext";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
@@ -14,9 +33,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 interface Message {
   id: string;
   text: string;
-  sender: 'user' | 'bot';
+  sender: "user" | "bot";
   timestamp: Date;
-  type: 'text' | 'image' | 'voice';
+  type: "text" | "image" | "voice";
   imageUrl?: string;
 }
 
@@ -24,16 +43,17 @@ const AnimalBitePage: React.FC = () => {
   const { t } = useLanguage();
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      text: t('language') === 'bn' ? 
-        `আস্সালামু আলাইকুম! আমি BiteBot, প্রাণীর কামড় বিশেষজ্ঞ। আমি আপনাকে সাপ, কুকুর, বিড়াল, পোকামাকড় বা যেকোনো প্রাণীর কামড়ের সঠিক চিকিৎসা পরামর্শ দিতে পারি। আপনি টেক্সট, ছবি বা ভয়েস মেসেজের মাধ্যমে আমার সাথে কথা বলতে পারেন।` :
-        `Hello! I am BiteBot, an animal bite specialist. I can provide you with proper treatment advice for snake, dog, cat, insect or any animal bite. You can talk to me through text, image or voice message.`,
-      sender: 'bot',
+      id: "1",
+      text:
+        t("language") === "bn"
+          ? `আস্সালামু আলাইকুম! আমি BiteBot, প্রাণীর কামড় বিশেষজ্ঞ। আমি আপনাকে সাপ, কুকুর, বিড়াল, পোকামাকড় বা যেকোনো প্রাণীর কামড়ের সঠিক চিকিৎসা পরামর্শ দিতে পারি। আপনি টেক্সট, ছবি বা ভয়েস মেসেজের মাধ্যমে আমার সাথে কথা বলতে পারেন।`
+          : `Hello! I am BiteBot, an animal bite specialist. I can provide you with proper treatment advice for snake, dog, cat, insect or any animal bite. You can talk to me through text, image or voice message.`,
+      sender: "bot",
       timestamp: new Date(),
-      type: 'text'
-    }
+      type: "text",
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -43,7 +63,7 @@ const AnimalBitePage: React.FC = () => {
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -52,29 +72,29 @@ const AnimalBitePage: React.FC = () => {
 
   const generateResponse = async (userMessage: string, imageUrl?: string) => {
     setIsLoading(true);
-    
+
     try {
       // Use Google Gemini API for real AI responses
-      const response = await generateHealthResponse(userMessage, 'animal-bite');
-      
+      const response = await generateHealthResponse(userMessage, "animal-bite");
+
       const botMessage: Message = {
         id: Date.now().toString(),
         text: response,
-        sender: 'bot',
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      
-      setMessages(prev => [...prev, botMessage]);
+
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       const errorMessage: Message = {
         id: Date.now().toString(),
-        text: 'দুঃখিত, কিছু সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
-        sender: 'bot',
+        text: "দুঃখিত, কিছু সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -82,17 +102,17 @@ const AnimalBitePage: React.FC = () => {
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
-    
+
     const userMessage: Message = {
       id: Date.now().toString(),
       text: input,
-      sender: 'user',
+      sender: "user",
       timestamp: new Date(),
-      type: 'text'
+      type: "text",
     };
-    
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
     await generateResponse(input);
   };
 
@@ -103,14 +123,14 @@ const AnimalBitePage: React.FC = () => {
       const userMessage: Message = {
         id: Date.now().toString(),
         text: `কামড়ের ছবি আপলোড করেছি: ${file.name}`,
-        sender: 'user',
+        sender: "user",
         timestamp: new Date(),
-        type: 'image',
-        imageUrl
+        type: "image",
+        imageUrl,
       };
-      
-      setMessages(prev => [...prev, userMessage]);
-      
+
+      setMessages((prev) => [...prev, userMessage]);
+
       // Analyze the uploaded image
       analyzeImageAndRespond(file);
     }
@@ -118,28 +138,28 @@ const AnimalBitePage: React.FC = () => {
 
   const analyzeImageAndRespond = async (file: File) => {
     setIsLoading(true);
-    
+
     try {
-      const response = await analyzeImage(file, 'animal-bite');
-      
+      const response = await analyzeImage(file, "animal-bite");
+
       const botMessage: Message = {
         id: Date.now().toString(),
         text: response,
-        sender: 'bot',
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      
-      setMessages(prev => [...prev, botMessage]);
+
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       const errorMessage: Message = {
         id: Date.now().toString(),
-        text: 'দুঃখিত, ছবি বিশ্লেষণ করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
-        sender: 'bot',
+        text: "দুঃখিত, ছবি বিশ্লেষণ করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -150,41 +170,45 @@ const AnimalBitePage: React.FC = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
-      
+
       mediaRecorder.start();
       setIsRecording(true);
       setRecordingTime(0);
-      
+
       recordingIntervalRef.current = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime((prev) => prev + 1);
       }, 1000);
-      
+
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) {
           const userMessage: Message = {
             id: Date.now().toString(),
-            text: 'ভয়েস মেসেজ পাঠিয়েছি',
-            sender: 'user',
+            text: "ভয়েস মেসেজ পাঠিয়েছি",
+            sender: "user",
             timestamp: new Date(),
-            type: 'voice'
+            type: "voice",
           };
-          
-          setMessages(prev => [...prev, userMessage]);
-          generateResponse('আমি একটি ভয়েস মেসেজ পাঠিয়েছি। প্রাণীর কামড় সম্পর্কে পরামর্শ দিন।');
+
+          setMessages((prev) => [...prev, userMessage]);
+          generateResponse(
+            "আমি একটি ভয়েস মেসেজ পাঠিয়েছি। প্রাণীর কামড় সম্পর্কে পরামর্শ দিন।",
+          );
         }
       };
     } catch (error) {
-      console.error('Error starting recording:', error);
+      console.error("Error starting recording:", error);
     }
   };
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
       setIsRecording(false);
       setRecordingTime(0);
-      
+
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
       }
@@ -194,103 +218,103 @@ const AnimalBitePage: React.FC = () => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const firstAidSteps = [
     {
-      step: '১',
-      title: 'পরিষ্কার করুন',
-      action: 'পানি ও সাবান দিয়ে ধুয়ে নিন'
+      step: "১",
+      title: "পরিষ্কার করুন",
+      action: "পানি ও সাবান দিয়ে ধুয়ে নিন",
     },
     {
-      step: '২',
-      title: 'জীবাণুমুক্ত করুন',
-      action: 'অ্যান্টিসেপটিক লাগান'
+      step: "২",
+      title: "জীবাণুমুক্ত করুন",
+      action: "অ্যান্টিসেপটিক লাগান",
     },
     {
-      step: '৩',
-      title: 'চিকিৎসা নিন',
-      action: 'দ্রুত ডাক্তারের কাছে যান'
-    }
+      step: "৩",
+      title: "চিকিৎসা নিন",
+      action: "দ্রুত ডাক্তারের কাছে যান",
+    },
   ];
 
   const animalTypes = [
     {
-      animal: 'কুকুর',
-      risk: 'উচ্চ',
-      treatment: 'জলাতঙ্ক টিকা',
-      timeline: '২৪ ঘণ্টা'
+      animal: "কুকুর",
+      risk: "উচ্চ",
+      treatment: "জলাতঙ্ক টিকা",
+      timeline: "২৪ ঘণ্টা",
     },
     {
-      animal: 'বিড়াল',
-      risk: 'মাঝারি',
-      treatment: 'জলাতঙ্ক টিকা',
-      timeline: '৪৮ ঘণ্টা'
+      animal: "বিড়াল",
+      risk: "মাঝারি",
+      treatment: "জলাতঙ্ক টিকা",
+      timeline: "৪৮ ঘণ্টা",
     },
     {
-      animal: 'সাপ',
-      risk: 'অত্যন্ত উচ্চ',
-      treatment: 'অবিলম্বে হাসপাতাল',
-      timeline: 'তুরন্ত'
+      animal: "সাপ",
+      risk: "অত্যন্ত উচ্চ",
+      treatment: "অবিলম্বে হাসপাতাল",
+      timeline: "তুরন্ত",
     },
     {
-      animal: 'বানর',
-      risk: 'উচ্চ',
-      treatment: 'জলাতঙ্ক ও টিটেনাস',
-      timeline: '২৪ ঘণ্টা'
-    }
+      animal: "বানর",
+      risk: "উচ্চ",
+      treatment: "জলাতঙ্ক ও টিটেনাস",
+      timeline: "২৪ ঘণ্টা",
+    },
   ];
 
   const warningSignals = [
-    'ক্ষতস্থান ফুলে যাওয়া',
-    'তীব্র ব্যথা',
-    'জ্বর',
-    'সংক্রমণের লক্ষণ'
+    "ক্ষতস্থান ফুলে যাওয়া",
+    "তীব্র ব্যথা",
+    "জ্বর",
+    "সংক্রমণের লক্ষণ",
   ];
 
   const emergencyContacts = [
     {
-      name: 'জাতীয় জরুরি সেবা',
-      number: '৯৯৯',
-      color: 'from-red-500 to-orange-500'
+      name: "জাতীয় জরুরি সেবা",
+      number: "৯৯৯",
+      color: "from-red-500 to-orange-500",
     },
     {
-      name: 'স্বাস্থ্য বাতায়ন',
-      number: '১৬২৬৩',
-      color: 'from-green-500 to-teal-500'
-    }
+      name: "স্বাস্থ্য বাতায়ন",
+      number: "১৬২৬৩",
+      color: "from-green-500 to-teal-500",
+    },
   ];
 
   const nearbyHospitals = [
     {
-      name: 'ঢাকা মেডিক্যাল কলেজ হাসপাতাল',
-      address: 'বকশী বাজার, ঢাকা',
-      phone: '০২-৮৬২৬৮১২',
-      distance: '২.৫ কিমি',
-      specialty: 'জরুরি বিভাগ ২৪/৭'
+      name: "ঢাকা মেডিক্যাল কলেজ হাসপাতাল",
+      address: "বকশী বাজার, ঢাকা",
+      phone: "০২-৮৬২৬৮১২",
+      distance: "২.৫ কিমি",
+      specialty: "জরুরি বিভাগ ২৪/৭",
     },
     {
-      name: 'বারডেম হাসপাতাল',
-      address: 'শাহবাগ, ঢাকা',
-      phone: '০২-৮৬১৬৬৬৬',
-      distance: '৩.২ কিমি',
-      specialty: 'জলাতঙ্ক প্রতিরোধ কেন্দ্র'
+      name: "বারডেম হাসপাতাল",
+      address: "শাহবাগ, ঢাকা",
+      phone: "০২-৮৬১৬৬৬৬",
+      distance: "৩.২ কিমি",
+      specialty: "জলাতঙ্ক প্রতিরোধ কেন্দ্র",
     },
     {
-      name: 'স্যার সলিমুল্লাহ মেডিক্যাল কলেজ',
-      address: 'মিটফোর্ড, ঢাকা',
-      phone: '০২-৭৩১৯০৪৪',
-      distance: '৪.১ কিমি',
-      specialty: 'বিষক্রিয়া চিকিৎসা'
+      name: "স্যার সলিমুল্লাহ মেডিক্যাল কলেজ",
+      address: "মিটফোর্ড, ঢাকা",
+      phone: "০২-৭৩১৯০৪৪",
+      distance: "৪.১ কিমি",
+      specialty: "বিষক্রিয়া চিকিৎসা",
     },
     {
-      name: 'জাতীয় ইনস্টিটিউট অব নিউরোসায়েন্স',
-      address: 'আগারগাঁও, ঢাকা',
-      phone: '০২-৮১১৮০৭৩',
-      distance: '৫.৮ কিমি',
-      specialty: 'সাপের কামড় বিশেষজ্ঞ'
-    }
+      name: "জাতীয় ইনস্টিটিউট অব নিউরোসায়েন্স",
+      address: "আগারগাঁও, ঢাকা",
+      phone: "০২-৮১১৮০৭৩",
+      distance: "৫.৮ কিমি",
+      specialty: "সাপের কামড় বিশেষজ্ঞ",
+    },
   ];
 
   return (

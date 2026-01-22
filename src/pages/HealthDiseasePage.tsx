@@ -24,6 +24,7 @@ import {
   Check,
 } from "lucide-react";
 import { useLanguage } from "../contexts/LanguageContext";
+import { generateHealthResponse } from "../utils/openaiApi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";

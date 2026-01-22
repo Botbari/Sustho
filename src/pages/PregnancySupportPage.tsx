@@ -1,14 +1,54 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Baby, Heart, Shield, AlertTriangle, Phone, MapPin, Navigation, Loader2, Copy, Share2, CheckCircle, User, UserCheck, Star, Calendar, Plus, X, Check, Send, Mic, MicOff, Bot, Upload, Edit, Save, Clock, Activity, FileText, Stethoscope, Pill, Users, BookOpen, Apple, Droplets, Moon, Sun, TrendingUp, BarChart3, ClipboardList } from 'lucide-react';
-import { generateHealthResponse, analyzeImage } from '../utils/geminiApi';
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Baby,
+  Heart,
+  Shield,
+  AlertTriangle,
+  Phone,
+  MapPin,
+  Navigation,
+  Loader2,
+  Copy,
+  Share2,
+  CheckCircle,
+  User,
+  UserCheck,
+  Star,
+  Calendar,
+  Plus,
+  X,
+  Check,
+  Send,
+  Mic,
+  MicOff,
+  Bot,
+  Upload,
+  Edit,
+  Save,
+  Clock,
+  Activity,
+  FileText,
+  Stethoscope,
+  Pill,
+  Users,
+  BookOpen,
+  Apple,
+  Droplets,
+  Moon,
+  Sun,
+  TrendingUp,
+  BarChart3,
+  ClipboardList,
+} from "lucide-react";
+import { generateHealthResponse, analyzeImage } from "../utils/openaiApi";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
 import img1 from "../assets/image/diseases.jpg";
 import img2 from "../assets/image/diseases1.jpg";
 import img3 from "../assets/image/diseases2.jpg";
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper, SwiperSlide } from "swiper/react";
 
 interface UserProfile {
   name: string;
@@ -61,44 +101,46 @@ interface Message {
 const PregnancySupportPage: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      text: 'আসসালামু আলাইকুম! আমি আপনার গর্ভাবস্থার সহায়ক। আপনার কোন প্রশ্ন বা সমস্যা থাকলে জানান।',
+      id: "1",
+      text: "আসসালামু আলাইকুম! আমি আপনার গর্ভাবস্থার সহায়ক। আপনার কোন প্রশ্ন বা সমস্যা থাকলে জানান।",
       isUser: false,
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    },
   ]);
-  const [inputMessage, setInputMessage] = useState('');
+  const [inputMessage, setInputMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedWarnings, setSelectedWarnings] = useState<string[]>([]);
-  const [doctorSuggestions, setDoctorSuggestions] = useState<DoctorSuggestion[]>([]);
+  const [doctorSuggestions, setDoctorSuggestions] = useState<
+    DoctorSuggestion[]
+  >([]);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showWeeklyModal, setShowWeeklyModal] = useState(false);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationShared, setLocationShared] = useState(false);
-  const [shareMessage, setShareMessage] = useState('');
+  const [shareMessage, setShareMessage] = useState("");
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [weeklyUpdates, setWeeklyUpdates] = useState<WeeklyUpdate[]>([]);
   const [updateData, setUpdateData] = useState({
-    week: '',
-    foods: '',
-    symptoms: '',
-    tests: '',
-    weight: '',
-    notes: ''
+    week: "",
+    foods: "",
+    symptoms: "",
+    tests: "",
+    weight: "",
+    notes: "",
   });
   const [weeklyData, setWeeklyData] = useState({
-    week: '',
-    tests: '',
-    testResults: '',
-    symptoms: '',
-    foods: '',
-    notes: '',
-    weight: '',
-    bloodPressure: ''
+    week: "",
+    tests: "",
+    testResults: "",
+    symptoms: "",
+    foods: "",
+    notes: "",
+    weight: "",
+    bloodPressure: "",
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -111,66 +153,74 @@ const PregnancySupportPage: React.FC = () => {
   }, [messages]);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   // Function to add doctor suggestion from chatbot
   const addDoctorSuggestionFromChat = (message: string) => {
     // Mock doctor suggestions based on keywords
-    const doctorKeywords = ['ডাক্তার', 'চিকিৎসক', 'বিশেষজ্ঞ', 'পরামর্শ'];
-    
-    if (doctorKeywords.some(keyword => message.includes(keyword))) {
+    const doctorKeywords = ["ডাক্তার", "চিকিৎসক", "বিশেষজ্ঞ", "পরামর্শ"];
+
+    if (doctorKeywords.some((keyword) => message.includes(keyword))) {
       const mockDoctors = [
         {
-          name: 'ডাঃ ফাতেমা খাতুন',
-          specialty: 'গাইনী ও প্রসূতি বিশেষজ্ঞ',
-          hospital: 'বারডেম হাসপাতাল',
-          phone: '০১৮৮৭৬৫৪ৣ২১',
+          name: "ডাঃ ফাতেমা খাতুন",
+          specialty: "গাইনী ও প্রসূতি বিশেষজ্ঞ",
+          hospital: "বারডেম হাসপাতাল",
+          phone: "০১৮৮৭৬৫৪ৣ২১",
           rating: 4.9,
-          experience: '১২ বছর'
+          experience: "১২ বছর",
         },
         {
-          name: 'ডাঃ রাশিদা বেগম',
-          specialty: 'মাতৃত্বকালীন বিশেষজ্ঞ',
-          hospital: 'ঢাকা মেডিক্যাল কলেজ',
-          phone: '০১৭১২৩৪৫৬৭৮',
+          name: "ডাঃ রাশিদা বেগম",
+          specialty: "মাতৃত্বকালীন বিশেষজ্ঞ",
+          hospital: "ঢাকা মেডিক্যাল কলেজ",
+          phone: "০১৭১২৩৪৫৬৭৮",
           rating: 4.8,
-          experience: '১৫ বছর'
-        }
+          experience: "১৫ বছর",
+        },
       ];
-      
-      const randomDoctor = mockDoctors[Math.floor(Math.random() * mockDoctors.length)];
+
+      const randomDoctor =
+        mockDoctors[Math.floor(Math.random() * mockDoctors.length)];
       const newSuggestion: DoctorSuggestion = {
         ...randomDoctor,
         id: Date.now().toString(),
-        timestamp: new Date()
+        timestamp: new Date(),
       };
-      
-      setDoctorSuggestions(prev => [newSuggestion, ...prev]);
+
+      setDoctorSuggestions((prev) => [newSuggestion, ...prev]);
     }
   };
 
   // Function to add weekly update from chatbot
   const addWeeklyUpdateFromChat = (message: string) => {
     // Parse message for test reports and other information
-    const testKeywords = ['টেস্ট', 'রিপোর্ট', 'পরীক্ষা', 'আল্ট্রাসাউন্ড', 'ব্লাড টেস্ট', 'ইউরিন টেস্ট'];
-    const foodKeywords = ['খেয়েছি', 'খাবার', 'খাই', 'পুষ্টি'];
-    const symptomKeywords = ['সমস্যা', 'ব্যথা', 'বমি', 'মাথা ঘোরা', 'জ্বর'];
-    
+    const testKeywords = [
+      "টেস্ট",
+      "রিপোর্ট",
+      "পরীক্ষা",
+      "আল্ট্রাসাউন্ড",
+      "ব্লাড টেস্ট",
+      "ইউরিন টেস্ট",
+    ];
+    const foodKeywords = ["খেয়েছি", "খাবার", "খাই", "পুষ্টি"];
+    const symptomKeywords = ["সমস্যা", "ব্যথা", "বমি", "মাথা ঘোরা", "জ্বর"];
+
     let tests: string[] = [];
     let foods: string[] = [];
     let symptoms: string[] = [];
-    
-    if (testKeywords.some(keyword => message.includes(keyword))) {
+
+    if (testKeywords.some((keyword) => message.includes(keyword))) {
       tests.push(message);
     }
-    if (foodKeywords.some(keyword => message.includes(keyword))) {
+    if (foodKeywords.some((keyword) => message.includes(keyword))) {
       foods.push(message);
     }
-    if (symptomKeywords.some(keyword => message.includes(keyword))) {
+    if (symptomKeywords.some((keyword) => message.includes(keyword))) {
       symptoms.push(message);
     }
-    
+
     if (tests.length > 0 || foods.length > 0 || symptoms.length > 0) {
       const currentWeek = userProfile?.currentWeek || 1;
       updateWeeklyRecord(currentWeek, tests, foods, symptoms, message);
@@ -178,18 +228,28 @@ const PregnancySupportPage: React.FC = () => {
   };
 
   // Update weekly record
-  const updateWeeklyRecord = (week: number, tests: string[], foods: string[], symptoms: string[], notes: string) => {
-    const existingUpdateIndex = weeklyUpdates.findIndex(update => update.week === week);
-    
+  const updateWeeklyRecord = (
+    week: number,
+    tests: string[],
+    foods: string[],
+    symptoms: string[],
+    notes: string,
+  ) => {
+    const existingUpdateIndex = weeklyUpdates.findIndex(
+      (update) => update.week === week,
+    );
+
     if (existingUpdateIndex >= 0) {
       // Update existing record
       const updatedRecord = { ...weeklyUpdates[existingUpdateIndex] };
       updatedRecord.tests = [...new Set([...updatedRecord.tests, ...tests])];
       updatedRecord.foods = [...new Set([...updatedRecord.foods, ...foods])];
-      updatedRecord.symptoms = [...new Set([...updatedRecord.symptoms, ...symptoms])];
-      updatedRecord.notes = updatedRecord.notes + '\n' + notes;
+      updatedRecord.symptoms = [
+        ...new Set([...updatedRecord.symptoms, ...symptoms]),
+      ];
+      updatedRecord.notes = updatedRecord.notes + "\n" + notes;
       updatedRecord.timestamp = new Date();
-      
+
       const newUpdates = [...weeklyUpdates];
       newUpdates[existingUpdateIndex] = updatedRecord;
       setWeeklyUpdates(newUpdates);
@@ -198,51 +258,54 @@ const PregnancySupportPage: React.FC = () => {
       const newUpdate: WeeklyUpdate = {
         id: Date.now().toString(),
         week: week,
-        date: new Date().toLocaleDateString('bn-BD'),
+        date: new Date().toLocaleDateString("bn-BD"),
         tests: tests,
         testResults: [],
         symptoms: symptoms,
         foods: foods,
         notes: notes,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
-      setWeeklyUpdates(prev => [newUpdate, ...prev]);
+      setWeeklyUpdates((prev) => [newUpdate, ...prev]);
     }
   };
 
   const generateResponse = async (userMessage: string, imageUrl?: string) => {
     setIsLoading(true);
-    
+
     try {
       // Use Google Gemini API for real AI responses
-      const response = await generateHealthResponse(userMessage, 'pregnancy-support');
-      
+      const response = await generateHealthResponse(
+        userMessage,
+        "pregnancy-support",
+      );
+
       // Auto-update weekly records from chat
       addWeeklyUpdateFromChat(userMessage);
-      
+
       // Check if message contains doctor-related keywords
-      const doctorKeywords = ['ডাক্তার', 'চিকিৎসক', 'বিশেষজ্ঞ', 'পরামর্শ'];
-      if (doctorKeywords.some(keyword => userMessage.includes(keyword))) {
+      const doctorKeywords = ["ডাক্তার", "চিকিৎসক", "বিশেষজ্ঞ", "পরামর্শ"];
+      if (doctorKeywords.some((keyword) => userMessage.includes(keyword))) {
         addDoctorSuggestionFromChat(userMessage);
       }
-      
+
       const botMessage: Message = {
         id: Date.now().toString(),
         text: response,
         isUser: false,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
-      
-      setMessages(prev => [...prev, botMessage]);
+
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
-      console.error('Error generating response:', error);
+      console.error("Error generating response:", error);
       const errorMessage: Message = {
         id: Date.now().toString(),
-        text: 'দুঃখিত, এই মুহূর্তে আমি উত্তর দিতে পারছি না। অনুগ্রহ করে পরে আবার চেষ্টা করুন।',
+        text: "দুঃখিত, এই মুহূর্তে আমি উত্তর দিতে পারছি না। অনুগ্রহ করে পরে আবার চেষ্টা করুন।",
         isUser: false,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -256,20 +319,20 @@ const PregnancySupportPage: React.FC = () => {
       text: inputMessage,
       isUser: true,
       timestamp: new Date(),
-      imageUrl: uploadedImage || undefined
+      imageUrl: uploadedImage || undefined,
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    
+    setMessages((prev) => [...prev, userMessage]);
+
     // Generate AI response
     await generateResponse(inputMessage, uploadedImage || undefined);
-    
-    setInputMessage('');
+
+    setInputMessage("");
     setUploadedImage(null);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
@@ -292,50 +355,51 @@ const PregnancySupportPage: React.FC = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
-      
+
       mediaRecorder.start();
       setIsRecording(true);
       setRecordingTime(0);
-      
+
       recordingIntervalRef.current = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime((prev) => prev + 1);
       }, 1000);
-      
+
       mediaRecorder.ondataavailable = (event) => {
         // Handle recorded audio data
-        console.log('Audio recorded:', event.data);
+        console.log("Audio recorded:", event.data);
       };
-      
     } catch (error) {
-      console.error('Error starting recording:', error);
+      console.error("Error starting recording:", error);
     }
   };
 
   const stopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
     }
-    
+
     if (recordingIntervalRef.current) {
       clearInterval(recordingIntervalRef.current);
     }
-    
+
     setIsRecording(false);
     setRecordingTime(0);
   };
 
   const toggleWarning = (warning: string) => {
-    setSelectedWarnings(prev => 
-      prev.includes(warning) 
-        ? prev.filter(w => w !== warning)
-        : [...prev, warning]
+    setSelectedWarnings((prev) =>
+      prev.includes(warning)
+        ? prev.filter((w) => w !== warning)
+        : [...prev, warning],
     );
   };
 
   const sendSelectedWarningsToChat = () => {
     if (selectedWarnings.length > 0) {
-      const message = `আমার এই লক্ষণগুলো রয়েছে: ${selectedWarnings.join(', ')}। এ বিষয়ে পরামর্শ দিন।`;
+      const message = `আমার এই লক্ষণগুলো রয়েছে: ${selectedWarnings.join(", ")}। এ বিষয়ে পরামর্শ দিন।`;
       setInputMessage(message);
       setSelectedWarnings([]);
     }
@@ -343,9 +407,9 @@ const PregnancySupportPage: React.FC = () => {
 
   const getEmergencyLocation = () => {
     setIsGettingLocation(true);
-    
+
     if (!navigator.geolocation) {
-      alert('আপনার ব্রাউজার জিওলোকেশন সাপোর্ট করে না');
+      alert("আপনার ব্রাউজার জিওলোকেশন সাপোর্ট করে না");
       setIsGettingLocation(false);
       return;
     }
@@ -354,40 +418,40 @@ const PregnancySupportPage: React.FC = () => {
       (position) => {
         const { latitude, longitude } = position.coords;
         setIsGettingLocation(false);
-        
-        const emergencyMessage = `🆘 জরুরি অবস্থা! গর্ভবতী মায়ের জরুরি সাহায্য প্রয়োজন।\n\n📍 অবস্থান:\nঅক্ষাংশ: ${latitude.toFixed(6)}\nদ্রাঘিমাংশ: ${longitude.toFixed(6)}\n\nGoogle Maps: https://maps.google.com/?q=${latitude},${longitude}\n\n⏰ সময়: ${new Date().toLocaleString('bn-BD')}\n\n📞 জরুরি নম্বর: ৯৯৯`;
-        
+
+        const emergencyMessage = `🆘 জরুরি অবস্থা! গর্ভবতী মায়ের জরুরি সাহায্য প্রয়োজন।\n\n📍 অবস্থান:\nঅক্ষাংশ: ${latitude.toFixed(6)}\nদ্রাঘিমাংশ: ${longitude.toFixed(6)}\n\nGoogle Maps: https://maps.google.com/?q=${latitude},${longitude}\n\n⏰ সময়: ${new Date().toLocaleString("bn-BD")}\n\n📞 জরুরি নম্বর: ৯৯৯`;
+
         setShareMessage(emergencyMessage);
         setLocationShared(true);
-        
+
         // Auto call emergency
         setTimeout(() => {
-          window.open('tel:999');
+          window.open("tel:999");
         }, 1000);
       },
       (error) => {
-        console.error('Error getting location:', error);
+        console.error("Error getting location:", error);
         setIsGettingLocation(false);
-        
-        const emergencyMessage = `🆘 জরুরি অবস্থা! গর্ভবতী মায়ের জরুরি সাহায্য প্রয়োজন।\n\n⚠️ লোকেশন পাওয়া যায়নি\n\n⏰ সময়: ${new Date().toLocaleString('bn-BD')}\n\n📞 জরুরি নম্বর: ৯৯৯`;
-        
+
+        const emergencyMessage = `🆘 জরুরি অবস্থা! গর্ভবতী মায়ের জরুরি সাহায্য প্রয়োজন।\n\n⚠️ লোকেশন পাওয়া যায়নি\n\n⏰ সময়: ${new Date().toLocaleString("bn-BD")}\n\n📞 জরুরি নম্বর: ৯৯৯`;
+
         setShareMessage(emergencyMessage);
         setLocationShared(true);
-        
+
         // Call emergency without location
-        window.open('tel:999');
+        window.open("tel:999");
       },
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 60000
-      }
+        maximumAge: 60000,
+      },
     );
   };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(shareMessage);
-    alert('জরুরি বার্তা কপি হয়েছে!');
+    alert("জরুরি বার্তা কপি হয়েছে!");
   };
 
   const shareViaWhatsApp = () => {
@@ -398,60 +462,88 @@ const PregnancySupportPage: React.FC = () => {
   const handleProfileSubmit = () => {
     // Validate required fields
     if (!userProfile?.name || !userProfile?.currentWeek) {
-      alert('নাম এবং গর্ভাবস্থার সপ্তাহ অবশ্যই দিতে হবে');
+      alert("নাম এবং গর্ভাবস্থার সপ্তাহ অবশ্যই দিতে হবে");
       return;
     }
-    
+
     setShowProfileModal(false);
-    alert('প্রোফাইল সংরক্ষিত হয়েছে!');
+    alert("প্রোফাইল সংরক্ষিত হয়েছে!");
   };
 
   const handleUpdateSubmit = () => {
     if (!updateData.week) {
-      alert('সপ্তাহ নম্বর দিন');
+      alert("সপ্তাহ নম্বর দিন");
       return;
     }
 
     // Process the update data
-    const foods = updateData.foods.split(',').map(f => f.trim()).filter(f => f);
-    const symptoms = updateData.symptoms.split(',').map(s => s.trim()).filter(s => s);
-    const tests = updateData.tests.split(',').map(t => t.trim()).filter(t => t);
+    const foods = updateData.foods
+      .split(",")
+      .map((f) => f.trim())
+      .filter((f) => f);
+    const symptoms = updateData.symptoms
+      .split(",")
+      .map((s) => s.trim())
+      .filter((s) => s);
+    const tests = updateData.tests
+      .split(",")
+      .map((t) => t.trim())
+      .filter((t) => t);
 
     // Add to chat as a message
-    const updateMessage = `সপ্তাহ ${updateData.week} এর আপডেট:\n\nখাবার: ${foods.join(', ')}\nলক্ষণ: ${symptoms.join(', ')}\nটেস্ট: ${tests.join(', ')}\nওজন: ${updateData.weight} কেজি\nনোট: ${updateData.notes}`;
-    
+    const updateMessage = `সপ্তাহ ${updateData.week} এর আপডেট:\n\nখাবার: ${foods.join(", ")}\nলক্ষণ: ${symptoms.join(", ")}\nটেস্ট: ${tests.join(", ")}\nওজন: ${updateData.weight} কেজি\nনোট: ${updateData.notes}`;
+
     const userMessage: Message = {
       id: Date.now().toString(),
       text: updateMessage,
       isUser: true,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
-    
+    setMessages((prev) => [...prev, userMessage]);
+
     // Generate AI response
     generateResponse(updateMessage);
-    
+
     // Reset form
-    setUpdateData({ week: '', foods: '', symptoms: '', tests: '', weight: '', notes: '' });
+    setUpdateData({
+      week: "",
+      foods: "",
+      symptoms: "",
+      tests: "",
+      weight: "",
+      notes: "",
+    });
     setShowUpdateModal(false);
   };
 
   const handleWeeklySubmit = () => {
     if (!weeklyData.week) {
-      alert('সপ্তাহ নম্বর দিন');
+      alert("সপ্তাহ নম্বর দিন");
       return;
     }
 
-    const tests = weeklyData.tests.split(',').map(t => t.trim()).filter(t => t);
-    const testResults = weeklyData.testResults.split(',').map(t => t.trim()).filter(t => t);
-    const symptoms = weeklyData.symptoms.split(',').map(t => t.trim()).filter(t => t);
-    const foods = weeklyData.foods.split(',').map(t => t.trim()).filter(t => t);
+    const tests = weeklyData.tests
+      .split(",")
+      .map((t) => t.trim())
+      .filter((t) => t);
+    const testResults = weeklyData.testResults
+      .split(",")
+      .map((t) => t.trim())
+      .filter((t) => t);
+    const symptoms = weeklyData.symptoms
+      .split(",")
+      .map((t) => t.trim())
+      .filter((t) => t);
+    const foods = weeklyData.foods
+      .split(",")
+      .map((t) => t.trim())
+      .filter((t) => t);
 
     const newUpdate: WeeklyUpdate = {
       id: Date.now().toString(),
       week: parseInt(weeklyData.week),
-      date: new Date().toLocaleDateString('bn-BD'),
+      date: new Date().toLocaleDateString("bn-BD"),
       tests: tests,
       testResults: testResults,
       symptoms: symptoms,
@@ -459,72 +551,84 @@ const PregnancySupportPage: React.FC = () => {
       notes: weeklyData.notes,
       weight: weeklyData.weight ? parseFloat(weeklyData.weight) : undefined,
       bloodPressure: weeklyData.bloodPressure || undefined,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setWeeklyUpdates(prev => [newUpdate, ...prev.filter(u => u.week !== newUpdate.week)]);
-    setWeeklyData({ week: '', tests: '', testResults: '', symptoms: '', foods: '', notes: '', weight: '', bloodPressure: '' });
+    setWeeklyUpdates((prev) => [
+      newUpdate,
+      ...prev.filter((u) => u.week !== newUpdate.week),
+    ]);
+    setWeeklyData({
+      week: "",
+      tests: "",
+      testResults: "",
+      symptoms: "",
+      foods: "",
+      notes: "",
+      weight: "",
+      bloodPressure: "",
+    });
     setShowWeeklyModal(false);
   };
 
   const nutritionTips = [
     {
       icon: Apple,
-      title: 'পুষ্টিকর খাবার',
-      description: 'ফলিক অ্যাসিড, আয়রন ও ক্যালসিয়াম',
-      foods: ['পালং শাক', 'ডিম', 'দুধ', 'মাছ'],
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'from-green-50 to-emerald-50',
-      borderColor: 'border-green-200'
+      title: "পুষ্টিকর খাবার",
+      description: "ফলিক অ্যাসিড, আয়রন ও ক্যালসিয়াম",
+      foods: ["পালং শাক", "ডিম", "দুধ", "মাছ"],
+      color: "from-green-500 to-emerald-500",
+      bgColor: "from-green-50 to-emerald-50",
+      borderColor: "border-green-200",
     },
     {
       icon: Droplets,
-      title: 'পর্যাপ্ত পানি',
-      description: 'দৈনিক ৮-১০ গ্লাস পানি পান করুন',
-      foods: ['পানি', 'ডাবের পানি', 'ফলের রস', 'স্যুপ'],
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'from-blue-50 to-cyan-50',
-      borderColor: 'border-blue-200'
+      title: "পর্যাপ্ত পানি",
+      description: "দৈনিক ৮-১০ গ্লাস পানি পান করুন",
+      foods: ["পানি", "ডাবের পানি", "ফলের রস", "স্যুপ"],
+      color: "from-blue-500 to-cyan-500",
+      bgColor: "from-blue-50 to-cyan-50",
+      borderColor: "border-blue-200",
     },
     {
       icon: Shield,
-      title: 'এড়িয়ে চলুন',
-      description: 'কাঁচা মাছ, মাংস ও অতিরিক্ত ক্যাফিন এড়িয়ে চলুন',
-      foods: ['রান্না করা খাবার', 'পাস্তুরাইজড দুধ', 'ধোয়া ফল', 'সিদ্ধ পানি'],
-      color: 'from-orange-500 to-red-500',
-      bgColor: 'from-orange-50 to-red-50',
-      borderColor: 'border-orange-200'
-    }
+      title: "এড়িয়ে চলুন",
+      description: "কাঁচা মাছ, মাংস ও অতিরিক্ত ক্যাফিন এড়িয়ে চলুন",
+      foods: ["রান্না করা খাবার", "পাস্তুরাইজড দুধ", "ধোয়া ফল", "সিদ্ধ পানি"],
+      color: "from-orange-500 to-red-500",
+      bgColor: "from-orange-50 to-red-50",
+      borderColor: "border-orange-200",
+    },
   ];
 
   const warningSignals = [
     {
       icon: AlertTriangle,
-      title: 'রক্তক্ষরণ',
-      description: 'অতিরিক্ত রক্তক্ষরণ বা তীব্র ব্যথা',
-      actions: ['অবিলম্বে হাসপাতালে যান', 'জরুরি নম্বরে কল করুন'],
-      color: 'from-red-500 to-orange-500',
-      bgColor: 'from-red-50 to-orange-50',
-      borderColor: 'border-red-200'
+      title: "রক্তক্ষরণ",
+      description: "অতিরিক্ত রক্তক্ষরণ বা তীব্র ব্যথা",
+      actions: ["অবিলম্বে হাসপাতালে যান", "জরুরি নম্বরে কল করুন"],
+      color: "from-red-500 to-orange-500",
+      bgColor: "from-red-50 to-orange-50",
+      borderColor: "border-red-200",
     },
     {
       icon: AlertTriangle,
-      title: 'উচ্চ রক্তচাপ',
-      description: 'তীব্র মাথা ব্যথা, দৃষ্টি ঝাপসা বা হাত-পা ফোলা',
-      actions: ['দ্রুত ডাক্তার দেখান', 'রক্তচাপ পরীক্ষা করান'],
-      color: 'from-yellow-500 to-orange-500',
-      bgColor: 'from-yellow-50 to-orange-50',
-      borderColor: 'border-yellow-200'
+      title: "উচ্চ রক্তচাপ",
+      description: "তীব্র মাথা ব্যথা, দৃষ্টি ঝাপসা বা হাত-পা ফোলা",
+      actions: ["দ্রুত ডাক্তার দেখান", "রক্তচাপ পরীক্ষা করান"],
+      color: "from-yellow-500 to-orange-500",
+      bgColor: "from-yellow-50 to-orange-50",
+      borderColor: "border-yellow-200",
     },
     {
       icon: Heart,
-      title: 'বাচ্চার নড়াচড়া',
-      description: 'বাচ্চার নড়াচড়া কমে যাওয়া বা বন্ধ হওয়া',
-      actions: ['অবিলম্বে ডাক্তারের কাছে যান', 'আল্ট্রাসাউন্ড করান'],
-      color: 'from-purple-500 to-pink-500',
-      bgColor: 'from-purple-50 to-pink-50',
-      borderColor: 'border-purple-200'
-    }
+      title: "বাচ্চার নড়াচড়া",
+      description: "বাচ্চার নড়াচড়া কমে যাওয়া বা বন্ধ হওয়া",
+      actions: ["অবিলম্বে ডাক্তারের কাছে যান", "আল্ট্রাসাউন্ড করান"],
+      color: "from-purple-500 to-pink-500",
+      bgColor: "from-purple-50 to-pink-50",
+      borderColor: "border-purple-200",
+    },
   ];
 
   return (

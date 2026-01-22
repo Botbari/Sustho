@@ -16,6 +16,7 @@ import {
   User,
   Sparkles
 } from 'lucide-react';
+import { generateHealthResponse } from '../utils/openaiApi';
 
 /* ================= TYPES ================= */
 
@@ -240,7 +241,7 @@ const TreeHealthChatbot: React.FC<{ externalMessages: string[] }> = ({
       { id: Date.now().toString(), text: msg, sender: 'user', timestamp: new Date() }
     ]);
     setInput('');
-    respondBot(false);
+    respondBot(false, msg);
   };
 
   const handleImageUpload = (file: File) => {
@@ -252,22 +253,40 @@ const TreeHealthChatbot: React.FC<{ externalMessages: string[] }> = ({
     respondBot(true);
   };
 
-  const respondBot = (image: boolean) => {
+  const respondBot = async (image: boolean, userText?: string) => {
     setLoading(true);
-    setTimeout(() => {
+    try {
+      let response: string;
+      if (image) {
+        response = 'পাতার ছবিটি বিশ্লেষণ করে মনে হচ্ছে এটি পুষ্টিহীনতা বা ছত্রাকজনিত সমস্যা হতে পারে। বিস্তারিত পরামর্শের জন্য গাছের সমস্যা সম্পর্কে আরও তথ্য দিন।';
+      } else {
+        const messageToSend = userText || '';
+        response = await generateHealthResponse(messageToSend, 'tree-health');
+      }
+      
       setMessages(m => [
         ...m,
         {
           id: (Date.now() + 1).toString(),
-          text: image
-            ? 'পাতার ছবিটি বিশ্লেষণ করে মনে হচ্ছে এটি পুষ্টিহীনতা বা ছত্রাকজনিত সমস্যা হতে পারে।'
-            : 'এই সমস্যায় পানি নিয়ন্ত্রণ, জৈব সার ও আক্রান্ত অংশ ছাঁটাই উপকারী।',
+          text: response,
           sender: 'bot',
           timestamp: new Date()
         }
       ]);
+    } catch (error) {
+      console.error('AI Response Error:', error);
+      setMessages(m => [
+        ...m,
+        {
+          id: (Date.now() + 1).toString(),
+          text: 'দুঃখিত, এই মুহূর্তে পরামর্শ দিতে পারছি না। অনুগ্রহ করে আবার চেষ্টা করুন।',
+          sender: 'bot',
+          timestamp: new Date()
+        }
+      ]);
+    } finally {
       setLoading(false);
-    }, 1600);
+    }
   };
 
   return (
