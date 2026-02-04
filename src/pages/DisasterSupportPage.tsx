@@ -391,37 +391,37 @@ const DisasterSupportPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
           <motion.div
-            className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white mb-6 shadow-2xl"
+            className="inline-flex items-center justify-center w-16 h-16 sm:w-20 md:w-24 sm:h-20 md:h-24 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white mb-4 sm:mb-6 shadow-2xl"
             whileHover={{ scale: 1.1, rotate: 10 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
-            <AlertTriangle className="w-12 h-12" />
+            <AlertTriangle className="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12" />
           </motion.div>
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 px-2">
             দুর্যোগ সহায়তা
           </h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-2">
             {t("disaster.subtitle")}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6 lg:space-y-8">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-3xl shadow-2xl border border-gray-100"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100"
             >
               <Swiper
                 pagination={{
@@ -436,15 +436,15 @@ const DisasterSupportPage: React.FC = () => {
                 loop={true}
                 speed={1600}
               >
-                <SwiperSlide className="h-[500px]">
+                <SwiperSlide className="">
                   <img src={img1} alt="" />
                 </SwiperSlide>
-                <SwiperSlide className="h-[500px]">
+                <SwiperSlide className="">
                   <img src={img2} alt="" />
                 </SwiperSlide>
-                <SwiperSlide className="h-[500px]">
+                {/* <SwiperSlide className="">
                   <img src={img3} alt="" />
-                </SwiperSlide>
+                </SwiperSlide> */}
                 {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
               </Swiper>
             </motion.div>

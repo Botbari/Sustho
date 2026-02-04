@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Baby, Heart, Shield, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
-import AIChat from '../components/AIChat';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Users,
+  Baby,
+  Heart,
+  Shield,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+} from "lucide-react";
+import AIChat from "../components/AIChat";
+import { useLanguage } from "../contexts/LanguageContext";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
@@ -18,87 +26,101 @@ const ChildHealthPage: React.FC = () => {
 
   const ageGroups = [
     {
-      age: t('language') === 'bn' ? '০-৬ মাস' : '0-6 months',
-      subtitle: t('language') === 'bn' ? 'নবজাতক পর্যায়' : 'Newborn stage',
-      feeding: t('language') === 'bn' ? 'শুধুমাত্র বুকের দুধ' : 'Breastfeeding only',
-      checkup: t('language') === 'bn' ? 'মাসিক ওজন পরীক্ষা' : 'Monthly weight check',
-      vaccination: 'BCG, Polio, DPT, Hepatitis B',
-      color: 'from-pink-500 to-rose-500',
-      bgColor: 'from-pink-50 to-rose-50',
-      icon: '👶'
+      age: t("language") === "bn" ? "০-৬ মাস" : "0-6 months",
+      subtitle: t("language") === "bn" ? "নবজাতক পর্যায়" : "Newborn stage",
+      feeding:
+        t("language") === "bn" ? "শুধুমাত্র বুকের দুধ" : "Breastfeeding only",
+      checkup:
+        t("language") === "bn" ? "মাসিক ওজন পরীক্ষা" : "Monthly weight check",
+      vaccination: "BCG, Polio, DPT, Hepatitis B",
+      color: "from-pink-500 to-rose-500",
+      bgColor: "from-pink-50 to-rose-50",
+      icon: "👶",
     },
     {
-      age: t('language') === 'bn' ? '৬-১২ মাস' : '6-12 months',
-      subtitle: t('language') === 'bn' ? 'সম্পূরক খাবার শুরু' : 'Start complementary feeding',
-      feeding: t('language') === 'bn' ? 'বুকের দুধ + সম্পূরক খাবার' : 'Breastfeeding + complementary food',
-      checkup: t('language') === 'bn' ? 'মাসিক বৃদ্ধি পরীক্ষা' : 'Monthly growth check',
-      vaccination: t('language') === 'bn' ? 'হাম, MR, নিউমোনিয়া' : 'Measles, MR, Pneumonia',
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'from-blue-50 to-cyan-50',
-      icon: '🍼'
+      age: t("language") === "bn" ? "৬-১২ মাস" : "6-12 months",
+      subtitle:
+        t("language") === "bn"
+          ? "সম্পূরক খাবার শুরু"
+          : "Start complementary feeding",
+      feeding:
+        t("language") === "bn"
+          ? "বুকের দুধ + সম্পূরক খাবার"
+          : "Breastfeeding + complementary food",
+      checkup:
+        t("language") === "bn"
+          ? "মাসিক বৃদ্ধি পরীক্ষা"
+          : "Monthly growth check",
+      vaccination:
+        t("language") === "bn"
+          ? "হাম, MR, নিউমোনিয়া"
+          : "Measles, MR, Pneumonia",
+      color: "from-blue-500 to-cyan-500",
+      bgColor: "from-blue-50 to-cyan-50",
+      icon: "🍼",
     },
     {
-      age: '১-২ বছর',
-      subtitle: 'হাঁটাচলা শেখার সময়',
-      feeding: 'পারিবারিক খাবার',
-      checkup: 'তিন মাস পর পর',
-      vaccination: 'ডিপথেরিয়া, টিটেনাস',
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'from-green-50 to-emerald-50',
-      icon: '🚶‍♂️'
+      age: "১-২ বছর",
+      subtitle: "হাঁটাচলা শেখার সময়",
+      feeding: "পারিবারিক খাবার",
+      checkup: "তিন মাস পর পর",
+      vaccination: "ডিপথেরিয়া, টিটেনাস",
+      color: "from-green-500 to-emerald-500",
+      bgColor: "from-green-50 to-emerald-50",
+      icon: "🚶‍♂️",
     },
     {
-      age: '২-৫ বছর',
-      subtitle: 'প্রাক-স্কুল পর্যায়',
-      feeding: 'সুষম খাবার',
-      checkup: 'ছয় মাস পর পর',
-      vaccination: 'বার্ষিক টিকা',
-      color: 'from-purple-500 to-indigo-500',
-      bgColor: 'from-purple-50 to-indigo-50',
-      icon: '🎒'
-    }
+      age: "২-৫ বছর",
+      subtitle: "প্রাক-স্কুল পর্যায়",
+      feeding: "সুষম খাবার",
+      checkup: "ছয় মাস পর পর",
+      vaccination: "বার্ষিক টিকা",
+      color: "from-purple-500 to-indigo-500",
+      bgColor: "from-purple-50 to-indigo-50",
+      icon: "🎒",
+    },
   ];
 
   const commonProblems = [
     {
-      icon: '🌡️',
-      title: 'জ্বর',
-      symptoms: ['উচ্চ তাপমাত্রা', 'শীত শীত ভাব'],
-      treatment: ['প্যারাসিটামল', 'স্পঞ্জিং'],
-      color: 'from-red-500 to-orange-500'
+      icon: "🌡️",
+      title: "জ্বর",
+      symptoms: ["উচ্চ তাপমাত্রা", "শীত শীত ভাব"],
+      treatment: ["প্যারাসিটামল", "স্পঞ্জিং"],
+      color: "from-red-500 to-orange-500",
     },
     {
-      icon: '🤧',
-      title: 'সর্দি-কাশি',
-      symptoms: ['নাক বন্ধ', 'কাশি'],
-      treatment: ['নরম তরল', 'গরম বাষ্প'],
-      color: 'from-blue-500 to-cyan-500'
+      icon: "🤧",
+      title: "সর্দি-কাশি",
+      symptoms: ["নাক বন্ধ", "কাশি"],
+      treatment: ["নরম তরল", "গরম বাষ্প"],
+      color: "from-blue-500 to-cyan-500",
     },
     {
-      icon: '💧',
-      title: 'ডায়রিয়া',
-      symptoms: ['পাতলা পায়খানা', 'বমি'],
-      treatment: ['ORS', 'জিঙ্ক'],
-      color: 'from-yellow-500 to-amber-500'
-    }
+      icon: "💧",
+      title: "ডায়রিয়া",
+      symptoms: ["পাতলা পায়খানা", "বমি"],
+      treatment: ["ORS", "জিঙ্ক"],
+      color: "from-yellow-500 to-amber-500",
+    },
   ];
 
   const nutritionTips = [
-    '০-৬ মাস: শুধুমাত্র বুকের দুধ',
-    '৬ মাস পর: বুকের দুধ + সম্পূরক খাবার',
-    'আয়রন সমৃদ্ধ খাবার দিন',
-    'ভিটামিন A সমৃদ্ধ খাবার',
-    'প্রতিদিন পানি পান করান',
-    'চিনি ও লবণ কম দিন'
+    "০-৬ মাস: শুধুমাত্র বুকের দুধ",
+    "৬ মাস পর: বুকের দুধ + সম্পূরক খাবার",
+    "আয়রন সমৃদ্ধ খাবার দিন",
+    "ভিটামিন A সমৃদ্ধ খাবার",
+    "প্রতিদিন পানি পান করান",
+    "চিনি ও লবণ কম দিন",
   ];
 
   const vaccinationSchedule = [
-    { age: 'জন্মের পর', vaccines: 'BCG, পোলিও-০, হেপাটাইটিস B-১' },
-    { age: '৬ সপ্তাহ', vaccines: 'পোলিও-১, DPT-১, হেপাটাইটিস B-২, হিব-১' },
-    { age: '১০ সপ্তাহ', vaccines: 'পোলিও-২, DPT-২, হেপাটাইটিস B-৩, হিব-২' },
-    { age: '১৪ সপ্তাহ', vaccines: 'পোলিও-৩, DPT-৩, হিব-৩' },
-    { age: '৯ মাস', vaccines: 'হাম, MR' },
-    { age: '১৮ মাস', vaccines: 'DPT বুস্টার, পোলিও বুস্টার' }
+    { age: "জন্মের পর", vaccines: "BCG, পোলিও-০, হেপাটাইটিস B-১" },
+    { age: "৬ সপ্তাহ", vaccines: "পোলিও-১, DPT-১, হেপাটাইটিস B-২, হিব-১" },
+    { age: "১০ সপ্তাহ", vaccines: "পোলিও-২, DPT-২, হেপাটাইটিস B-৩, হিব-২" },
+    { age: "১৪ সপ্তাহ", vaccines: "পোলিও-৩, DPT-৩, হিব-৩" },
+    { age: "৯ মাস", vaccines: "হাম, MR" },
+    { age: "১৮ মাস", vaccines: "DPT বুস্টার, পোলিও বুস্টার" },
   ];
 
   const nextStage = () => {
@@ -115,32 +137,32 @@ const ChildHealthPage: React.FC = () => {
 
   const sendNutritionTipToChat = (tip: string) => {
     const message = `${tip} - এই বিষয়ে বিস্তারিত পরামর্শ দিন।`;
-    setChatMessages(prev => [...prev, message]);
+    setChatMessages((prev) => [...prev, message]);
   };
 
   const currentStageData = ageGroups[currentStage];
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white mb-6">
-            <Baby className="w-10 h-10" />
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white mb-4 sm:mb-6">
+            <Baby className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
             শিশু স্বাস্থ্য পরামর্শ
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
             {t("child.subtitle")}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Child Health Info */}
           <div className="lg:col-span-2 space-y-6">
             <motion.div
@@ -162,13 +184,13 @@ const ChildHealthPage: React.FC = () => {
                 loop={true}
                 speed={1600}
               >
-                <SwiperSlide className="h-[500px]">
+                <SwiperSlide className="">
                   <img src={img1} alt="" />
                 </SwiperSlide>
-                <SwiperSlide className="h-[500px]">
+                <SwiperSlide className="">
                   <img src={img2} alt="" />
                 </SwiperSlide>
-                <SwiperSlide className="h-[500px]">
+                <SwiperSlide className="">
                   <img src={img3} alt="" />
                 </SwiperSlide>
                 {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}

@@ -1,8 +1,8 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Stethoscope, Heart, AlertTriangle, Shield } from 'lucide-react';
-import AIChat from '../components/AIChat';
-import { useLanguage } from '../contexts/LanguageContext';
+import React from "react";
+import { motion } from "framer-motion";
+import { Stethoscope, Heart, AlertTriangle, Shield } from "lucide-react";
+import AIChat from "../components/AIChat";
+import { useLanguage } from "../contexts/LanguageContext";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
@@ -16,98 +16,140 @@ const AnimalTreatmentPage: React.FC = () => {
 
   const animalTypes = [
     {
-      name: t('language') === 'bn' ? 'গরু' : 'Cattle',
-      diseases: t('language') === 'bn' ? ['জ্বর', 'ডায়রিয়া', 'মুখ ও পায়ে ক্ষত', 'কাশি'] : ['Fever', 'Diarrhea', 'Foot & mouth disease', 'Cough'],
-      prevention: t('language') === 'bn' ? ['টিকা দেওয়া', 'পরিষ্কার পানি', 'সুষম খাবার', 'নিয়মিত পরিষ্কার'] : ['Vaccination', 'Clean water', 'Balanced diet', 'Regular cleaning'],
-      color: 'from-brown-500 to-amber-600',
-      bgColor: 'from-brown-50 to-amber-50',
-      icon: '🐄'
+      name: t("language") === "bn" ? "গরু" : "Cattle",
+      diseases:
+        t("language") === "bn"
+          ? ["জ্বর", "ডায়রিয়া", "মুখ ও পায়ে ক্ষত", "কাশি"]
+          : ["Fever", "Diarrhea", "Foot & mouth disease", "Cough"],
+      prevention:
+        t("language") === "bn"
+          ? ["টিকা দেওয়া", "পরিষ্কার পানি", "সুষম খাবার", "নিয়মিত পরিষ্কার"]
+          : ["Vaccination", "Clean water", "Balanced diet", "Regular cleaning"],
+      color: "from-brown-500 to-amber-600",
+      bgColor: "from-brown-50 to-amber-50",
+      icon: "🐄",
     },
     {
-      name: 'ছাগল',
-      diseases: ['PPR', 'কৃমি', 'আন্ত্রিক সমস্যা', 'চর্মরোগ'],
-      prevention: ['কৃমির ওষুধ', 'পরিষ্কার জায়গা', 'সময়মতো টিকা', 'সুষম খাবার'],
-      color: 'from-gray-500 to-slate-600',
-      bgColor: 'from-gray-50 to-slate-50',
-      icon: '🐐'
+      name: "ছাগল",
+      diseases: ["PPR", "কৃমি", "আন্ত্রিক সমস্যা", "চর্মরোগ"],
+      prevention: [
+        "কৃমির ওষুধ",
+        "পরিষ্কার জায়গা",
+        "সময়মতো টিকা",
+        "সুষম খাবার",
+      ],
+      color: "from-gray-500 to-slate-600",
+      bgColor: "from-gray-50 to-slate-50",
+      icon: "🐐",
     },
     {
-      name: 'মুরগি',
-      diseases: ['রাণীক্ষেত', 'কক্সিডিয়া', 'গামবোরো', 'ফাউল পক্স'],
-      prevention: ['টিকা কার্যক্রম', 'পরিষ্কার খাঁচা', 'জীবাণুমুক্ত পানি', 'সুষম খাবার'],
-      color: 'from-orange-500 to-red-500',
-      bgColor: 'from-orange-50 to-red-50',
-      icon: '🐔'
+      name: "মুরগি",
+      diseases: ["রাণীক্ষেত", "কক্সিডিয়া", "গামবোরো", "ফাউল পক্স"],
+      prevention: [
+        "টিকা কার্যক্রম",
+        "পরিষ্কার খাঁচা",
+        "জীবাণুমুক্ত পানি",
+        "সুষম খাবার",
+      ],
+      color: "from-orange-500 to-red-500",
+      bgColor: "from-orange-50 to-red-50",
+      icon: "🐔",
     },
     {
-      name: 'মাছ',
-      diseases: ['EUS', 'শ্বাসকষ্ট', 'পেট ফোলা', 'পাখনা পচা'],
-      prevention: ['পানির গুণমান', 'সঠিক খাবার', 'নিয়মিত পরিষ্কার', 'ঘনত্ব নিয়ন্ত্রণ'],
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'from-blue-50 to-cyan-50',
-      icon: '🐟'
-    }
+      name: "মাছ",
+      diseases: ["EUS", "শ্বাসকষ্ট", "পেট ফোলা", "পাখনা পচা"],
+      prevention: [
+        "পানির গুণমান",
+        "সঠিক খাবার",
+        "নিয়মিত পরিষ্কার",
+        "ঘনত্ব নিয়ন্ত্রণ",
+      ],
+      color: "from-blue-500 to-cyan-500",
+      bgColor: "from-blue-50 to-cyan-50",
+      icon: "🐟",
+    },
   ];
 
   const emergencySignals = [
     {
       icon: AlertTriangle,
-      title: 'জরুরি লক্ষণ',
-      signs: ['হঠাৎ খাবার বন্ধ', 'শ্বাসকষ্ট', 'অস্বাভাবিক আচরণ', 'মাত্রাতিরিক্ত জ্বর'],
-      color: 'from-red-500 to-orange-500'
+      title: "জরুরি লক্ষণ",
+      signs: [
+        "হঠাৎ খাবার বন্ধ",
+        "শ্বাসকষ্ট",
+        "অস্বাভাবিক আচরণ",
+        "মাত্রাতিরিক্ত জ্বর",
+      ],
+      color: "from-red-500 to-orange-500",
     },
     {
       icon: Heart,
-      title: 'প্রাথমিক চিকিৎসা',
-      signs: ['আলাদা রাখুন', 'পানি দিন', 'ঠান্ডা জায়গায় রাখুন', 'পশু চিকিৎসকের কাছে নিন'],
-      color: 'from-green-500 to-emerald-500'
+      title: "প্রাথমিক চিকিৎসা",
+      signs: [
+        "আলাদা রাখুন",
+        "পানি দিন",
+        "ঠান্ডা জায়গায় রাখুন",
+        "পশু চিকিৎসকের কাছে নিন",
+      ],
+      color: "from-green-500 to-emerald-500",
     },
     {
       icon: Shield,
-      title: 'প্রতিরোধ',
-      signs: ['নিয়মিত টিকা', 'পরিষ্কার পরিবেশ', 'সুষম খাবার', 'স্বাস্থ্য পরীক্ষা'],
-      color: 'from-blue-500 to-indigo-500'
-    }
+      title: "প্রতিরোধ",
+      signs: [
+        "নিয়মিত টিকা",
+        "পরিষ্কার পরিবেশ",
+        "সুষম খাবার",
+        "স্বাস্থ্য পরীক্ষা",
+      ],
+      color: "from-blue-500 to-indigo-500",
+    },
   ];
 
   const vaccinationSchedule = [
-    { 
-      animal: 'গরু ও ছাগল', 
+    {
+      animal: "গরু ও ছাগল",
       vaccines: [
-        { name: 'তড়কা', schedule: '৬ মাস পর পর', color: 'bg-red-500' },
-        { name: 'মুখ ও পায়ের ক্ষত', schedule: 'বছরে ২ বার', color: 'bg-orange-500' },
-        { name: 'PPR (ছাগল)', schedule: '৩ বছর পর পর', color: 'bg-yellow-500' }
-      ]
+        { name: "তড়কা", schedule: "৬ মাস পর পর", color: "bg-red-500" },
+        {
+          name: "মুখ ও পায়ের ক্ষত",
+          schedule: "বছরে ২ বার",
+          color: "bg-orange-500",
+        },
+        { name: "PPR (ছাগল)", schedule: "৩ বছর পর পর", color: "bg-yellow-500" },
+      ],
     },
-    { 
-      animal: 'মুরগি', 
+    {
+      animal: "মুরগি",
       vaccines: [
-        { name: 'রাণীক্ষেত', schedule: '৭ দিন বয়সে', color: 'bg-green-500' },
-        { name: 'গামবোরো', schedule: '১৪ দিন বয়সে', color: 'bg-blue-500' },
-        { name: 'ফাউল পক্স', schedule: '৮ সপ্তাহে', color: 'bg-purple-500' }
-      ]
-    }
+        { name: "রাণীক্ষেত", schedule: "৭ দিন বয়সে", color: "bg-green-500" },
+        { name: "গামবোরো", schedule: "১৪ দিন বয়সে", color: "bg-blue-500" },
+        { name: "ফাউল পক্স", schedule: "৮ সপ্তাহে", color: "bg-purple-500" },
+      ],
+    },
   ];
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white mb-6">
-            <Stethoscope className="w-10 h-10" />
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 text-white mb-4 sm:mb-6">
+            <Stethoscope className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">পশু চিকিৎসা</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
+            পশু চিকিৎসা
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
             {t("animal.subtitle")}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Animal Treatment Info */}
           <div className="lg:col-span-2 space-y-6">
             <motion.div
@@ -129,13 +171,13 @@ const AnimalTreatmentPage: React.FC = () => {
                 loop={true}
                 speed={1600}
               >
-                <SwiperSlide className="h-[500px]">
+                <SwiperSlide className="">
                   <img src={img1} alt="" />
                 </SwiperSlide>
-                <SwiperSlide className="h-[500px]">
+                <SwiperSlide className="">
                   <img src={img2} alt="" />
                 </SwiperSlide>
-                <SwiperSlide className="h-[500px]">
+                <SwiperSlide className="">
                   <img src={img3} alt="" />
                 </SwiperSlide>
                 {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}

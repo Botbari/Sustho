@@ -632,34 +632,34 @@ const PregnancySupportPage: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white mb-6 shadow-2xl">
-            <Baby className="w-10 h-10" />
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-full bg-gradient-to-r from-pink-500 to-purple-500 text-white mb-4 sm:mb-6 shadow-2xl">
+            <Baby className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 px-2">
             গর্ভাবস্থা সহায়তা
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
             গর্ভাবস্থায় মা ও শিশুর সুস্বাস্থ্যের জন্য AI চালিত সম্পূর্ণ
             গাইডলাইন ও পরামর্শ
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Information Cards */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6 lg:space-y-8">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-3xl shadow-2xl border border-gray-100"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100"
             >
               <Swiper
                 pagination={{
@@ -674,13 +674,13 @@ const PregnancySupportPage: React.FC = () => {
                 loop={true}
                 speed={1600}
               >
-                <SwiperSlide className="h-[400px]">
+                <SwiperSlide className="">
                   <img src={img1} alt="" />
                 </SwiperSlide>
-                <SwiperSlide className="h-[400px]">
+                <SwiperSlide className="">
                   <img src={img2} alt="" />
                 </SwiperSlide>
-                <SwiperSlide className="h-[400px]">
+                <SwiperSlide className="">
                   <img src={img3} alt="" />
                 </SwiperSlide>
                 {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
