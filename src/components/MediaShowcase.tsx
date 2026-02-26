@@ -12,7 +12,7 @@ const MediaShowcase: React.FC = () => {
             {/* Image Box */}
             <div className="overflow-hidden rounded-[24px] shadow-md group">
               <img
-                src={"https://6971273ec0356527951e30fc.imgix.net/sastho-seba.jpeg"}
+                src={"https://res.cloudinary.com/drlo4ktpa/image/upload/v1772090822/satho-seba_hwcirb.jpg"}
                 alt="Health Mission"
                 className="w-full h-[300px] object-cover transform group-hover:scale-110 transition-transform duration-700"
               />

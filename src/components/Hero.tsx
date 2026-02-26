@@ -36,7 +36,7 @@ const Hero: React.FC<HeroProps> = ({ onOpenBenefits }) => {
         <div className="relative flex justify-center items-center">
           <div className="relative z-10 w-full max-w-md transform hover:scale-105 transition-transform duration-700">
             <img
-              src={"https://6971273ec0356527951e30fc.imgix.net/sustho-card-img.jpeg"}
+              src={"https://res.cloudinary.com/drlo4ktpa/image/upload/v1772090719/sutho-card_l5toja.jpg"}
               alt="AI Medical Technology"
               className="rounded-[32px] shadow-2xl border-4 border-white/10"
             />
