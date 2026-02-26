@@ -1,36 +1,77 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { AlertTriangle, MapPin, Phone, Heart, Shield, Zap, Cloud, Wind, Droplets, Users, Baby, Download, Play, Send, Mic, MicOff, Loader2, User, Bot, Navigation, Guitar as Hospital, Pill, Home, BookOpen, Volume2, Copy, Share2, CheckCircle } from 'lucide-react';
-import { generateHealthResponse } from '../utils/geminiApi';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  AlertTriangle,
+  MapPin,
+  Phone,
+  Heart,
+  Shield,
+  Zap,
+  Cloud,
+  Wind,
+  Droplets,
+  Users,
+  Baby,
+  Download,
+  Play,
+  Send,
+  Mic,
+  MicOff,
+  Loader2,
+  User,
+  Bot,
+  Navigation,
+  Guitar as Hospital,
+  Pill,
+  Home,
+  BookOpen,
+  Volume2,
+  Copy,
+  Share2,
+  CheckCircle,
+} from "lucide-react";
+import { generateHealthResponse } from "../utils/openaiApi";
+import { useLanguage } from "../contexts/LanguageContext";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import img1 from "../assets/image/diseases.jpg";
+import img2 from "../assets/image/diseases1.jpg";
+import img3 from "../assets/image/diseases2.jpg";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 interface Message {
   id: string;
   text: string;
-  sender: 'user' | 'bot';
+  sender: "user" | "bot";
   timestamp: Date;
-  type: 'text' | 'voice';
+  type: "text" | "voice";
 }
 
 const DisasterSupportPage: React.FC = () => {
   const { t } = useLanguage();
-  const [userLocation, setUserLocation] = useState<{lat: number, lng: number, address: string} | null>(null);
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+    address: string;
+  } | null>(null);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationShared, setLocationShared] = useState(false);
-  const [shareMessage, setShareMessage] = useState('');
-  
+  const [shareMessage, setShareMessage] = useState("");
+
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
-      text: t('language') === 'bn' ? 
-        `আস্সালামু আলাইকুম! আমি DisasterBot, আপনার দুর্যোগকালীন সহায়ক। বন্যা, ঘূর্ণিঝড় বা যেকোনো দুর্যোগে আমি আপনাকে সাহায্য করতে পারি। আপনি টেক্সট বা ভয়েস মেসেজের মাধ্যমে আমার সাথে কথা বলতে পারেন।` :
-        `Hello! I am DisasterBot, your disaster support assistant. I can help you with floods, cyclones or any disaster. You can talk to me through text or voice messages.`,
-      sender: 'bot',
+      id: "1",
+      text:
+        t("language") === "bn"
+          ? `আস্সালামু আলাইকুম! আমি DisasterBot, আপনার দুর্যোগকালীন সহায়ক। বন্যা, ঘূর্ণিঝড় বা যেকোনো দুর্যোগে আমি আপনাকে সাহায্য করতে পারি। আপনি টেক্সট বা ভয়েস মেসেজের মাধ্যমে আমার সাথে কথা বলতে পারেন।`
+          : `Hello! I am DisasterBot, your disaster support assistant. I can help you with floods, cyclones or any disaster. You can talk to me through text or voice messages.`,
+      sender: "bot",
       timestamp: new Date(),
-      type: 'text'
-    }
+      type: "text",
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -39,7 +80,7 @@ const DisasterSupportPage: React.FC = () => {
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -48,29 +89,32 @@ const DisasterSupportPage: React.FC = () => {
 
   const generateResponse = async (userMessage: string) => {
     setIsLoading(true);
-    
+
     try {
       // Use Google Gemini API for real AI responses
-      const response = await generateHealthResponse(userMessage, 'disaster-support');
-      
+      const response = await generateHealthResponse(
+        userMessage,
+        "disaster-support",
+      );
+
       const botMessage: Message = {
         id: Date.now().toString(),
         text: response,
-        sender: 'bot',
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      
-      setMessages(prev => [...prev, botMessage]);
+
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       const errorMessage: Message = {
         id: Date.now().toString(),
-        text: 'দুঃখিত, কিছু সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
-        sender: 'bot',
+        text: "দুঃখিত, কিছু সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -78,17 +122,17 @@ const DisasterSupportPage: React.FC = () => {
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
-    
+
     const userMessage: Message = {
       id: Date.now().toString(),
       text: input,
-      sender: 'user',
+      sender: "user",
       timestamp: new Date(),
-      type: 'text'
+      type: "text",
     };
-    
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
     await generateResponse(input);
   };
 
@@ -97,41 +141,45 @@ const DisasterSupportPage: React.FC = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
-      
+
       mediaRecorder.start();
       setIsRecording(true);
       setRecordingTime(0);
-      
+
       recordingIntervalRef.current = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime((prev) => prev + 1);
       }, 1000);
-      
+
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) {
           const userMessage: Message = {
             id: Date.now().toString(),
-            text: 'ভয়েস মেসেজ পাঠিয়েছি',
-            sender: 'user',
+            text: "ভয়েস মেসেজ পাঠিয়েছি",
+            sender: "user",
             timestamp: new Date(),
-            type: 'voice'
+            type: "voice",
           };
-          
-          setMessages(prev => [...prev, userMessage]);
-          generateResponse('আমি একটি ভয়েস মেসেজ পাঠিয়েছি। দুর্যোগ সম্পর্কে পরামর্শ দিন।');
+
+          setMessages((prev) => [...prev, userMessage]);
+          generateResponse(
+            "আমি একটি ভয়েস মেসেজ পাঠিয়েছি। দুর্যোগ সম্পর্কে পরামর্শ দিন।",
+          );
         }
       };
     } catch (error) {
-      console.error('Error starting recording:', error);
+      console.error("Error starting recording:", error);
     }
   };
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
       setIsRecording(false);
       setRecordingTime(0);
-      
+
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
       }
@@ -141,14 +189,14 @@ const DisasterSupportPage: React.FC = () => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const getCurrentLocation = () => {
     setIsGettingLocation(true);
-    
+
     if (!navigator.geolocation) {
-      alert('আপনার ব্রাউজার জিওলোকেশন সাপোর্ট করে না');
+      alert("আপনার ব্রাউজার জিওলোকেশন সাপোর্ট করে না");
       setIsGettingLocation(false);
       return;
     }
@@ -156,56 +204,56 @@ const DisasterSupportPage: React.FC = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        
+
         try {
           // Reverse geocoding to get address (using a mock address for demo)
           const mockAddress = `${latitude.toFixed(6)}, ${longitude.toFixed(6)} (আনুমানিক ঠিকানা)`;
-          
+
           setUserLocation({
             lat: latitude,
             lng: longitude,
-            address: mockAddress
+            address: mockAddress,
           });
-          
+
           setIsGettingLocation(false);
         } catch (error) {
-          console.error('Error getting address:', error);
+          console.error("Error getting address:", error);
           setUserLocation({
             lat: latitude,
             lng: longitude,
-            address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
+            address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
           });
           setIsGettingLocation(false);
         }
       },
       (error) => {
-        console.error('Error getting location:', error);
-        alert('লোকেশন পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+        console.error("Error getting location:", error);
+        alert("লোকেশন পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
         setIsGettingLocation(false);
       },
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 60000
-      }
+        maximumAge: 60000,
+      },
     );
   };
 
   const shareLocation = () => {
     if (!userLocation) return;
-    
+
     const locationText = `🆘 জরুরি সাহায্য প্রয়োজন!\n📍 আমার অবস্থান: ${userLocation.address}\n🌐 Google Maps: https://maps.google.com/?q=${userLocation.lat},${userLocation.lng}\n\nদয়া করে সাহায্য করুন!`;
-    
+
     setShareMessage(locationText);
     setLocationShared(true);
-    
+
     // Copy to clipboard
     navigator.clipboard.writeText(locationText).then(() => {
       // Auto share via SMS if possible
       if (navigator.share) {
         navigator.share({
-          title: 'জরুরি সাহায্য প্রয়োজন',
-          text: locationText
+          title: "জরুরি সাহায্য প্রয়োজন",
+          text: locationText,
         });
       }
     });
@@ -214,129 +262,192 @@ const DisasterSupportPage: React.FC = () => {
   const copyLocationText = () => {
     if (shareMessage) {
       navigator.clipboard.writeText(shareMessage).then(() => {
-        alert('লোকেশন কপি হয়েছে! এখন যেকোনো জায়গায় পেস্ট করুন।');
+        alert("লোকেশন কপি হয়েছে! এখন যেকোনো জায়গায় পেস্ট করুন।");
       });
     }
   };
 
   const liveUpdates = [
     {
-      type: 'weather',
-      title: 'আবহাওয়া সতর্কতা',
-      status: 'সাধারণ',
-      description: 'আজ সারাদেশে হালকা বৃষ্টির সম্ভাবনা',
-      color: 'from-blue-500 to-cyan-500',
-      icon: Cloud
+      type: "weather",
+      title: "আবহাওয়া সতর্কতা",
+      status: "সাধারণ",
+      description: "আজ সারাদেশে হালকা বৃষ্টির সম্ভাবনা",
+      color: "from-blue-500 to-cyan-500",
+      icon: Cloud,
     },
     {
-      type: 'cyclone',
-      title: 'ঘূর্ণিঝড় সংকেত',
-      status: 'নিরাপদ',
-      description: 'বর্তমানে কোন ঘূর্ণিঝড়ের সংকেত নেই',
-      color: 'from-green-500 to-emerald-500',
-      icon: Wind
+      type: "cyclone",
+      title: "ঘূর্ণিঝড় সংকেত",
+      status: "নিরাপদ",
+      description: "বর্তমানে কোন ঘূর্ণিঝড়ের সংকেত নেই",
+      color: "from-green-500 to-emerald-500",
+      icon: Wind,
     },
     {
-      type: 'flood',
-      title: 'বন্যা পরিস্থিতি',
-      status: 'স্বাভাবিক',
-      description: 'নদীর পানি স্বাভাবিক মাত্রায় রয়েছে',
-      color: 'from-teal-500 to-blue-500',
-      icon: Droplets
-    }
+      type: "flood",
+      title: "বন্যা পরিস্থিতি",
+      status: "স্বাভাবিক",
+      description: "নদীর পানি স্বাভাবিক মাত্রায় রয়েছে",
+      color: "from-teal-500 to-blue-500",
+      icon: Droplets,
+    },
   ];
 
   const emergencyContacts = [
     {
-      name: 'জাতীয় জরুরি সেবা',
-      number: '৯৯৯',
-      description: 'সব ধরনের জরুরি অবস্থার জন্য',
-      color: 'from-red-500 to-orange-500'
+      name: "জাতীয় জরুরি সেবা",
+      number: "৯৯৯",
+      description: "সব ধরনের জরুরি অবস্থার জন্য",
+      color: "from-red-500 to-orange-500",
     },
     {
-      name: 'ফায়ার সার্ভিস',
-      number: '১৯৯',
-      description: 'আগুন ও উদ্ধার কাজের জন্য',
-      color: 'from-orange-500 to-red-500'
+      name: "ফায়ার সার্ভিস",
+      number: "১৯৯",
+      description: "আগুন ও উদ্ধার কাজের জন্য",
+      color: "from-orange-500 to-red-500",
     },
     {
-      name: 'পুলিশ',
-      number: '১০০',
-      description: 'আইন শৃঙ্খলা সংক্রান্ত সমস্যার জন্য',
-      color: 'from-blue-500 to-indigo-500'
+      name: "পুলিশ",
+      number: "১০০",
+      description: "আইন শৃঙ্খলা সংক্রান্ত সমস্যার জন্য",
+      color: "from-blue-500 to-indigo-500",
     },
     {
-      name: 'স্বাস্থ্য বাতায়ন',
-      number: '১৬২৬৩',
-      description: 'স্বাস্থ্য সেবা ও পরামর্শের জন্য',
-      color: 'from-green-500 to-teal-500'
-    }
+      name: "স্বাস্থ্য বাতায়ন",
+      number: "১৬২৬৩",
+      description: "স্বাস্থ্য সেবা ও পরামর্শের জন্য",
+      color: "from-green-500 to-teal-500",
+    },
   ];
 
   const firstAidTips = [
     {
-      title: 'বন্যার সময় স্বাস্থ্য সুরক্ষা',
-      tips: ['ফুটানো পানি পান করুন', 'খাবার ভালো করে রান্না করুন', 'ক্ষত পরিষ্কার রাখুন', 'মশার কামড় থেকে বাঁচুন'],
+      title: "বন্যার সময় স্বাস্থ্য সুরক্ষা",
+      tips: [
+        "ফুটানো পানি পান করুন",
+        "খাবার ভালো করে রান্না করুন",
+        "ক্ষত পরিষ্কার রাখুন",
+        "মশার কামড় থেকে বাঁচুন",
+      ],
       icon: Droplets,
-      color: 'from-blue-500 to-cyan-500'
+      color: "from-blue-500 to-cyan-500",
     },
     {
-      title: 'ঘূর্ণিঝড়ে আহত হলে',
-      tips: ['রক্তক্ষরণ বন্ধ করুন', 'পরিষ্কার কাপড় দিয়ে বাঁধুন', 'দ্রুত হাসপাতালে নিন', 'শ্বাসকষ্ট হলে বসিয়ে রাখুন'],
+      title: "ঘূর্ণিঝড়ে আহত হলে",
+      tips: [
+        "রক্তক্ষরণ বন্ধ করুন",
+        "পরিষ্কার কাপড় দিয়ে বাঁধুন",
+        "দ্রুত হাসপাতালে নিন",
+        "শ্বাসকষ্ট হলে বসিয়ে রাখুন",
+      ],
       icon: Wind,
-      color: 'from-orange-500 to-red-500'
+      color: "from-orange-500 to-red-500",
     },
     {
-      title: 'শিশুদের বিশেষ যত্ন',
-      tips: ['পানিশূন্যতা রোধ করুন', 'পরিষ্কার পরিবেশে রাখুন', 'নিয়মিত খাওয়ান', 'জ্বর হলে স্পঞ্জিং করুন'],
+      title: "শিশুদের বিশেষ যত্ন",
+      tips: [
+        "পানিশূন্যতা রোধ করুন",
+        "পরিষ্কার পরিবেশে রাখুন",
+        "নিয়মিত খাওয়ান",
+        "জ্বর হলে স্পঞ্জিং করুন",
+      ],
       icon: Baby,
-      color: 'from-pink-500 to-purple-500'
-    }
+      color: "from-pink-500 to-purple-500",
+    },
   ];
 
   const preparednessGuide = [
     {
-      title: 'দুর্যোগের আগে প্রস্তুতি',
-      items: ['জরুরি কিট তৈরি করুন', 'পরিবারের সাথে পরিকল্পনা করুন', 'গুরুত্বপূর্ণ কাগজপত্র সংরক্ষণ করুন', 'যোগাযোগের মাধ্যম প্রস্তুত রাখুন'],
-      icon: Shield
+      title: "দুর্যোগের আগে প্রস্তুতি",
+      items: [
+        "জরুরি কিট তৈরি করুন",
+        "পরিবারের সাথে পরিকল্পনা করুন",
+        "গুরুত্বপূর্ণ কাগজপত্র সংরক্ষণ করুন",
+        "যোগাযোগের মাধ্যম প্রস্তুত রাখুন",
+      ],
+      icon: Shield,
     },
     {
-      title: 'দুর্যোগের সময় করণীয়',
-      items: ['শান্ত থাকুন', 'নিরাপদ স্থানে যান', 'সরকারি নির্দেশনা মেনে চলুন', 'পরিবারের সবাইকে একসাথে রাখুন'],
-      icon: AlertTriangle
+      title: "দুর্যোগের সময় করণীয়",
+      items: [
+        "শান্ত থাকুন",
+        "নিরাপদ স্থানে যান",
+        "সরকারি নির্দেশনা মেনে চলুন",
+        "পরিবারের সবাইকে একসাথে রাখুন",
+      ],
+      icon: AlertTriangle,
     },
     {
-      title: 'দুর্যোগের পরে করণীয়',
-      items: ['ক্ষয়ক্ষতি মূল্যায়ন করুন', 'পরিষ্কার পানি নিশ্চিত করুন', 'স্বাস্থ্য পরীক্ষা করান', 'সাহায্যের জন্য যোগাযোগ করুন'],
-      icon: Heart
-    }
+      title: "দুর্যোগের পরে করণীয়",
+      items: [
+        "ক্ষয়ক্ষতি মূল্যায়ন করুন",
+        "পরিষ্কার পানি নিশ্চিত করুন",
+        "স্বাস্থ্য পরীক্ষা করান",
+        "সাহায্যের জন্য যোগাযোগ করুন",
+      ],
+      icon: Heart,
+    },
   ];
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <motion.div 
-            className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white mb-6 shadow-2xl"
+          <motion.div
+            className="inline-flex items-center justify-center w-16 h-16 sm:w-20 md:w-24 sm:h-20 md:h-24 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white mb-4 sm:mb-6 shadow-2xl"
             whileHover={{ scale: 1.1, rotate: 10 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
-            <AlertTriangle className="w-12 h-12" />
+            <AlertTriangle className="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12" />
           </motion.div>
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">দুর্যোগ সহায়তা</h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            {t('disaster.subtitle')}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 px-2">
+            দুর্যোগ সহায়তা
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-2">
+            {t("disaster.subtitle")}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6 lg:space-y-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100"
+            >
+              <Swiper
+                pagination={{
+                  dynamicBullets: true,
+                }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
+                modules={[Pagination, Autoplay]}
+                className="mySwiper rounded-3xl"
+                loop={true}
+                speed={1600}
+              >
+                <SwiperSlide className="">
+                  <img src={img1} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="">
+                  <img src={img2} alt="" />
+                </SwiperSlide>
+                {/* <SwiperSlide className="">
+                  <img src={img3} alt="" />
+                </SwiperSlide> */}
+                {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
+              </Swiper>
+            </motion.div>
             {/* Live Updates */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -351,10 +462,12 @@ const DisasterSupportPage: React.FC = () => {
                 >
                   <Zap className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-gray-800 mb-2">লাইভ আপডেট</h2>
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                  লাইভ আপডেট
+                </h2>
                 <p className="text-gray-600">বর্তমান দুর্যোগ পরিস্থিতি</p>
               </div>
-              
+
               <div className="grid md:grid-cols-3 gap-6">
                 {liveUpdates.map((update, index) => (
                   <motion.div
@@ -372,7 +485,9 @@ const DisasterSupportPage: React.FC = () => {
                       <update.icon className="w-6 h-6" />
                     </motion.div>
                     <h3 className="font-bold mb-2">{update.title}</h3>
-                    <p className="text-sm opacity-90 mb-2">{update.description}</p>
+                    <p className="text-sm opacity-90 mb-2">
+                      {update.description}
+                    </p>
                     <span className="inline-block px-2 py-1 bg-white/20 rounded-full text-xs font-medium">
                       {update.status}
                     </span>
@@ -395,10 +510,12 @@ const DisasterSupportPage: React.FC = () => {
                 >
                   <Phone className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-gray-800 mb-2">জরুরি যোগাযোগ</h2>
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                  জরুরি যোগাযোগ
+                </h2>
                 <p className="text-gray-600">দুর্যোগকালীন হেল্পলাইন নম্বর</p>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-6">
                 {emergencyContacts.map((contact, index) => (
                   <motion.div
@@ -410,7 +527,9 @@ const DisasterSupportPage: React.FC = () => {
                     whileHover={{ scale: 1.02, y: -2 }}
                   >
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-bold text-gray-800">{contact.name}</h3>
+                      <h3 className="font-bold text-gray-800">
+                        {contact.name}
+                      </h3>
                       <motion.a
                         href={`tel:${contact.number}`}
                         className={`px-4 py-2 bg-gradient-to-r ${contact.color} text-white rounded-xl font-bold hover:shadow-lg transition-all`}
@@ -420,7 +539,9 @@ const DisasterSupportPage: React.FC = () => {
                         {contact.number}
                       </motion.a>
                     </div>
-                    <p className="text-gray-600 text-sm">{contact.description}</p>
+                    <p className="text-gray-600 text-sm">
+                      {contact.description}
+                    </p>
                   </motion.div>
                 ))}
               </div>
@@ -440,10 +561,12 @@ const DisasterSupportPage: React.FC = () => {
                 >
                   <Heart className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-gray-800 mb-2">প্রাথমিক চিকিৎসা গাইড</h2>
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                  প্রাথমিক চিকিৎসা গাইড
+                </h2>
                 <p className="text-gray-600">দুর্যোগকালীন স্বাস্থ্য সুরক্ষা</p>
               </div>
-              
+
               <div className="grid md:grid-cols-3 gap-6">
                 {firstAidTips.map((tip, index) => (
                   <motion.div
@@ -454,16 +577,21 @@ const DisasterSupportPage: React.FC = () => {
                     className="text-center bg-gradient-to-br from-blue-50 to-green-50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300 border border-blue-100"
                     whileHover={{ scale: 1.05, y: -3 }}
                   >
-                    <motion.div 
+                    <motion.div
                       className={`w-16 h-16 bg-gradient-to-br ${tip.color} rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-lg`}
                       whileHover={{ rotate: 15, scale: 1.15 }}
                     >
                       <tip.icon className="w-8 h-8" />
                     </motion.div>
-                    <h3 className="font-bold text-gray-800 mb-4 text-lg">{tip.title}</h3>
+                    <h3 className="font-bold text-gray-800 mb-4 text-lg">
+                      {tip.title}
+                    </h3>
                     <div className="space-y-2">
                       {tip.tips.map((item, i) => (
-                        <div key={i} className="text-gray-600 text-sm bg-white/60 rounded-lg p-2">
+                        <div
+                          key={i}
+                          className="text-gray-600 text-sm bg-white/60 rounded-lg p-2"
+                        >
                           • {item}
                         </div>
                       ))}
@@ -487,10 +615,14 @@ const DisasterSupportPage: React.FC = () => {
                 >
                   <BookOpen className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-purple-800 mb-2">দুর্যোগ প্রস্তুতি গাইড</h2>
-                <p className="text-purple-600">দুর্যোগের আগে, সময় ও পরে করণীয়</p>
+                <h2 className="text-3xl font-bold text-purple-800 mb-2">
+                  দুর্যোগ প্রস্তুতি গাইড
+                </h2>
+                <p className="text-purple-600">
+                  দুর্যোগের আগে, সময় ও পরে করণীয়
+                </p>
               </div>
-              
+
               <div className="grid md:grid-cols-3 gap-6">
                 {preparednessGuide.map((guide, index) => (
                   <motion.div
@@ -500,16 +632,21 @@ const DisasterSupportPage: React.FC = () => {
                     transition={{ delay: 0.1 * index }}
                     className="bg-white/60 rounded-2xl p-6 backdrop-blur-sm border border-purple-200"
                   >
-                    <motion.div 
+                    <motion.div
                       className="w-12 h-12 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-xl flex items-center justify-center text-white mb-4 shadow-lg"
                       whileHover={{ rotate: 10, scale: 1.1 }}
                     >
                       <guide.icon className="w-6 h-6" />
                     </motion.div>
-                    <h3 className="font-bold text-purple-800 mb-4">{guide.title}</h3>
+                    <h3 className="font-bold text-purple-800 mb-4">
+                      {guide.title}
+                    </h3>
                     <div className="space-y-2">
                       {guide.items.map((item, i) => (
-                        <div key={i} className="text-purple-700 text-sm flex items-center">
+                        <div
+                          key={i}
+                          className="text-purple-700 text-sm flex items-center"
+                        >
                           <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
                           {item}
                         </div>
@@ -534,10 +671,14 @@ const DisasterSupportPage: React.FC = () => {
                 >
                   <MapPin className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-indigo-800 mb-2">আমার অবস্থান আপডেট</h2>
-                <p className="text-indigo-600">জরুরি অবস্থায় আপনার লোকেশন শেয়ার করুন</p>
+                <h2 className="text-3xl font-bold text-indigo-800 mb-2">
+                  আমার অবস্থান আপডেট
+                </h2>
+                <p className="text-indigo-600">
+                  জরুরি অবস্থায় আপনার লোকেশন শেয়ার করুন
+                </p>
               </div>
-              
+
               {!userLocation ? (
                 <div className="text-center">
                   <motion.button
@@ -575,10 +716,15 @@ const DisasterSupportPage: React.FC = () => {
                         <CheckCircle className="w-6 h-6" />
                       </motion.div>
                       <div className="flex-1">
-                        <h3 className="font-bold text-indigo-800 mb-2">আপনার বর্তমান অবস্থান:</h3>
-                        <p className="text-indigo-700 mb-2">{userLocation.address}</p>
+                        <h3 className="font-bold text-indigo-800 mb-2">
+                          আপনার বর্তমান অবস্থান:
+                        </h3>
+                        <p className="text-indigo-700 mb-2">
+                          {userLocation.address}
+                        </p>
                         <p className="text-indigo-600 text-sm">
-                          Latitude: {userLocation.lat.toFixed(6)}, Longitude: {userLocation.lng.toFixed(6)}
+                          Latitude: {userLocation.lat.toFixed(6)}, Longitude:{" "}
+                          {userLocation.lng.toFixed(6)}
                         </p>
                       </div>
                     </div>
@@ -625,7 +771,9 @@ const DisasterSupportPage: React.FC = () => {
                       className="bg-green-50 rounded-2xl p-6 border border-green-200"
                     >
                       <div className="flex items-start justify-between mb-4">
-                        <h3 className="font-bold text-green-800">শেয়ার করার জন্য প্রস্তুত:</h3>
+                        <h3 className="font-bold text-green-800">
+                          শেয়ার করার জন্য প্রস্তুত:
+                        </h3>
                         <motion.button
                           onClick={copyLocationText}
                           className="bg-green-500 text-white px-4 py-2 rounded-xl font-medium hover:bg-green-600 transition-all flex items-center space-x-2"
@@ -642,7 +790,8 @@ const DisasterSupportPage: React.FC = () => {
                         </pre>
                       </div>
                       <p className="text-green-600 text-sm mt-3">
-                        এই মেসেজটি SMS, WhatsApp, Facebook বা যেকোনো মাধ্যমে পাঠিয়ে সাহায্য চাইতে পারেন।
+                        এই মেসেজটি SMS, WhatsApp, Facebook বা যেকোনো মাধ্যমে
+                        পাঠিয়ে সাহায্য চাইতে পারেন।
                       </p>
                     </motion.div>
                   )}
@@ -666,22 +815,32 @@ const DisasterSupportPage: React.FC = () => {
 
               {/* Instructions */}
               <div className="mt-6 bg-white/60 rounded-2xl p-6 backdrop-blur-sm border border-indigo-200">
-                <h3 className="font-bold text-indigo-800 mb-3">কিভাবে ব্যবহার করবেন:</h3>
+                <h3 className="font-bold text-indigo-800 mb-3">
+                  কিভাবে ব্যবহার করবেন:
+                </h3>
                 <div className="space-y-2 text-indigo-700 text-sm">
                   <div className="flex items-center">
-                    <span className="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">১</span>
+                    <span className="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">
+                      ১
+                    </span>
                     "আমার লোকেশন নিন\" বাটনে ক্লিক করুন
                   </div>
                   <div className="flex items-center">
-                    <span className="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">২</span>
+                    <span className="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">
+                      ২
+                    </span>
                     ব্রাউজারে "Allow\" বাটনে ক্লিক করুন
                   </div>
                   <div className="flex items-center">
-                    <span className="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">৩</span>
+                    <span className="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">
+                      ৩
+                    </span>
                     "জরুরি লোকেশন শেয়ার\" বাটনে ক্লিক করুন
                   </div>
                   <div className="flex items-center">
-                    <span className="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">৪</span>
+                    <span className="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs font-bold mr-3">
+                      ৪
+                    </span>
                     মেসেজ কপি করে যেকোনো জায়গায় পাঠান
                   </div>
                 </div>
@@ -701,7 +860,7 @@ const DisasterSupportPage: React.FC = () => {
                 {/* Chat Header */}
                 <div className="bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 text-white p-8 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-red-400/20 to-yellow-400/20 animate-pulse" />
-                  
+
                   <div className="relative flex items-center space-x-4">
                     <motion.div
                       className="w-20 h-20 bg-white/20 rounded-3xl flex items-center justify-center backdrop-blur-sm shadow-2xl"
@@ -712,7 +871,9 @@ const DisasterSupportPage: React.FC = () => {
                     </motion.div>
                     <div>
                       <h3 className="text-3xl font-bold mb-2">DisasterBot</h3>
-                      <p className="text-red-100 text-lg">দুর্যোগকালীন সহায়ক</p>
+                      <p className="text-red-100 text-lg">
+                        দুর্যোগকালীন সহায়ক
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -726,42 +887,56 @@ const DisasterSupportPage: React.FC = () => {
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                        transition={{
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 30,
+                        }}
+                        className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                       >
-                        <div className={`flex items-start space-x-3 max-w-xs ${
-                          message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                        }`}>
-                          <motion.div 
+                        <div
+                          className={`flex items-start space-x-3 max-w-xs ${
+                            message.sender === "user"
+                              ? "flex-row-reverse space-x-reverse"
+                              : ""
+                          }`}
+                        >
+                          <motion.div
                             className={`w-10 h-10 rounded-2xl flex items-center justify-center shadow-lg ${
-                            message.sender === 'user' 
-                              ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white' 
-                              : 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white'
+                              message.sender === "user"
+                                ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
+                                : "bg-gradient-to-r from-yellow-500 to-orange-500 text-white"
                             }`}
                             whileHover={{ scale: 1.1 }}
                           >
-                            {message.sender === 'user' ? (
+                            {message.sender === "user" ? (
                               <User className="w-5 h-5" />
                             ) : (
                               <Bot className="w-5 h-5" />
                             )}
                           </motion.div>
 
-                          <motion.div 
+                          <motion.div
                             className={`rounded-3xl p-4 shadow-lg backdrop-blur-sm ${
-                            message.sender === 'user'
-                              ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white'
-                              : 'bg-white/80 text-gray-800 border border-gray-200'
+                              message.sender === "user"
+                                ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
+                                : "bg-white/80 text-gray-800 border border-gray-200"
                             }`}
                             whileHover={{ scale: 1.02 }}
                           >
-                            <p className="text-sm leading-relaxed">{message.text}</p>
-                            <p className={`text-xs mt-2 ${
-                              message.sender === 'user' ? 'text-red-100' : 'text-gray-500'
-                            }`}>
-                              {message.timestamp.toLocaleTimeString('bn-BD', { 
-                                hour: '2-digit', 
-                                minute: '2-digit' 
+                            <p className="text-sm leading-relaxed">
+                              {message.text}
+                            </p>
+                            <p
+                              className={`text-xs mt-2 ${
+                                message.sender === "user"
+                                  ? "text-red-100"
+                                  : "text-gray-500"
+                              }`}
+                            >
+                              {message.timestamp.toLocaleTimeString("bn-BD", {
+                                hour: "2-digit",
+                                minute: "2-digit",
                               })}
                             </p>
                           </motion.div>
@@ -784,7 +959,9 @@ const DisasterSupportPage: React.FC = () => {
                         <div className="bg-white/80 rounded-3xl p-4 shadow-lg backdrop-blur-sm border border-gray-200">
                           <div className="flex items-center space-x-2">
                             <Loader2 className="w-4 h-4 animate-spin text-red-500" />
-                            <span className="text-sm text-gray-600">উত্তর তৈরি করছি...</span>
+                            <span className="text-sm text-gray-600">
+                              উত্তর তৈরি করছি...
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -803,12 +980,14 @@ const DisasterSupportPage: React.FC = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       className="mb-4 flex items-center justify-center space-x-3 text-red-500 bg-red-50 rounded-2xl p-3"
                     >
-                      <motion.div 
+                      <motion.div
                         className="w-3 h-3 bg-red-500 rounded-full"
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ repeat: Infinity, duration: 1 }}
                       />
-                      <span className="text-sm font-medium">রেকর্ড করছি... {formatTime(recordingTime)}</span>
+                      <span className="text-sm font-medium">
+                        রেকর্ড করছি... {formatTime(recordingTime)}
+                      </span>
                     </motion.div>
                   )}
 
@@ -819,7 +998,9 @@ const DisasterSupportPage: React.FC = () => {
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        onKeyPress={(e) =>
+                          e.key === "Enter" && handleSendMessage()
+                        }
                         placeholder="দুর্যোগ সম্পর্কে প্রশ্ন করুন..."
                         className="w-full p-4 bg-gray-50 border border-gray-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all"
                         disabled={isLoading}
@@ -828,9 +1009,9 @@ const DisasterSupportPage: React.FC = () => {
 
                     <motion.button
                       className={`p-3 rounded-2xl transition-colors ${
-                        isRecording 
-                          ? 'bg-red-500 text-white hover:bg-red-600' 
-                          : 'text-orange-600 hover:bg-orange-50'
+                        isRecording
+                          ? "bg-red-500 text-white hover:bg-red-600"
+                          : "text-orange-600 hover:bg-orange-50"
                       }`}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
@@ -838,7 +1019,11 @@ const DisasterSupportPage: React.FC = () => {
                       onMouseUp={stopRecording}
                       onMouseLeave={stopRecording}
                     >
-                      {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+                      {isRecording ? (
+                        <MicOff className="w-5 h-5" />
+                      ) : (
+                        <Mic className="w-5 h-5" />
+                      )}
                     </motion.button>
 
                     <motion.button
@@ -865,7 +1050,7 @@ const DisasterSupportPage: React.FC = () => {
                   className="w-full bg-gradient-to-r from-red-600 to-red-700 text-white py-6 rounded-3xl font-bold text-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-3"
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => window.open('tel:999')}
+                  onClick={() => window.open("tel:999")}
                 >
                   <Phone className="w-8 h-8" />
                   <span>🆘 জরুরি কল (৯৯৯)</span>

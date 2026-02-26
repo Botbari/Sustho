@@ -1,103 +1,109 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Bell, AlertTriangle, Info, CheckCircle, Clock } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Bell, AlertTriangle, Info, CheckCircle, Clock } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const HealthAlertPage: React.FC = () => {
   const { t } = useLanguage();
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const alerts = [
     {
       id: 1,
-      type: 'জরুরি',
-      title: 'ডেঙ্গু সতর্কতা',
-      description: 'ঢাকা শহরে ডেঙ্গু রোগীর সংখ্যা বৃদ্ধি পেয়েছে। সতর্ক থাকুন এবং প্রতিরোধমূলক ব্যবস্থা নিন।',
-      date: '২৫ জানুয়ারি ২০২৫',
-      time: '২ ঘণ্টা আগে',
-      location: 'ঢাকা',
+      type: "জরুরি",
+      title: "ডেঙ্গু সতর্কতা",
+      description:
+        "ঢাকা শহরে ডেঙ্গু রোগীর সংখ্যা বৃদ্ধি পেয়েছে। সতর্ক থাকুন এবং প্রতিরোধমূলক ব্যবস্থা নিন।",
+      date: "২৫ জানুয়ারি ২০২৫",
+      time: "২ ঘণ্টা আগে",
+      location: "ঢাকা",
       recommendations: [
-        'পানি জমতে দেবেন না',
-        'মশারি ব্যবহার করুন',
-        'জ্বর হলে দ্রুত চিকিৎসক দেখান'
-      ]
+        "পানি জমতে দেবেন না",
+        "মশারি ব্যবহার করুন",
+        "জ্বর হলে দ্রুত চিকিৎসক দেখান",
+      ],
     },
     {
       id: 2,
-      type: 'সাধারণ',
-      title: 'শীতকালীন স্বাস্থ্য সতর্কতা',
-      description: 'শীতকালে সর্দি, কাশি ও নিউমোনিয়া প্রতিরোধে বিশেষ সতর্কতা অবলম্বন করুন।',
-      date: '২৪ জানুয়ারি ২০২৫',
-      time: '৫ ঘণ্টা আগে',
-      location: 'সারাদেশ',
+      type: "সাধারণ",
+      title: "শীতকালীন স্বাস্থ্য সতর্কতা",
+      description:
+        "শীতকালে সর্দি, কাশি ও নিউমোনিয়া প্রতিরোধে বিশেষ সতর্কতা অবলম্বন করুন।",
+      date: "২৪ জানুয়ারি ২০২৫",
+      time: "৫ ঘণ্টা আগে",
+      location: "সারাদেশ",
       recommendations: [
-        'গরম কাপড় পরুন',
-        'গরম পানি পান করুন',
-        'ধূমপান থেকে বিরত থাকুন'
-      ]
+        "গরম কাপড় পরুন",
+        "গরম পানি পান করুন",
+        "ধূমপান থেকে বিরত থাকুন",
+      ],
     },
     {
       id: 3,
-      type: 'তথ্য',
-      title: 'বিনামূল্যে স্বাস্থ্য পরীক্ষা',
-      description: 'আগামী সপ্তাহে সরকারি হাসপাতালে বিনামূল্যে স্বাস্থ্য পরীক্ষা ক্যাম্প অনুষ্ঠিত হবে।',
-      date: '২৩ জানুয়ারি ২০২৫',
-      time: '১ দিন আগে',
-      location: 'সারাদেশ',
+      type: "তথ্য",
+      title: "বিনামূল্যে স্বাস্থ্য পরীক্ষা",
+      description:
+        "আগামী সপ্তাহে সরকারি হাসপাতালে বিনামূল্যে স্বাস্থ্য পরীক্ষা ক্যাম্প অনুষ্ঠিত হবে।",
+      date: "২৩ জানুয়ারি ২০২৫",
+      time: "১ দিন আগে",
+      location: "সারাদেশ",
       recommendations: [
-        'সকাল ৯টা থেকে বিকেল ৫টা',
-        'পরিচয়পত্র সাথে নিন',
-        'খালি পেটে আসুন'
-      ]
+        "সকাল ৯টা থেকে বিকেল ৫টা",
+        "পরিচয়পত্র সাথে নিন",
+        "খালি পেটে আসুন",
+      ],
     },
     {
       id: 4,
-      type: 'জরুরি',
-      title: 'হেপাটাইটিস A প্রাদুর্ভাব',
-      description: 'চট্টগ্রাম এলাকায় হেপাটাইটিস A এর প্রাদুর্ভাব দেখা দিয়েছে। খাবার ও পানিতে সতর্কতা অবলম্বন করুন।',
-      date: '২২ জানুয়ারি ২০২৫',
-      time: '২ দিন আগে',
-      location: 'চট্টগ্রাম',
+      type: "জরুরি",
+      title: "হেপাটাইটিস A প্রাদুর্ভাব",
+      description:
+        "চট্টগ্রাম এলাকায় হেপাটাইটিস A এর প্রাদুর্ভাব দেখা দিয়েছে। খাবার ও পানিতে সতর্কতা অবলম্বন করুন।",
+      date: "২২ জানুয়ারি ২০২৫",
+      time: "২ দিন আগে",
+      location: "চট্টগ্রাম",
       recommendations: [
-        'পানি ফুটিয়ে পান করুন',
-        'খাবার ভালোভাবে রান্না করুন',
-        'হাত নিয়মিত ধুয়ে নিন'
-      ]
+        "পানি ফুটিয়ে পান করুন",
+        "খাবার ভালোভাবে রান্না করুন",
+        "হাত নিয়মিত ধুয়ে নিন",
+      ],
     },
     {
       id: 5,
-      type: 'সাধারণ',
-      title: 'টিকা সপ্তাহ',
-      description: 'জাতীয় টিকা সপ্তাহ উপলক্ষে সকল শিশুর টিকা সম্পূর্ণ করার জন্য বিশেষ ব্যবস্থা।',
-      date: '২০ জানুয়ারি ২০২৫',
-      time: '৫ দিন আগে',
-      location: 'সারাদেশ',
+      type: "সাধারণ",
+      title: "টিকা সপ্তাহ",
+      description:
+        "জাতীয় টিকা সপ্তাহ উপলক্ষে সকল শিশুর টিকা সম্পূর্ণ করার জন্য বিশেষ ব্যবস্থা।",
+      date: "২০ জানুয়ারি ২০২৫",
+      time: "৫ দিন আগে",
+      location: "সারাদেশ",
       recommendations: [
-        'শিশুর টিকা কার্ড নিন',
-        'নিকটস্থ স্বাস্থ্যকেন্দ্রে যান',
-        'টিকার তারিখ মনে রাখুন'
-      ]
-    }
+        "শিশুর টিকা কার্ড নিন",
+        "নিকটস্থ স্বাস্থ্যকেন্দ্রে যান",
+        "টিকার তারিখ মনে রাখুন",
+      ],
+    },
   ];
 
   const categories = [
-    { id: 'all', name: 'সব সতর্কতা', color: 'gray' },
-    { id: 'জরুরি', name: 'জরুরি', color: 'red' },
-    { id: 'সাধারণ', name: 'সাধারণ', color: 'blue' },
-    { id: 'তথ্য', name: 'তথ্য', color: 'green' }
+    { id: "all", name: "সব সতর্কতা", color: "gray" },
+    { id: "জরুরি", name: "জরুরি", color: "red" },
+    { id: "সাধারণ", name: "সাধারণ", color: "blue" },
+    { id: "তথ্য", name: "তথ্য", color: "green" },
   ];
 
-  const filteredAlerts = selectedCategory === 'all' 
-    ? alerts 
-    : alerts.filter(alert => alert.type === selectedCategory);
+  const filteredAlerts =
+    selectedCategory === "all"
+      ? alerts
+      : alerts.filter((alert) => alert.type === selectedCategory);
 
   const getAlertIcon = (type: string) => {
     switch (type) {
-      case 'জরুরি':
+      case "জরুরি":
         return <AlertTriangle className="w-5 h-5" />;
-      case 'তথ্য':
+      case "তথ্য":
         return <Info className="w-5 h-5" />;
-      case 'সাধারণ':
+      case "সাধারণ":
         return <CheckCircle className="w-5 h-5" />;
       default:
         return <Bell className="w-5 h-5" />;
@@ -106,45 +112,47 @@ const HealthAlertPage: React.FC = () => {
 
   const getAlertColor = (type: string) => {
     switch (type) {
-      case 'জরুরি':
-        return 'from-red-500 to-orange-500';
-      case 'তথ্য':
-        return 'from-green-500 to-emerald-500';
-      case 'সাধারণ':
-        return 'from-blue-500 to-cyan-500';
+      case "জরুরি":
+        return "from-red-500 to-orange-500";
+      case "তথ্য":
+        return "from-green-500 to-emerald-500";
+      case "সাধারণ":
+        return "from-blue-500 to-cyan-500";
       default:
-        return 'from-gray-500 to-slate-500';
+        return "from-gray-500 to-slate-500";
     }
   };
 
   const getBadgeColor = (type: string) => {
     switch (type) {
-      case 'জরুরি':
-        return 'bg-red-100 text-red-800';
-      case 'তথ্য':
-        return 'bg-green-100 text-green-800';
-      case 'সাধারণ':
-        return 'bg-blue-100 text-blue-800';
+      case "জরুরি":
+        return "bg-red-100 text-red-800";
+      case "তথ্য":
+        return "bg-green-100 text-green-800";
+      case "সাধারণ":
+        return "bg-blue-100 text-blue-800";
       default:
-        return 'bg-gray-100 text-gray-800';
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white mb-6">
-            <Bell className="w-10 h-10" />
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-white mb-4 sm:mb-6">
+            <Bell className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">স্বাস্থ্য সতর্ক বার্তা</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('alert.subtitle')}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
+            স্বাস্থ্য সতর্ক বার্তা
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
+            {t("alert.subtitle")}
           </p>
         </motion.div>
 
@@ -153,17 +161,17 @@ const HealthAlertPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-3xl shadow-xl p-6 mb-8 border border-gray-100"
+          className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 mb-6 sm:mb-8 border border-gray-100"
         >
-          <div className="flex flex-wrap gap-3">
-            {categories.map(category => (
+          <div className="flex flex-wrap gap-2 sm:gap-3">
+            {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setSelectedCategory(category.id)}
                 className={`px-4 py-2 rounded-full font-medium transition-all ${
                   selectedCategory === category.id
-                    ? 'bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-lg"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
                 {category.name}
@@ -183,7 +191,9 @@ const HealthAlertPage: React.FC = () => {
               className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden"
             >
               {/* Alert Header */}
-              <div className={`bg-gradient-to-r ${getAlertColor(alert.type)} text-white p-6`}>
+              <div
+                className={`bg-gradient-to-r ${getAlertColor(alert.type)} text-white p-6`}
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     {getAlertIcon(alert.type)}
@@ -205,8 +215,12 @@ const HealthAlertPage: React.FC = () => {
               {/* Alert Content */}
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
-                  <p className="text-gray-700 flex-1 pr-4">{alert.description}</p>
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${getBadgeColor(alert.type)}`}>
+                  <p className="text-gray-700 flex-1 pr-4">
+                    {alert.description}
+                  </p>
+                  <span
+                    className={`px-3 py-1 rounded-full text-sm font-medium ${getBadgeColor(alert.type)}`}
+                  >
                     {alert.type}
                   </span>
                 </div>
@@ -262,16 +276,26 @@ const HealthAlertPage: React.FC = () => {
               <h3 className="font-bold text-red-700 mb-3">জাতীয় জরুরি সেবা</h3>
               <ul className="space-y-2">
                 <li className="text-red-600 text-sm">• জরুরি সেবা: ৯৯৯</li>
-                <li className="text-red-600 text-sm">• স্বাস্থ্য বাতায়ন: ১৬২৬৩</li>
+                <li className="text-red-600 text-sm">
+                  • স্বাস্থ্য বাতায়ন: ১৬২৬৩
+                </li>
                 <li className="text-red-600 text-sm">• বিষক্রিয়া: ১৬২৬৩</li>
               </ul>
             </div>
             <div>
-              <h3 className="font-bold text-red-700 mb-3">স্বাস্থ্য অধিদপ্তর</h3>
+              <h3 className="font-bold text-red-700 mb-3">
+                স্বাস্থ্য অধিদপ্তর
+              </h3>
               <ul className="space-y-2">
-                <li className="text-red-600 text-sm">• কন্ট্রোল রুম: ০২-৫৫০৮৬৯০৮</li>
-                <li className="text-red-600 text-sm">• ইমেইল: info@dghs.gov.bd</li>
-                <li className="text-red-600 text-sm">• ওয়েবসাইট: www.dghs.gov.bd</li>
+                <li className="text-red-600 text-sm">
+                  • কন্ট্রোল রুম: ০২-৫৫০৮৬৯০৮
+                </li>
+                <li className="text-red-600 text-sm">
+                  • ইমেইল: info@dghs.gov.bd
+                </li>
+                <li className="text-red-600 text-sm">
+                  • ওয়েবসাইট: www.dghs.gov.bd
+                </li>
               </ul>
             </div>
           </div>

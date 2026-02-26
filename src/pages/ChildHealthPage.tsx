@@ -1,8 +1,23 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Baby, Heart, Shield, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
-import AIChat from '../components/AIChat';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Users,
+  Baby,
+  Heart,
+  Shield,
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+} from "lucide-react";
+import AIChat from "../components/AIChat";
+import { useLanguage } from "../contexts/LanguageContext";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import img1 from "../assets/image/diseases.jpg";
+import img2 from "../assets/image/diseases1.jpg";
+import img3 from "../assets/image/diseases2.jpg";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const ChildHealthPage: React.FC = () => {
   const { t } = useLanguage();
@@ -11,87 +26,101 @@ const ChildHealthPage: React.FC = () => {
 
   const ageGroups = [
     {
-      age: t('language') === 'bn' ? '০-৬ মাস' : '0-6 months',
-      subtitle: t('language') === 'bn' ? 'নবজাতক পর্যায়' : 'Newborn stage',
-      feeding: t('language') === 'bn' ? 'শুধুমাত্র বুকের দুধ' : 'Breastfeeding only',
-      checkup: t('language') === 'bn' ? 'মাসিক ওজন পরীক্ষা' : 'Monthly weight check',
-      vaccination: 'BCG, Polio, DPT, Hepatitis B',
-      color: 'from-pink-500 to-rose-500',
-      bgColor: 'from-pink-50 to-rose-50',
-      icon: '👶'
+      age: t("language") === "bn" ? "০-৬ মাস" : "0-6 months",
+      subtitle: t("language") === "bn" ? "নবজাতক পর্যায়" : "Newborn stage",
+      feeding:
+        t("language") === "bn" ? "শুধুমাত্র বুকের দুধ" : "Breastfeeding only",
+      checkup:
+        t("language") === "bn" ? "মাসিক ওজন পরীক্ষা" : "Monthly weight check",
+      vaccination: "BCG, Polio, DPT, Hepatitis B",
+      color: "from-pink-500 to-rose-500",
+      bgColor: "from-pink-50 to-rose-50",
+      icon: "👶",
     },
     {
-      age: t('language') === 'bn' ? '৬-১২ মাস' : '6-12 months',
-      subtitle: t('language') === 'bn' ? 'সম্পূরক খাবার শুরু' : 'Start complementary feeding',
-      feeding: t('language') === 'bn' ? 'বুকের দুধ + সম্পূরক খাবার' : 'Breastfeeding + complementary food',
-      checkup: t('language') === 'bn' ? 'মাসিক বৃদ্ধি পরীক্ষা' : 'Monthly growth check',
-      vaccination: t('language') === 'bn' ? 'হাম, MR, নিউমোনিয়া' : 'Measles, MR, Pneumonia',
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'from-blue-50 to-cyan-50',
-      icon: '🍼'
+      age: t("language") === "bn" ? "৬-১২ মাস" : "6-12 months",
+      subtitle:
+        t("language") === "bn"
+          ? "সম্পূরক খাবার শুরু"
+          : "Start complementary feeding",
+      feeding:
+        t("language") === "bn"
+          ? "বুকের দুধ + সম্পূরক খাবার"
+          : "Breastfeeding + complementary food",
+      checkup:
+        t("language") === "bn"
+          ? "মাসিক বৃদ্ধি পরীক্ষা"
+          : "Monthly growth check",
+      vaccination:
+        t("language") === "bn"
+          ? "হাম, MR, নিউমোনিয়া"
+          : "Measles, MR, Pneumonia",
+      color: "from-blue-500 to-cyan-500",
+      bgColor: "from-blue-50 to-cyan-50",
+      icon: "🍼",
     },
     {
-      age: '১-২ বছর',
-      subtitle: 'হাঁটাচলা শেখার সময়',
-      feeding: 'পারিবারিক খাবার',
-      checkup: 'তিন মাস পর পর',
-      vaccination: 'ডিপথেরিয়া, টিটেনাস',
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'from-green-50 to-emerald-50',
-      icon: '🚶‍♂️'
+      age: "১-২ বছর",
+      subtitle: "হাঁটাচলা শেখার সময়",
+      feeding: "পারিবারিক খাবার",
+      checkup: "তিন মাস পর পর",
+      vaccination: "ডিপথেরিয়া, টিটেনাস",
+      color: "from-green-500 to-emerald-500",
+      bgColor: "from-green-50 to-emerald-50",
+      icon: "🚶‍♂️",
     },
     {
-      age: '২-৫ বছর',
-      subtitle: 'প্রাক-স্কুল পর্যায়',
-      feeding: 'সুষম খাবার',
-      checkup: 'ছয় মাস পর পর',
-      vaccination: 'বার্ষিক টিকা',
-      color: 'from-purple-500 to-indigo-500',
-      bgColor: 'from-purple-50 to-indigo-50',
-      icon: '🎒'
-    }
+      age: "২-৫ বছর",
+      subtitle: "প্রাক-স্কুল পর্যায়",
+      feeding: "সুষম খাবার",
+      checkup: "ছয় মাস পর পর",
+      vaccination: "বার্ষিক টিকা",
+      color: "from-purple-500 to-indigo-500",
+      bgColor: "from-purple-50 to-indigo-50",
+      icon: "🎒",
+    },
   ];
 
   const commonProblems = [
     {
-      icon: '🌡️',
-      title: 'জ্বর',
-      symptoms: ['উচ্চ তাপমাত্রা', 'শীত শীত ভাব'],
-      treatment: ['প্যারাসিটামল', 'স্পঞ্জিং'],
-      color: 'from-red-500 to-orange-500'
+      icon: "🌡️",
+      title: "জ্বর",
+      symptoms: ["উচ্চ তাপমাত্রা", "শীত শীত ভাব"],
+      treatment: ["প্যারাসিটামল", "স্পঞ্জিং"],
+      color: "from-red-500 to-orange-500",
     },
     {
-      icon: '🤧',
-      title: 'সর্দি-কাশি',
-      symptoms: ['নাক বন্ধ', 'কাশি'],
-      treatment: ['নরম তরল', 'গরম বাষ্প'],
-      color: 'from-blue-500 to-cyan-500'
+      icon: "🤧",
+      title: "সর্দি-কাশি",
+      symptoms: ["নাক বন্ধ", "কাশি"],
+      treatment: ["নরম তরল", "গরম বাষ্প"],
+      color: "from-blue-500 to-cyan-500",
     },
     {
-      icon: '💧',
-      title: 'ডায়রিয়া',
-      symptoms: ['পাতলা পায়খানা', 'বমি'],
-      treatment: ['ORS', 'জিঙ্ক'],
-      color: 'from-yellow-500 to-amber-500'
-    }
+      icon: "💧",
+      title: "ডায়রিয়া",
+      symptoms: ["পাতলা পায়খানা", "বমি"],
+      treatment: ["ORS", "জিঙ্ক"],
+      color: "from-yellow-500 to-amber-500",
+    },
   ];
 
   const nutritionTips = [
-    '০-৬ মাস: শুধুমাত্র বুকের দুধ',
-    '৬ মাস পর: বুকের দুধ + সম্পূরক খাবার',
-    'আয়রন সমৃদ্ধ খাবার দিন',
-    'ভিটামিন A সমৃদ্ধ খাবার',
-    'প্রতিদিন পানি পান করান',
-    'চিনি ও লবণ কম দিন'
+    "০-৬ মাস: শুধুমাত্র বুকের দুধ",
+    "৬ মাস পর: বুকের দুধ + সম্পূরক খাবার",
+    "আয়রন সমৃদ্ধ খাবার দিন",
+    "ভিটামিন A সমৃদ্ধ খাবার",
+    "প্রতিদিন পানি পান করান",
+    "চিনি ও লবণ কম দিন",
   ];
 
   const vaccinationSchedule = [
-    { age: 'জন্মের পর', vaccines: 'BCG, পোলিও-০, হেপাটাইটিস B-১' },
-    { age: '৬ সপ্তাহ', vaccines: 'পোলিও-১, DPT-১, হেপাটাইটিস B-২, হিব-১' },
-    { age: '১০ সপ্তাহ', vaccines: 'পোলিও-২, DPT-২, হেপাটাইটিস B-৩, হিব-২' },
-    { age: '১৪ সপ্তাহ', vaccines: 'পোলিও-৩, DPT-৩, হিব-৩' },
-    { age: '৯ মাস', vaccines: 'হাম, MR' },
-    { age: '১৮ মাস', vaccines: 'DPT বুস্টার, পোলিও বুস্টার' }
+    { age: "জন্মের পর", vaccines: "BCG, পোলিও-০, হেপাটাইটিস B-১" },
+    { age: "৬ সপ্তাহ", vaccines: "পোলিও-১, DPT-১, হেপাটাইটিস B-২, হিব-১" },
+    { age: "১০ সপ্তাহ", vaccines: "পোলিও-২, DPT-২, হেপাটাইটিস B-৩, হিব-২" },
+    { age: "১৪ সপ্তাহ", vaccines: "পোলিও-৩, DPT-৩, হিব-৩" },
+    { age: "৯ মাস", vaccines: "হাম, MR" },
+    { age: "১৮ মাস", vaccines: "DPT বুস্টার, পোলিও বুস্টার" },
   ];
 
   const nextStage = () => {
@@ -108,32 +137,65 @@ const ChildHealthPage: React.FC = () => {
 
   const sendNutritionTipToChat = (tip: string) => {
     const message = `${tip} - এই বিষয়ে বিস্তারিত পরামর্শ দিন।`;
-    setChatMessages(prev => [...prev, message]);
+    setChatMessages((prev) => [...prev, message]);
   };
 
   const currentStageData = ageGroups[currentStage];
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white mb-6">
-            <Baby className="w-10 h-10" />
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white mb-4 sm:mb-6">
+            <Baby className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">শিশু স্বাস্থ্য পরামর্শ</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('child.subtitle')}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
+            শিশু স্বাস্থ্য পরামর্শ
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
+            {t("child.subtitle")}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Child Health Info */}
           <div className="lg:col-span-2 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-3xl shadow-2xl border border-gray-100"
+            >
+              <Swiper
+                pagination={{
+                  dynamicBullets: true,
+                }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
+                modules={[Pagination, Autoplay]}
+                className="mySwiper rounded-3xl"
+                loop={true}
+                speed={1600}
+              >
+                <SwiperSlide className="">
+                  <img src={img1} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="">
+                  <img src={img2} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="">
+                  <img src={img3} alt="" />
+                </SwiperSlide>
+                {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
+              </Swiper>
+            </motion.div>
             {/* Age Groups Wizard */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -141,19 +203,21 @@ const ChildHealthPage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
               style={{
-                transform: 'perspective(1000px) rotateY(-1deg)',
-                transformStyle: 'preserve-3d'
+                transform: "perspective(1000px) rotateY(-1deg)",
+                transformStyle: "preserve-3d",
               }}
             >
               {/* Wizard Header */}
-              <div className={`bg-gradient-to-r ${currentStageData.color} text-white p-8 relative overflow-hidden`}>
+              <div
+                className={`bg-gradient-to-r ${currentStageData.color} text-white p-8 relative overflow-hidden`}
+              >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent animate-pulse" />
-                
+
                 {/* Floating particles */}
                 <div className="absolute top-4 left-4 w-2 h-2 bg-white/30 rounded-full animate-bounce" />
                 <div className="absolute top-8 right-8 w-3 h-3 bg-white/20 rounded-full animate-pulse" />
                 <div className="absolute bottom-6 left-12 w-1.5 h-1.5 bg-white/40 rounded-full animate-ping" />
-                
+
                 <div className="relative flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <motion.div
@@ -164,23 +228,34 @@ const ChildHealthPage: React.FC = () => {
                       {currentStageData.icon}
                     </motion.div>
                     <div>
-                      <h2 className="text-3xl font-bold mb-2">{currentStageData.age}</h2>
-                      <p className="text-white/90 text-lg">{currentStageData.subtitle}</p>
+                      <h2 className="text-3xl font-bold mb-2">
+                        {currentStageData.age}
+                      </h2>
+                      <p className="text-white/90 text-lg">
+                        {currentStageData.subtitle}
+                      </p>
                     </div>
                   </div>
-                  
+
                   {/* Stage Indicator with Animation */}
                   <div className="flex space-x-2">
                     {ageGroups.map((_, index) => (
                       <motion.div
                         key={index}
                         className={`w-4 h-4 rounded-full cursor-pointer ${
-                          index === currentStage ? 'bg-white shadow-lg' : 'bg-white/30'
+                          index === currentStage
+                            ? "bg-white shadow-lg"
+                            : "bg-white/30"
                         }`}
                         whileHover={{ scale: 1.2 }}
                         onClick={() => setCurrentStage(index)}
-                        animate={index === currentStage ? { scale: [1, 1.2, 1] } : {}}
-                        transition={{ duration: 0.5, repeat: index === currentStage ? Infinity : 0 }}
+                        animate={
+                          index === currentStage ? { scale: [1, 1.2, 1] } : {}
+                        }
+                        transition={{
+                          duration: 0.5,
+                          repeat: index === currentStage ? Infinity : 0,
+                        }}
                       />
                     ))}
                   </div>
@@ -195,33 +270,53 @@ const ChildHealthPage: React.FC = () => {
                     initial={{ opacity: 0, x: 50, rotateY: 10 }}
                     animate={{ opacity: 1, x: 0, rotateY: 0 }}
                     exit={{ opacity: 0, x: -50, rotateY: -10 }}
-                    transition={{ duration: 0.5, type: "spring", stiffness: 100 }}
+                    transition={{
+                      duration: 0.5,
+                      type: "spring",
+                      stiffness: 100,
+                    }}
                     className={`bg-gradient-to-br ${currentStageData.bgColor} rounded-3xl p-8`}
                     style={{
-                      transform: 'perspective(800px) rotateX(2deg)',
-                      boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
+                      transform: "perspective(800px) rotateX(2deg)",
+                      boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
                     }}
                   >
                     <div className="grid md:grid-cols-3 gap-6">
                       {[
-                        { title: 'খাদ্য', content: currentStageData.feeding, icon: '🍼' },
-                        { title: 'চেকআপ', content: currentStageData.checkup, icon: '👩‍⚕️' },
-                        { title: 'টিকা', content: currentStageData.vaccination, icon: '💉' }
+                        {
+                          title: "খাদ্য",
+                          content: currentStageData.feeding,
+                          icon: "🍼",
+                        },
+                        {
+                          title: "চেকআপ",
+                          content: currentStageData.checkup,
+                          icon: "👩‍⚕️",
+                        },
+                        {
+                          title: "টিকা",
+                          content: currentStageData.vaccination,
+                          icon: "💉",
+                        },
                       ].map((item, index) => (
                         <motion.div
                           key={index}
                           initial={{ opacity: 0, y: 20, scale: 0.9 }}
                           animate={{ opacity: 1, y: 0, scale: 1 }}
-                          transition={{ delay: 0.1 * index, type: "spring", stiffness: 200 }}
+                          transition={{
+                            delay: 0.1 * index,
+                            type: "spring",
+                            stiffness: 200,
+                          }}
                           className="group bg-white/80 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/95 transition-all duration-300 border border-white/50 hover:shadow-xl"
-                          whileHover={{ 
-                            scale: 1.05, 
+                          whileHover={{
+                            scale: 1.05,
                             y: -5,
                             rotateY: 5,
-                            boxShadow: '0 25px 50px rgba(0,0,0,0.15)'
+                            boxShadow: "0 25px 50px rgba(0,0,0,0.15)",
                           }}
                           style={{
-                            transform: 'perspective(500px) rotateX(1deg)',
+                            transform: "perspective(500px) rotateX(1deg)",
                           }}
                         >
                           <motion.div
@@ -249,13 +344,16 @@ const ChildHealthPage: React.FC = () => {
                     disabled={currentStage === 0}
                     className={`flex items-center space-x-2 px-6 py-3 rounded-2xl font-medium transition-all ${
                       currentStage === 0
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-gray-600 to-gray-700 text-white hover:shadow-xl'
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-gray-600 to-gray-700 text-white hover:shadow-xl"
                     }`}
                     whileHover={currentStage > 0 ? { scale: 1.05, y: -2 } : {}}
                     whileTap={currentStage > 0 ? { scale: 0.95 } : {}}
                     style={{
-                      transform: currentStage > 0 ? 'perspective(500px) rotateX(-2deg)' : 'none'
+                      transform:
+                        currentStage > 0
+                          ? "perspective(500px) rotateX(-2deg)"
+                          : "none",
                     }}
                   >
                     <ChevronLeft className="w-5 h-5" />
@@ -273,13 +371,22 @@ const ChildHealthPage: React.FC = () => {
                     disabled={currentStage === ageGroups.length - 1}
                     className={`flex items-center space-x-2 px-6 py-3 rounded-2xl font-medium transition-all ${
                       currentStage === ageGroups.length - 1
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                         : `bg-gradient-to-r ${currentStageData.color} text-white hover:shadow-xl`
                     }`}
-                    whileHover={currentStage < ageGroups.length - 1 ? { scale: 1.05, y: -2 } : {}}
-                    whileTap={currentStage < ageGroups.length - 1 ? { scale: 0.95 } : {}}
+                    whileHover={
+                      currentStage < ageGroups.length - 1
+                        ? { scale: 1.05, y: -2 }
+                        : {}
+                    }
+                    whileTap={
+                      currentStage < ageGroups.length - 1 ? { scale: 0.95 } : {}
+                    }
                     style={{
-                      transform: currentStage < ageGroups.length - 1 ? 'perspective(500px) rotateX(-2deg)' : 'none'
+                      transform:
+                        currentStage < ageGroups.length - 1
+                          ? "perspective(500px) rotateX(-2deg)"
+                          : "none",
                     }}
                   >
                     <span>পরবর্তী</span>
@@ -296,7 +403,9 @@ const ChildHealthPage: React.FC = () => {
               transition={{ delay: 0.4 }}
               className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
             >
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">সাধারণ সমস্যা</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                সাধারণ সমস্যা
+              </h2>
               <div className="grid md:grid-cols-3 gap-4">
                 {commonProblems.map((problem, index) => (
                   <motion.div
@@ -313,10 +422,15 @@ const ChildHealthPage: React.FC = () => {
                     >
                       {problem.icon}
                     </motion.div>
-                    <h3 className="font-bold text-gray-800 mb-2">{problem.title}</h3>
+                    <h3 className="font-bold text-gray-800 mb-2">
+                      {problem.title}
+                    </h3>
                     <div className="space-y-1">
                       {problem.symptoms.map((symptom, i) => (
-                        <div key={i} className="text-gray-600 text-xs bg-white/60 rounded-lg p-1">
+                        <div
+                          key={i}
+                          className="text-gray-600 text-xs bg-white/60 rounded-lg p-1"
+                        >
                           • {symptom}
                         </div>
                       ))}
@@ -333,8 +447,12 @@ const ChildHealthPage: React.FC = () => {
               transition={{ delay: 0.6 }}
               className="bg-green-50 rounded-2xl shadow-lg p-6 border border-green-200"
             >
-              <h2 className="text-2xl font-bold text-green-800 mb-4">পুষ্টি পরামর্শ</h2>
-              <p className="text-green-600 mb-4 text-center">টিপসে ক্লিক করুন এবং AI থেকে বিস্তারিত পরামর্শ নিন</p>
+              <h2 className="text-2xl font-bold text-green-800 mb-4">
+                পুষ্টি পরামর্শ
+              </h2>
+              <p className="text-green-600 mb-4 text-center">
+                টিপসে ক্লিক করুন এবং AI থেকে বিস্তারিত পরামর্শ নিন
+              </p>
               <div className="grid md:grid-cols-2 gap-3">
                 {nutritionTips.map((tip, index) => (
                   <motion.div
@@ -369,17 +487,17 @@ const ChildHealthPage: React.FC = () => {
               transition={{ delay: 0.8 }}
               className="bg-purple-50 rounded-3xl shadow-2xl p-8 border border-purple-200 relative overflow-hidden"
               style={{
-                transform: 'perspective(1000px) rotateX(2deg)',
-                transformStyle: 'preserve-3d'
+                transform: "perspective(1000px) rotateX(2deg)",
+                transformStyle: "preserve-3d",
               }}
             >
               {/* 3D Background Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-purple-400/5 to-indigo-400/5 animate-pulse" />
-              
+
               {/* Floating particles */}
               <div className="absolute top-4 right-4 w-2 h-2 bg-purple-300/50 rounded-full animate-bounce" />
               <div className="absolute bottom-6 left-6 w-1.5 h-1.5 bg-indigo-300/50 rounded-full animate-pulse" />
-              
+
               <div className="relative">
                 <div className="text-center mb-6">
                   <motion.div
@@ -387,32 +505,38 @@ const ChildHealthPage: React.FC = () => {
                     whileHover={{ scale: 1.15, rotate: 10 }}
                     transition={{ type: "spring", stiffness: 400 }}
                     style={{
-                      transform: 'perspective(500px) rotateX(10deg)',
+                      transform: "perspective(500px) rotateX(10deg)",
                     }}
                   >
                     <span className="text-2xl">💉</span>
                   </motion.div>
-                  <h2 className="text-3xl font-bold text-purple-800 mb-2">টিকা সূচি</h2>
+                  <h2 className="text-3xl font-bold text-purple-800 mb-2">
+                    টিকা সূচি
+                  </h2>
                   <p className="text-purple-600">শিশুর টিকার সময়সূচি</p>
                 </div>
-                
+
                 <div className="grid md:grid-cols-2 gap-6">
                   {vaccinationSchedule.map((schedule, index) => (
                     <motion.div
                       key={index}
                       initial={{ opacity: 0, y: 20, rotateX: 10 }}
                       animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                      transition={{ delay: 0.1 * index, type: "spring", stiffness: 200 }}
+                      transition={{
+                        delay: 0.1 * index,
+                        type: "spring",
+                        stiffness: 200,
+                      }}
                       className="group bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-purple-200/50 hover:bg-white/80 transition-all duration-300 hover:shadow-xl"
-                      whileHover={{ 
-                        scale: 1.05, 
+                      whileHover={{
+                        scale: 1.05,
                         y: -5,
                         rotateY: 5,
-                        boxShadow: '0 25px 50px rgba(147, 51, 234, 0.15)'
+                        boxShadow: "0 25px 50px rgba(147, 51, 234, 0.15)",
                       }}
                       style={{
-                        transform: 'perspective(800px) rotateX(1deg)',
-                        transformStyle: 'preserve-3d'
+                        transform: "perspective(800px) rotateX(1deg)",
+                        transformStyle: "preserve-3d",
                       }}
                     >
                       <div className="flex items-start space-x-4">
@@ -432,7 +556,7 @@ const ChildHealthPage: React.FC = () => {
                           </p>
                         </div>
                       </div>
-                      
+
                       {/* Hover Effect Border */}
                       <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-purple-200 transition-colors duration-300" />
                     </motion.div>

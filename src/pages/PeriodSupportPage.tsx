@@ -1,8 +1,26 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Heart, Shield, ChevronLeft, ChevronRight, MessageCircle, Image, Mic, Type, Plus } from 'lucide-react';
-import AIChat from '../components/AIChat';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Calendar,
+  Heart,
+  Shield,
+  ChevronLeft,
+  ChevronRight,
+  MessageCircle,
+  Image,
+  Mic,
+  Type,
+  Plus,
+} from "lucide-react";
+import AIChat from "../components/AIChat";
+import { useLanguage } from "../contexts/LanguageContext";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import img1 from "../assets/image/diseases.jpg";
+import img2 from "../assets/image/diseases1.jpg";
+import img3 from "../assets/image/diseases2.jpg";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const PeriodSupportPage: React.FC = () => {
   const { t } = useLanguage();
@@ -11,65 +29,71 @@ const PeriodSupportPage: React.FC = () => {
 
   const menstrualCycle = [
     {
-      phase: t('language') === 'bn' ? 'মাসিক পর্যায়' : 'Menstrual Phase',
-      days: t('language') === 'bn' ? 'দিন ১-৫' : 'Day 1-5',
-      description: t('language') === 'bn' ? 'জরায়ুর আস্তরণ ঝরে যাওয়া' : 'Shedding of uterine lining',
-      symptoms: t('language') === 'bn' ? ['রক্তপাত', 'পেট ব্যথা', 'মাথা ব্যথা', 'মুড সুইং'] : ['Bleeding', 'Abdominal pain', 'Headache', 'Mood swings'],
-      color: 'from-red-500 to-pink-500',
-      bgColor: 'from-red-50 to-pink-50',
-      icon: '🩸'
+      phase: t("language") === "bn" ? "মাসিক পর্যায়" : "Menstrual Phase",
+      days: t("language") === "bn" ? "দিন ১-৫" : "Day 1-5",
+      description:
+        t("language") === "bn"
+          ? "জরায়ুর আস্তরণ ঝরে যাওয়া"
+          : "Shedding of uterine lining",
+      symptoms:
+        t("language") === "bn"
+          ? ["রক্তপাত", "পেট ব্যথা", "মাথা ব্যথা", "মুড সুইং"]
+          : ["Bleeding", "Abdominal pain", "Headache", "Mood swings"],
+      color: "from-red-500 to-pink-500",
+      bgColor: "from-red-50 to-pink-50",
+      icon: "🩸",
     },
     {
-      phase: 'ফলিকুলার পর্যায়',
-      days: 'দিন ১-১৩',
-      description: 'নতুন ডিম্বাণু তৈরি হওয়া',
-      symptoms: ['শক্তি বৃদ্ধি', 'ভাল মুড', 'পরিষ্কার ত্বক'],
-      color: 'from-blue-500 to-cyan-500',
-      bgColor: 'from-blue-50 to-cyan-50',
-      icon: '🌱'
+      phase: "ফলিকুলার পর্যায়",
+      days: "দিন ১-১৩",
+      description: "নতুন ডিম্বাণু তৈরি হওয়া",
+      symptoms: ["শক্তি বৃদ্ধি", "ভাল মুড", "পরিষ্কার ত্বক"],
+      color: "from-blue-500 to-cyan-500",
+      bgColor: "from-blue-50 to-cyan-50",
+      icon: "🌱",
     },
     {
-      phase: 'ওভুলেশন',
-      days: 'দিন ১৪',
-      description: 'ডিম্বাণু নিঃসরণ',
-      symptoms: ['সামান্য ব্যথা', 'স্রাব বৃদ্ধি', 'তাপমাত্রা বৃদ্ধি'],
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'from-green-50 to-emerald-50',
-      icon: '🥚'
+      phase: "ওভুলেশন",
+      days: "দিন ১৪",
+      description: "ডিম্বাণু নিঃসরণ",
+      symptoms: ["সামান্য ব্যথা", "স্রাব বৃদ্ধি", "তাপমাত্রা বৃদ্ধি"],
+      color: "from-green-500 to-emerald-500",
+      bgColor: "from-green-50 to-emerald-50",
+      icon: "🥚",
     },
     {
-      phase: 'লুটিয়াল পর্যায়',
-      days: 'দিন ১৫-২৮',
-      description: 'জরায়ু প্রস্তুতি',
-      symptoms: ['PMS লক্ষণ', 'স্তন ব্যথা', 'খিদে বৃদ্ধি'],
-      color: 'from-purple-500 to-indigo-500',
-      bgColor: 'from-purple-50 to-indigo-50',
-      icon: '🌙'
-    }
+      phase: "লুটিয়াল পর্যায়",
+      days: "দিন ১৫-২৮",
+      description: "জরায়ু প্রস্তুতি",
+      symptoms: ["PMS লক্ষণ", "স্তন ব্যথা", "খিদে বৃদ্ধি"],
+      color: "from-purple-500 to-indigo-500",
+      bgColor: "from-purple-50 to-indigo-50",
+      icon: "🌙",
+    },
   ];
 
   const painRelief = [
     {
       icon: Heart,
-      title: 'প্রাকৃতিক উপায়',
-      tips: ['গরম সেঁক', 'যোগব্যায়াম', 'ম্যাসাজ', 'হালকা ব্যায়াম'],
-      color: 'from-red-500 to-pink-500'
+      title: "প্রাকৃতিক উপায়",
+      tips: ["গরম সেঁক", "যোগব্যায়াম", "ম্যাসাজ", "হালকা ব্যায়াম"],
+      color: "from-red-500 to-pink-500",
     },
     {
       icon: Shield,
-      title: 'খাদ্য পরামর্শ',
-      tips: ['আয়রন সমৃদ্ধ খাবার', 'ক্যালসিয়াম', 'পানি বেশি পান', 'চা কম খান'],
-      color: 'from-green-500 to-emerald-500'
-    }
+      title: "খাদ্য পরামর্শ",
+      tips: ["আয়রন সমৃদ্ধ খাবার", "ক্যালসিয়াম", "পানি বেশি পান", "চা কম খান"],
+      color: "from-green-500 to-emerald-500",
+    },
   ];
 
   const hygieneTips = [
-    'পরিষ্কার প্যাড বা ট্যাম্পন ব্যবহার করুন',
-    'প্রতি ৪-৬ ঘণ্টা পর পর পরিবর্তন করুন',
-    'নিয়মিত গোসল করুন',
-    'সুতি অন্তর্বাস পরুন',
-    'হাত ধোয়ার অভ্যাস করুন',
-    'পরিষ্কার পানি ব্যবহার করুন'
+    "পরিষ্কার প্যাড বা ট্যাম্পন ব্যবহার করুন",
+    "প্রতি ৪-৬ ঘণ্টা পর পর পরিবর্তন করুন",
+    "নিয়মিত গোসল করুন",
+    "সুতি অন্তর্বাস পরুন",
+    "হাত ধোয়ার অভ্যাস করুন",
+    "পরিষ্কার পানি ব্যবহার করুন",
   ];
 
   const nextCycleStage = () => {
@@ -86,36 +110,69 @@ const PeriodSupportPage: React.FC = () => {
 
   const sendHygieneTipToChat = (tip: string) => {
     const message = `${tip} - এই বিষয়ে বিস্তারিত পরামর্শ দিন।`;
-    setChatMessages(prev => [...prev, message]);
+    setChatMessages((prev) => [...prev, message]);
   };
 
   const currentStage = menstrualCycle[currentCycleStage];
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <motion.div 
-            className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white mb-6 shadow-2xl"
+          <motion.div
+            className="inline-flex items-center justify-center w-16 h-16 sm:w-20 md:w-24 sm:h-20 md:h-24 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white mb-4 sm:mb-6 shadow-2xl"
             whileHover={{ scale: 1.1, rotate: 10 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
-            <Calendar className="w-12 h-12" />
+            <Calendar className="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12" />
           </motion.div>
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">মাসিক সহায়তা</h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            {t('period.subtitle')}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 px-2">
+            মাসিক সহায়তা
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-2">
+            {t("period.subtitle")}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Period Info */}
           <div className="lg:col-span-2 space-y-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-3xl shadow-2xl border border-gray-100"
+            >
+              <Swiper
+                pagination={{
+                  dynamicBullets: true,
+                }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
+                modules={[Pagination, Autoplay]}
+                className="mySwiper rounded-3xl"
+                loop={true}
+                speed={1600}
+              >
+                <SwiperSlide className="">
+                  <img src={img1} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="">
+                  <img src={img2} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="">
+                  <img src={img3} alt="" />
+                </SwiperSlide>
+                {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
+              </Swiper>
+            </motion.div>
             {/* Menstrual Cycle Wizard */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -124,7 +181,9 @@ const PeriodSupportPage: React.FC = () => {
               className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
             >
               {/* Wizard Header */}
-              <div className={`bg-gradient-to-r ${currentStage.color} text-white p-8 relative overflow-hidden`}>
+              <div
+                className={`bg-gradient-to-r ${currentStage.color} text-white p-8 relative overflow-hidden`}
+              >
                 <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent animate-pulse" />
                 <div className="relative flex items-center justify-between">
                   <div className="flex items-center space-x-4">
@@ -136,22 +195,28 @@ const PeriodSupportPage: React.FC = () => {
                       {currentStage.icon}
                     </motion.div>
                     <div>
-                      <h2 className="text-3xl font-bold mb-2">{currentStage.phase}</h2>
-                      <p className="text-white/90 text-lg">{currentStage.days}</p>
+                      <h2 className="text-3xl font-bold mb-2">
+                        {currentStage.phase}
+                      </h2>
+                      <p className="text-white/90 text-lg">
+                        {currentStage.days}
+                      </p>
                     </div>
                   </div>
-                  
+
                   {/* Stage Indicator */}
                   <div className="flex space-x-2">
                     {menstrualCycle.map((_, index) => (
                       <motion.div
                         key={index}
                         className={`w-4 h-4 rounded-full ${
-                          index === currentCycleStage ? 'bg-white shadow-lg' : 'bg-white/30'
+                          index === currentCycleStage
+                            ? "bg-white shadow-lg"
+                            : "bg-white/30"
                         }`}
                         whileHover={{ scale: 1.2 }}
                         onClick={() => setCurrentCycleStage(index)}
-                        style={{ cursor: 'pointer' }}
+                        style={{ cursor: "pointer" }}
                       />
                     ))}
                   </div>
@@ -169,7 +234,9 @@ const PeriodSupportPage: React.FC = () => {
                     transition={{ duration: 0.3 }}
                     className={`bg-gradient-to-br ${currentStage.bgColor} rounded-3xl p-8`}
                   >
-                    <h3 className="text-2xl font-bold text-gray-800 mb-4">{currentStage.description}</h3>
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                      {currentStage.description}
+                    </h3>
                     <div className="grid md:grid-cols-2 gap-4">
                       {currentStage.symptoms.map((symptom, index) => (
                         <motion.div
@@ -182,7 +249,9 @@ const PeriodSupportPage: React.FC = () => {
                         >
                           <div className="flex items-center">
                             <span className="w-3 h-3 bg-gradient-to-r from-purple-400 to-indigo-400 rounded-full mr-3"></span>
-                            <span className="text-gray-700 font-medium">{symptom}</span>
+                            <span className="text-gray-700 font-medium">
+                              {symptom}
+                            </span>
                           </div>
                         </motion.div>
                       ))}
@@ -197,8 +266,8 @@ const PeriodSupportPage: React.FC = () => {
                     disabled={currentCycleStage === 0}
                     className={`flex items-center space-x-2 px-6 py-3 rounded-2xl font-medium transition-all ${
                       currentCycleStage === 0
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                        : 'bg-gradient-to-r from-gray-600 to-gray-700 text-white hover:shadow-lg'
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-gradient-to-r from-gray-600 to-gray-700 text-white hover:shadow-lg"
                     }`}
                     whileHover={currentCycleStage > 0 ? { scale: 1.05 } : {}}
                     whileTap={currentCycleStage > 0 ? { scale: 0.95 } : {}}
@@ -218,11 +287,19 @@ const PeriodSupportPage: React.FC = () => {
                     disabled={currentCycleStage === menstrualCycle.length - 1}
                     className={`flex items-center space-x-2 px-6 py-3 rounded-2xl font-medium transition-all ${
                       currentCycleStage === menstrualCycle.length - 1
-                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                        ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                         : `bg-gradient-to-r ${currentStage.color} text-white hover:shadow-lg`
                     }`}
-                    whileHover={currentCycleStage < menstrualCycle.length - 1 ? { scale: 1.05 } : {}}
-                    whileTap={currentCycleStage < menstrualCycle.length - 1 ? { scale: 0.95 } : {}}
+                    whileHover={
+                      currentCycleStage < menstrualCycle.length - 1
+                        ? { scale: 1.05 }
+                        : {}
+                    }
+                    whileTap={
+                      currentCycleStage < menstrualCycle.length - 1
+                        ? { scale: 0.95 }
+                        : {}
+                    }
                   >
                     <span>পরবর্তী</span>
                     <ChevronRight className="w-5 h-5" />
@@ -245,7 +322,9 @@ const PeriodSupportPage: React.FC = () => {
                 >
                   <Heart className="w-6 h-6" />
                 </motion.div>
-                <h2 className="text-2xl font-bold text-gray-800 mb-2">ব্যথা উপশম ও যত্ন</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                  ব্যথা উপশম ও যত্ন
+                </h2>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
                 {painRelief.map((relief, index) => (
@@ -257,16 +336,21 @@ const PeriodSupportPage: React.FC = () => {
                     className="text-center bg-gradient-to-br from-purple-50 via-white to-indigo-50 rounded-2xl p-6 hover:shadow-lg transition-all duration-300 border border-purple-100"
                     whileHover={{ scale: 1.05, y: -3 }}
                   >
-                    <motion.div 
+                    <motion.div
                       className={`w-12 h-12 bg-gradient-to-br ${relief.color} rounded-2xl flex items-center justify-center text-white mx-auto mb-4 shadow-lg`}
                       whileHover={{ rotate: 15, scale: 1.15 }}
                     >
                       <relief.icon className="w-6 h-6" />
                     </motion.div>
-                    <h3 className="font-bold text-gray-800 mb-3 text-lg">{relief.title}</h3>
+                    <h3 className="font-bold text-gray-800 mb-3 text-lg">
+                      {relief.title}
+                    </h3>
                     <div className="space-y-2">
                       {relief.tips.map((tip, i) => (
-                        <div key={i} className="text-gray-600 text-sm bg-white/60 rounded-lg p-2">
+                        <div
+                          key={i}
+                          className="text-gray-600 text-sm bg-white/60 rounded-lg p-2"
+                        >
                           • {tip}
                         </div>
                       ))}
@@ -290,8 +374,12 @@ const PeriodSupportPage: React.FC = () => {
                 >
                   <Shield className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-blue-800 mb-2">পরিচ্ছন্নতার নিয়ম</h2>
-                <p className="text-blue-600">টিপসে ক্লিক করুন এবং AI থেকে বিস্তারিত পরামর্শ নিন</p>
+                <h2 className="text-3xl font-bold text-blue-800 mb-2">
+                  পরিচ্ছন্নতার নিয়ম
+                </h2>
+                <p className="text-blue-600">
+                  টিপসে ক্লিক করুন এবং AI থেকে বিস্তারিত পরামর্শ নিন
+                </p>
               </div>
               <div className="grid md:grid-cols-2 gap-4">
                 {hygieneTips.map((tip, index) => (
@@ -334,10 +422,14 @@ const PeriodSupportPage: React.FC = () => {
                 >
                   <MessageCircle className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-purple-800 mb-2">AI সহায়তা</h2>
-                <p className="text-purple-600 text-lg">বিভিন্ন মাধ্যমে আমাদের AI এর সাথে যোগাযোগ করুন</p>
+                <h2 className="text-3xl font-bold text-purple-800 mb-2">
+                  AI সহায়তা
+                </h2>
+                <p className="text-purple-600 text-lg">
+                  বিভিন্ন মাধ্যমে আমাদের AI এর সাথে যোগাযোগ করুন
+                </p>
               </div>
-              
+
               <div className="grid md:grid-cols-3 gap-6">
                 <motion.div
                   className="text-center bg-white/60 rounded-2xl p-6 backdrop-blur-sm border border-purple-200/50 hover:bg-white/80 transition-all duration-300"
@@ -349,8 +441,12 @@ const PeriodSupportPage: React.FC = () => {
                   >
                     <Type className="w-8 h-8" />
                   </motion.div>
-                  <h3 className="font-bold text-purple-800 mb-2 text-lg">টেক্সট মেসেজ</h3>
-                  <p className="text-purple-600 text-sm">লিখে আপনার প্রশ্ন করুন</p>
+                  <h3 className="font-bold text-purple-800 mb-2 text-lg">
+                    টেক্সট মেসেজ
+                  </h3>
+                  <p className="text-purple-600 text-sm">
+                    লিখে আপনার প্রশ্ন করুন
+                  </p>
                 </motion.div>
 
                 <motion.div
@@ -363,8 +459,12 @@ const PeriodSupportPage: React.FC = () => {
                   >
                     <Image className="w-8 h-8" />
                   </motion.div>
-                  <h3 className="font-bold text-purple-800 mb-2 text-lg">ছবি আপলোড</h3>
-                  <p className="text-purple-600 text-sm">ছবি পাঠিয়ে পরামর্শ নিন</p>
+                  <h3 className="font-bold text-purple-800 mb-2 text-lg">
+                    ছবি আপলোড
+                  </h3>
+                  <p className="text-purple-600 text-sm">
+                    ছবি পাঠিয়ে পরামর্শ নিন
+                  </p>
                 </motion.div>
 
                 <motion.div
@@ -377,14 +477,17 @@ const PeriodSupportPage: React.FC = () => {
                   >
                     <Mic className="w-8 h-8" />
                   </motion.div>
-                  <h3 className="font-bold text-purple-800 mb-2 text-lg">ভয়েস মেসেজ</h3>
+                  <h3 className="font-bold text-purple-800 mb-2 text-lg">
+                    ভয়েস মেসেজ
+                  </h3>
                   <p className="text-purple-600 text-sm">কথা বলে প্রশ্ন করুন</p>
                 </motion.div>
               </div>
 
               <div className="mt-6 text-center">
                 <p className="text-purple-700 font-medium text-lg">
-                  আপনি টেক্সট, ছবি এবং ভয়েস - তিনটি মাধ্যমেই আমাদের AI এর কাছে প্রশ্ন করতে পারেন
+                  আপনি টেক্সট, ছবি এবং ভয়েস - তিনটি মাধ্যমেই আমাদের AI এর কাছে
+                  প্রশ্ন করতে পারেন
                 </p>
               </div>
             </motion.div>

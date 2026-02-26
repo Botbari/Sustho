@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { UserCheck, Search, MapPin, Phone, Star, Plus, X, Check, User } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  UserCheck,
+  Search,
+  MapPin,
+  Phone,
+  Star,
+  Plus,
+  X,
+  Check,
+  User,
+} from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 interface Doctor {
   id: number;
@@ -22,142 +32,184 @@ interface Doctor {
 
 const FindDoctorPage: React.FC = () => {
   const { t } = useLanguage();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSpecialty, setSelectedSpecialty] = useState('all');
-  const [selectedLocation, setSelectedLocation] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedSpecialty, setSelectedSpecialty] = useState("all");
+  const [selectedLocation, setSelectedLocation] = useState("all");
   const [showAddDoctorModal, setShowAddDoctorModal] = useState(false);
-  
+
   const [newDoctor, setNewDoctor] = useState({
-    name: '',
-    specialty: '',
-    qualification: '',
-    experience: '',
-    hospital: '',
-    location: '',
-    phone: '',
-    chamber: '',
-    email: ''
+    name: "",
+    specialty: "",
+    qualification: "",
+    experience: "",
+    hospital: "",
+    location: "",
+    phone: "",
+    chamber: "",
+    email: "",
   });
 
   const specialties = [
-    { id: 'all', name: t('language') === 'bn' ? 'সব বিশেষজ্ঞ' : 'All Specialists' },
-    { id: 'হৃদরোগ বিশেষজ্ঞ', name: t('language') === 'bn' ? 'হৃদরোগ বিশেষজ্ঞ' : 'Cardiologist' },
-    { id: 'গাইনী বিশেষজ্ঞ', name: t('language') === 'bn' ? 'গাইনী বিশেষজ্ঞ' : 'Gynecologist' },
-    { id: 'শিশু বিশেষজ্ঞ', name: t('language') === 'bn' ? 'শিশু বিশেষজ্ঞ' : 'Pediatrician' },
-    { id: 'চর্মরোগ বিশেষজ্ঞ', name: t('language') === 'bn' ? 'চর্মরোগ বিশেষজ্ঞ' : 'Dermatologist' },
-    { id: 'অর্থোপেডিক্স', name: t('language') === 'bn' ? 'অর্থোপেডিক্স' : 'Orthopedics' },
-    { id: 'নিউরোলজি', name: t('language') === 'bn' ? 'নিউরোলজি' : 'Neurology' },
-    { id: 'কার্ডিওলজি', name: t('language') === 'bn' ? 'কার্ডিওলজি' : 'Cardiology' }
+    {
+      id: "all",
+      name: t("language") === "bn" ? "সব বিশেষজ্ঞ" : "All Specialists",
+    },
+    {
+      id: "হৃদরোগ বিশেষজ্ঞ",
+      name: t("language") === "bn" ? "হৃদরোগ বিশেষজ্ঞ" : "Cardiologist",
+    },
+    {
+      id: "গাইনী বিশেষজ্ঞ",
+      name: t("language") === "bn" ? "গাইনী বিশেষজ্ঞ" : "Gynecologist",
+    },
+    {
+      id: "শিশু বিশেষজ্ঞ",
+      name: t("language") === "bn" ? "শিশু বিশেষজ্ঞ" : "Pediatrician",
+    },
+    {
+      id: "চর্মরোগ বিশেষজ্ঞ",
+      name: t("language") === "bn" ? "চর্মরোগ বিশেষজ্ঞ" : "Dermatologist",
+    },
+    {
+      id: "অর্থোপেডিক্স",
+      name: t("language") === "bn" ? "অর্থোপেডিক্স" : "Orthopedics",
+    },
+    { id: "নিউরোলজি", name: t("language") === "bn" ? "নিউরোলজি" : "Neurology" },
+    {
+      id: "কার্ডিওলজি",
+      name: t("language") === "bn" ? "কার্ডিওলজি" : "Cardiology",
+    },
   ];
 
   const locations = [
-    { id: 'all', name: t('language') === 'bn' ? 'সব এলাকা' : 'All Areas' },
-    { id: 'ঢাকা', name: t('language') === 'bn' ? 'ঢাকা' : 'Dhaka' },
-    { id: 'চট্টগ্রাম', name: t('language') === 'bn' ? 'চট্টগ্রাম' : 'Chittagong' },
-    { id: 'রাজশাহী', name: t('language') === 'bn' ? 'রাজশাহী' : 'Rajshahi' },
-    { id: 'সিলেট', name: t('language') === 'bn' ? 'সিলেট' : 'Sylhet' },
-    { id: 'খুলনা', name: t('language') === 'bn' ? 'খুলনা' : 'Khulna' },
-    { id: 'বরিশাল', name: t('language') === 'bn' ? 'বরিশাল' : 'Barisal' }
+    { id: "all", name: t("language") === "bn" ? "সব এলাকা" : "All Areas" },
+    { id: "ঢাকা", name: t("language") === "bn" ? "ঢাকা" : "Dhaka" },
+    {
+      id: "চট্টগ্রাম",
+      name: t("language") === "bn" ? "চট্টগ্রাম" : "Chittagong",
+    },
+    { id: "রাজশাহী", name: t("language") === "bn" ? "রাজশাহী" : "Rajshahi" },
+    { id: "সিলেট", name: t("language") === "bn" ? "সিলেট" : "Sylhet" },
+    { id: "খুলনা", name: t("language") === "bn" ? "খুলনা" : "Khulna" },
+    { id: "বরিশাল", name: t("language") === "bn" ? "বরিশাল" : "Barisal" },
   ];
 
   const [doctors, setDoctors] = useState<Doctor[]>([
     {
       id: 1,
-      name: 'ডাঃ মোহাম্মদ রহিম',
-      specialty: 'হৃদরোগ বিশেষজ্ঞ',
-      qualification: 'MBBS, MD (কার্ডিওলজি)',
-      experience: '১৫ বছর',
-      hospital: 'ঢাকা মেডিক্যাল কলেজ হাসপাতাল',
-      location: 'ঢাকা',
-      phone: '০১৭১২৩৪৫৬৭৮',
+      name: "ডাঃ মোহাম্মদ রহিম",
+      specialty: "হৃদরোগ বিশেষজ্ঞ",
+      qualification: "MBBS, MD (কার্ডিওলজি)",
+      experience: "১৫ বছর",
+      hospital: "ঢাকা মেডিক্যাল কলেজ হাসপাতাল",
+      location: "ঢাকা",
+      phone: "০১৭১২৩৪৫৬৭৮",
       rating: 4.8,
-      chamber: 'শনি-বৃহস্পতিবার, ৪:০০-৮:০০ PM',
+      chamber: "শনি-বৃহস্পতিবার, ৪:০০-৮:০০ PM",
       age: 45,
-      photo: 'https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=150&h=150'
+      photo:
+        "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=150&h=150",
     },
     {
       id: 2,
-      name: 'ডাঃ ফাতেমা খাতুন',
-      specialty: 'গাইনী বিশেষজ্ঞ',
-      qualification: 'MBBS, FCPS (গাইনী)',
-      experience: '১২ বছর',
-      hospital: 'বারডেম হাসপাতাল',
-      location: 'ঢাকা',
-      phone: '০১৮৮৭৬৫৪৩২১',
+      name: "ডাঃ ফাতেমা খাতুন",
+      specialty: "গাইনী বিশেষজ্ঞ",
+      qualification: "MBBS, FCPS (গাইনী)",
+      experience: "১২ বছর",
+      hospital: "বারডেম হাসপাতাল",
+      location: "ঢাকা",
+      phone: "০১৮৮৭৬৫৪৩২১",
       rating: 4.9,
-      chamber: 'রবি-বৃহস্পতিবার, ৫:০০-৯:০০ PM',
+      chamber: "রবি-বৃহস্পতিবার, ৫:০০-৯:০০ PM",
       age: 38,
-      photo: 'https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=150&h=150'
+      photo:
+        "https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=150&h=150",
     },
     {
       id: 3,
-      name: 'ডাঃ আব্দুল করিম',
-      specialty: 'শিশু বিশেষজ্ঞ',
-      qualification: 'MBBS, DCH, FCPS (শিশু)',
-      experience: '১০ বছর',
-      hospital: 'চট্টগ্রাম মেডিক্যাল কলেজ',
-      location: 'চট্টগ্রাম',
-      phone: '০১৯৯৮৮৭৭৬৬৫',
+      name: "ডাঃ আব্দুল করিম",
+      specialty: "শিশু বিশেষজ্ঞ",
+      qualification: "MBBS, DCH, FCPS (শিশু)",
+      experience: "১০ বছর",
+      hospital: "চট্টগ্রাম মেডিক্যাল কলেজ",
+      location: "চট্টগ্রাম",
+      phone: "০১৯৯৮৮৭৭৬৬৫",
       rating: 4.7,
-      chamber: 'সোম-শুক্রবার, ৬:০০-১০:০০ PM',
+      chamber: "সোম-শুক্রবার, ৬:০০-১০:০০ PM",
       age: 42,
-      photo: 'https://images.pexels.com/photos/6749778/pexels-photo-6749778.jpeg?auto=compress&cs=tinysrgb&w=150&h=150'
+      photo:
+        "https://images.pexels.com/photos/6749778/pexels-photo-6749778.jpeg?auto=compress&cs=tinysrgb&w=150&h=150",
     },
     {
       id: 4,
-      name: 'ডাঃ সালমা আক্তার',
-      specialty: 'চর্মরোগ বিশেষজ্ঞ',
-      qualification: 'MBBS, MD (চর্মরোগ)',
-      experience: '৮ বছর',
-      hospital: 'রাজশাহী মেডিক্যাল কলেজ',
-      location: 'রাজশাহী',
-      phone: '০১৫৫৪৪৩৩২২১',
+      name: "ডাঃ সালমা আক্তার",
+      specialty: "চর্মরোগ বিশেষজ্ঞ",
+      qualification: "MBBS, MD (চর্মরোগ)",
+      experience: "৮ বছর",
+      hospital: "রাজশাহী মেডিক্যাল কলেজ",
+      location: "রাজশাহী",
+      phone: "০১৫৫৪৪৩৩২২১",
       rating: 4.6,
-      chamber: 'সোম-বুধবার, ৪:৩০-৮:৩০ PM',
+      chamber: "সোম-বুধবার, ৪:৩০-৮:৩০ PM",
       age: 35,
-      photo: 'https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=150&h=150'
+      photo:
+        "https://images.pexels.com/photos/5452201/pexels-photo-5452201.jpeg?auto=compress&cs=tinysrgb&w=150&h=150",
     },
     {
       id: 5,
-      name: 'ডাঃ নাজমুল হক',
-      specialty: 'অর্থোপেডিক্স',
-      qualification: 'MBBS, MS (অর্থোপেডিক্স)',
-      experience: '১৮ বছর',
-      hospital: 'সিলেট এম এ জি ওসমানী মেডিক্যাল কলেজ',
-      location: 'সিলেট',
-      phone: '০১৬৬৫৫৪৪৩৩২',
+      name: "ডাঃ নাজমুল হক",
+      specialty: "অর্থোপেডিক্স",
+      qualification: "MBBS, MS (অর্থোপেডিক্স)",
+      experience: "১৮ বছর",
+      hospital: "সিলেট এম এ জি ওসমানী মেডিক্যাল কলেজ",
+      location: "সিলেট",
+      phone: "০১৬৬৫৫৪৪৩৩২",
       rating: 4.8,
-      chamber: 'রবি-বৃহস্পতিবার, ৫:৩০-৯:৩০ PM',
+      chamber: "রবি-বৃহস্পতিবার, ৫:৩০-৯:৩০ PM",
       age: 50,
-      photo: 'https://images.pexels.com/photos/5452274/pexels-photo-5452274.jpeg?auto=compress&cs=tinysrgb&w=150&h=150'
+      photo:
+        "https://images.pexels.com/photos/5452274/pexels-photo-5452274.jpeg?auto=compress&cs=tinysrgb&w=150&h=150",
     },
     {
       id: 6,
-      name: 'ডাঃ রাশিদা বেগম',
-      specialty: 'নিউরোলজি',
-      qualification: 'MBBS, MD (নিউরোলজি)',
-      experience: '১৪ বছর',
-      hospital: 'খুলনা মেডিক্যাল কলেজ',
-      location: 'খুলনা',
-      phone: '০১৭৭৬৬৫৫৪৪৩',
+      name: "ডাঃ রাশিদা বেগম",
+      specialty: "নিউরোলজি",
+      qualification: "MBBS, MD (নিউরোলজি)",
+      experience: "১৪ বছর",
+      hospital: "খুলনা মেডিক্যাল কলেজ",
+      location: "খুলনা",
+      phone: "০১৭৭৬৬৫৫৪৪৩",
       rating: 4.7,
-      chamber: 'সোম-শুক্রবার, ৫:০০-৯:০০ PM',
+      chamber: "সোম-শুক্রবার, ৫:০০-৯:০০ PM",
       age: 41,
-      photo: 'https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=150&h=150'
-    }
+      photo:
+        "https://images.pexels.com/photos/5452293/pexels-photo-5452293.jpeg?auto=compress&cs=tinysrgb&w=150&h=150",
+    },
   ]);
 
-  const filteredDoctors = doctors.filter(doctor => {
-    const matchesSearch = doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesSpecialty = selectedSpecialty === 'all' || doctor.specialty === selectedSpecialty;
-    const matchesLocation = selectedLocation === 'all' || doctor.location === selectedLocation;
+  const filteredDoctors = doctors.filter((doctor) => {
+    const matchesSearch =
+      doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSpecialty =
+      selectedSpecialty === "all" || doctor.specialty === selectedSpecialty;
+    const matchesLocation =
+      selectedLocation === "all" || doctor.location === selectedLocation;
     return matchesSearch && matchesSpecialty && matchesLocation;
   });
 
   const handleSubmitDoctor = () => {
-    if (!newDoctor.name || !newDoctor.specialty || !newDoctor.location || !newDoctor.phone || !newDoctor.qualification || !newDoctor.experience || !newDoctor.hospital || !newDoctor.chamber) {
-      alert('সব প্রয়োজনীয় তথ্য পূরণ করুন');
+    if (
+      !newDoctor.name ||
+      !newDoctor.specialty ||
+      !newDoctor.location ||
+      !newDoctor.phone ||
+      !newDoctor.qualification ||
+      !newDoctor.experience ||
+      !newDoctor.hospital ||
+      !newDoctor.chamber
+    ) {
+      alert("সব প্রয়োজনীয় তথ্য পূরণ করুন");
       return;
     }
 
@@ -174,20 +226,21 @@ const FindDoctorPage: React.FC = () => {
       email: newDoctor.email,
       rating: 4.5,
       age: 35,
-      photo: 'https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=150&h=150'
+      photo:
+        "https://images.pexels.com/photos/5215024/pexels-photo-5215024.jpeg?auto=compress&cs=tinysrgb&w=150&h=150",
     };
 
-    setDoctors(prev => [doctor, ...prev]);
+    setDoctors((prev) => [doctor, ...prev]);
     setNewDoctor({
-      name: '',
-      specialty: '',
-      qualification: '',
-      experience: '',
-      hospital: '',
-      location: '',
-      phone: '',
-      chamber: '',
-      email: ''
+      name: "",
+      specialty: "",
+      qualification: "",
+      experience: "",
+      hospital: "",
+      location: "",
+      phone: "",
+      chamber: "",
+      email: "",
     });
     setShowAddDoctorModal(false);
   };
@@ -198,32 +251,34 @@ const FindDoctorPage: React.FC = () => {
         key={i}
         className={`w-4 h-4 ${
           i < Math.floor(rating)
-            ? 'text-yellow-400 fill-current'
-            : 'text-gray-300'
+            ? "text-yellow-400 fill-current"
+            : "text-gray-300"
         }`}
       />
     ));
   };
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white mb-6">
-            <UserCheck className="w-10 h-10" />
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 text-white mb-4 sm:mb-6">
+            <UserCheck className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">ডাক্তার খোঁজা</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('doctor.subtitle')}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
+            ডাক্তার খোঁজা
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
+            {t("doctor.subtitle")}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
           {/* Left Column - Doctors List */}
           <div className="lg:col-span-3">
             {/* Search and Filter */}
@@ -231,14 +286,18 @@ const FindDoctorPage: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-3xl shadow-xl p-6 mb-8 border border-gray-100"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 mb-6 sm:mb-8 border border-gray-100"
             >
-              <div className="grid md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
                     type="text"
-                    placeholder={t('language') === 'bn' ? 'ডাক্তারের নাম বা বিশেষত্ব...' : 'Doctor name or specialty...'}
+                    placeholder={
+                      t("language") === "bn"
+                        ? "ডাক্তারের নাম বা বিশেষত্ব..."
+                        : "Doctor name or specialty..."
+                    }
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -249,7 +308,7 @@ const FindDoctorPage: React.FC = () => {
                   onChange={(e) => setSelectedSpecialty(e.target.value)}
                   className="px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  {specialties.map(specialty => (
+                  {specialties.map((specialty) => (
                     <option key={specialty.id} value={specialty.id}>
                       {specialty.name}
                     </option>
@@ -260,7 +319,7 @@ const FindDoctorPage: React.FC = () => {
                   onChange={(e) => setSelectedLocation(e.target.value)}
                   className="px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 >
-                  {locations.map(location => (
+                  {locations.map((location) => (
                     <option key={location.id} value={location.id}>
                       {location.name}
                     </option>
@@ -285,8 +344,8 @@ const FindDoctorPage: React.FC = () => {
                       className="w-16 h-16 rounded-2xl overflow-hidden shadow-lg flex-shrink-0"
                       whileHover={{ scale: 1.05 }}
                     >
-                      <img 
-                        src={doctor.photo} 
+                      <img
+                        src={doctor.photo}
                         alt={doctor.name}
                         className="w-full h-full object-cover"
                       />
@@ -295,40 +354,55 @@ const FindDoctorPage: React.FC = () => {
                     <div className="flex-1">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="text-lg font-bold text-gray-800">{doctor.name}</h3>
-                          <p className="text-indigo-600 font-medium text-sm">{doctor.specialty}</p>
-                          <p className="text-gray-600 text-xs">{doctor.qualification}</p>
+                          <h3 className="text-lg font-bold text-gray-800">
+                            {doctor.name}
+                          </h3>
+                          <p className="text-indigo-600 font-medium text-sm">
+                            {doctor.specialty}
+                          </p>
+                          <p className="text-gray-600 text-xs">
+                            {doctor.qualification}
+                          </p>
                         </div>
                         <div className="flex items-center space-x-1">
                           {renderStars(doctor.rating)}
-                          <span className="text-xs text-gray-600 ml-1">{doctor.rating}</span>
+                          <span className="text-xs text-gray-600 ml-1">
+                            {doctor.rating}
+                          </span>
                         </div>
                       </div>
 
                       <div className="space-y-1 text-xs">
                         <div className="flex items-center text-gray-600">
                           <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
-                          {t('language') === 'bn' ? 'অভিজ্ঞতা' : 'Experience'}: {doctor.experience}
+                          {t("language") === "bn" ? "অভিজ্ঞতা" : "Experience"}:{" "}
+                          {doctor.experience}
                         </div>
-                        
+
                         <div className="flex items-center text-gray-600">
                           <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-2"></span>
                           {doctor.hospital}
                         </div>
-                        
+
                         <div className="flex items-center text-gray-600">
                           <MapPin className="w-3 h-3 mr-1" />
                           {doctor.location}
                         </div>
-                        
+
                         <div className="flex items-center text-gray-600">
                           <Phone className="w-3 h-3 mr-1" />
                           {doctor.phone}
                         </div>
-                        
+
                         <div className="bg-gray-50 rounded-lg p-2 mt-2">
                           <p className="text-xs text-gray-700">
-                            <strong>{t('language') === 'bn' ? 'চেম্বারের সময়' : 'Chamber Time'}:</strong> {doctor.chamber}
+                            <strong>
+                              {t("language") === "bn"
+                                ? "চেম্বারের সময়"
+                                : "Chamber Time"}
+                              :
+                            </strong>{" "}
+                            {doctor.chamber}
                           </p>
                         </div>
                       </div>
@@ -339,7 +413,9 @@ const FindDoctorPage: React.FC = () => {
                           whileTap={{ scale: 0.98 }}
                           className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-2 rounded-xl font-medium hover:shadow-lg transition-all text-sm"
                         >
-                          {t('language') === 'bn' ? 'অ্যাপয়েন্টমেন্ট নিন' : 'Book Appointment'}
+                          {t("language") === "bn"
+                            ? "অ্যাপয়েন্টমেন্ট নিন"
+                            : "Book Appointment"}
                         </motion.button>
                       </div>
                     </div>
@@ -354,7 +430,9 @@ const FindDoctorPage: React.FC = () => {
                 animate={{ opacity: 1 }}
                 className="text-center py-12"
               >
-                <p className="text-gray-500 text-lg">কোন ডাক্তার পাওয়া যায়নি। অনুগ্রহ করে সার্চ পরিবর্তন করুন।</p>
+                <p className="text-gray-500 text-lg">
+                  কোন ডাক্তার পাওয়া যায়নি। অনুগ্রহ করে সার্চ পরিবর্তন করুন।
+                </p>
               </motion.div>
             )}
           </div>
@@ -375,7 +453,7 @@ const FindDoctorPage: React.FC = () => {
               </motion.div>
               <h3 className="text-xl font-bold mb-3">ডাক্তার হিসেবে যোগ দিন</h3>
               <p className="text-indigo-100 text-sm mb-4 leading-relaxed">
-                {t('doctor.register.desc')}
+                {t("doctor.register.desc")}
               </p>
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
@@ -384,7 +462,7 @@ const FindDoctorPage: React.FC = () => {
                 className="w-full bg-white text-indigo-500 py-3 rounded-xl font-bold text-sm hover:shadow-lg transition-all flex items-center justify-center space-x-2"
               >
                 <Plus className="w-4 h-4" />
-                <span>{t('button.register')}</span>
+                <span>{t("button.register")}</span>
               </motion.button>
             </motion.div>
           </div>
@@ -401,7 +479,7 @@ const FindDoctorPage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setShowAddDoctorModal(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -422,7 +500,9 @@ const FindDoctorPage: React.FC = () => {
                       </motion.div>
                       <div>
                         <h3 className="text-3xl font-bold">ডাক্তার নিবন্ধন</h3>
-                        <p className="text-indigo-100 text-lg">আপনার তথ্য দিয়ে নিবন্ধন করুন</p>
+                        <p className="text-indigo-100 text-lg">
+                          আপনার তথ্য দিয়ে নিবন্ধন করুন
+                        </p>
                       </div>
                     </div>
                     <motion.button
@@ -441,50 +521,82 @@ const FindDoctorPage: React.FC = () => {
                   <div className="grid md:grid-cols-2 gap-6">
                     {/* Personal Information */}
                     <div className="space-y-6">
-                      <h4 className="text-2xl font-bold text-gray-800 mb-4">ব্যক্তিগত তথ্য</h4>
-                      
+                      <h4 className="text-2xl font-bold text-gray-800 mb-4">
+                        ব্যক্তিগত তথ্য
+                      </h4>
+
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">পূর্ণ নাম *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          পূর্ণ নাম *
+                        </label>
                         <input
                           type="text"
                           value={newDoctor.name}
-                          onChange={(e) => setNewDoctor(prev => ({ ...prev, name: e.target.value }))}
+                          onChange={(e) =>
+                            setNewDoctor((prev) => ({
+                              ...prev,
+                              name: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                           placeholder="ডাঃ আপনার নাম"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">বিশেষত্ব *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          বিশেষত্ব *
+                        </label>
                         <select
                           value={newDoctor.specialty}
-                          onChange={(e) => setNewDoctor(prev => ({ ...prev, specialty: e.target.value }))}
+                          onChange={(e) =>
+                            setNewDoctor((prev) => ({
+                              ...prev,
+                              specialty: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                         >
                           <option value="">নির্বাচন করুন</option>
-                          {specialties.slice(1).map(specialty => (
-                            <option key={specialty.id} value={specialty.id}>{specialty.name}</option>
+                          {specialties.slice(1).map((specialty) => (
+                            <option key={specialty.id} value={specialty.id}>
+                              {specialty.name}
+                            </option>
                           ))}
                         </select>
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">যোগ্যতা *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          যোগ্যতা *
+                        </label>
                         <input
                           type="text"
                           value={newDoctor.qualification}
-                          onChange={(e) => setNewDoctor(prev => ({ ...prev, qualification: e.target.value }))}
+                          onChange={(e) =>
+                            setNewDoctor((prev) => ({
+                              ...prev,
+                              qualification: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                           placeholder="MBBS, MD, FCPS ইত্যাদি"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">অভিজ্ঞতা *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          অভিজ্ঞতা *
+                        </label>
                         <input
                           type="text"
                           value={newDoctor.experience}
-                          onChange={(e) => setNewDoctor(prev => ({ ...prev, experience: e.target.value }))}
+                          onChange={(e) =>
+                            setNewDoctor((prev) => ({
+                              ...prev,
+                              experience: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                           placeholder="যেমন: ১০ বছর"
                         />
@@ -493,61 +605,100 @@ const FindDoctorPage: React.FC = () => {
 
                     {/* Professional Information */}
                     <div className="space-y-6">
-                      <h4 className="text-2xl font-bold text-gray-800 mb-4">পেশাগত তথ্য</h4>
-                      
+                      <h4 className="text-2xl font-bold text-gray-800 mb-4">
+                        পেশাগত তথ্য
+                      </h4>
+
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">হাসপাতাল/ক্লিনিক *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          হাসপাতাল/ক্লিনিক *
+                        </label>
                         <input
                           type="text"
                           value={newDoctor.hospital}
-                          onChange={(e) => setNewDoctor(prev => ({ ...prev, hospital: e.target.value }))}
+                          onChange={(e) =>
+                            setNewDoctor((prev) => ({
+                              ...prev,
+                              hospital: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                           placeholder="হাসপাতাল বা ক্লিনিকের নাম"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">এলাকা/শহর *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          এলাকা/শহর *
+                        </label>
                         <select
                           value={newDoctor.location}
-                          onChange={(e) => setNewDoctor(prev => ({ ...prev, location: e.target.value }))}
+                          onChange={(e) =>
+                            setNewDoctor((prev) => ({
+                              ...prev,
+                              location: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                         >
                           <option value="">নির্বাচন করুন</option>
-                          {locations.slice(1).map(location => (
-                            <option key={location.id} value={location.id}>{location.name}</option>
+                          {locations.slice(1).map((location) => (
+                            <option key={location.id} value={location.id}>
+                              {location.name}
+                            </option>
                           ))}
                         </select>
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">মোবাইল নম্বর *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          মোবাইল নম্বর *
+                        </label>
                         <input
                           type="tel"
                           value={newDoctor.phone}
-                          onChange={(e) => setNewDoctor(prev => ({ ...prev, phone: e.target.value }))}
+                          onChange={(e) =>
+                            setNewDoctor((prev) => ({
+                              ...prev,
+                              phone: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                           placeholder="০১৭xxxxxxxx"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">চেম্বারের সময় *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          চেম্বারের সময় *
+                        </label>
                         <input
                           type="text"
                           value={newDoctor.chamber}
-                          onChange={(e) => setNewDoctor(prev => ({ ...prev, chamber: e.target.value }))}
+                          onChange={(e) =>
+                            setNewDoctor((prev) => ({
+                              ...prev,
+                              chamber: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                           placeholder="যেমন: সোম-শুক্র, ৫:০০-৯:০০ PM"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">ইমেইল (ঐচ্ছিক)</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          ইমেইল (ঐচ্ছিক)
+                        </label>
                         <input
                           type="email"
                           value={newDoctor.email}
-                          onChange={(e) => setNewDoctor(prev => ({ ...prev, email: e.target.value }))}
+                          onChange={(e) =>
+                            setNewDoctor((prev) => ({
+                              ...prev,
+                              email: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-indigo-300 focus:border-indigo-500"
                           placeholder="example@email.com"
                         />

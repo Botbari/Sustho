@@ -1,8 +1,15 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { AlertTriangle, Heart, Shield, Phone, Plus } from 'lucide-react';
-import AIChat from '../components/AIChat';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { AlertTriangle, Heart, Shield, Phone, Plus } from "lucide-react";
+import AIChat from "../components/AIChat";
+import { useLanguage } from "../contexts/LanguageContext";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import img1 from "../assets/image/diseases.jpg";
+import img2 from "../assets/image/diseases1.jpg";
+import img3 from "../assets/image/diseases2.jpg";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 const AbortionSupportPage: React.FC = () => {
   const { t } = useLanguage();
@@ -10,99 +17,150 @@ const AbortionSupportPage: React.FC = () => {
 
   const postAbortionCare = [
     {
-      title: 'শারীরিক যত্ন',
-      points: ['পর্যাপ্ত বিশ্রাম নিন', 'ভারী কাজ এড়িয়ে চলুন', 'পুষ্টিকর খাবার খান', 'নিয়মিত ওষুধ সেবন'],
-      color: 'from-orange-500 to-red-500',
-      bgColor: 'from-orange-50 to-red-50',
-      borderColor: 'border-orange-300'
+      title: "শারীরিক যত্ন",
+      points: [
+        "পর্যাপ্ত বিশ্রাম নিন",
+        "ভারী কাজ এড়িয়ে চলুন",
+        "পুষ্টিকর খাবার খান",
+        "নিয়মিত ওষুধ সেবন",
+      ],
+      color: "from-orange-500 to-red-500",
+      bgColor: "from-orange-50 to-red-50",
+      borderColor: "border-orange-300",
     },
     {
-      title: 'মানসিক স্বাস্থ্য',
-      points: ['মানসিক সহায়তা নিন', 'পরিবারের সাথে কথা বলুন', 'প্রয়োজনে কাউন্সেলিং', 'নিজেকে দোষ দিবেন না'],
-      color: 'from-purple-500 to-indigo-500',
-      bgColor: 'from-purple-50 to-indigo-50',
-      borderColor: 'border-purple-300'
+      title: "মানসিক স্বাস্থ্য",
+      points: [
+        "মানসিক সহায়তা নিন",
+        "পরিবারের সাথে কথা বলুন",
+        "প্রয়োজনে কাউন্সেলিং",
+        "নিজেকে দোষ দিবেন না",
+      ],
+      color: "from-purple-500 to-indigo-500",
+      bgColor: "from-purple-50 to-indigo-50",
+      borderColor: "border-purple-300",
     },
     {
-      title: 'খাদ্য ও পুষ্টি',
-      points: ['আয়রন সমৃদ্ধ খাবার', 'প্রোটিন জাতীয় খাবার', 'ভিটামিন C', 'প্রচুর পানি পান'],
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'from-green-50 to-emerald-50',
-      borderColor: 'border-green-300'
-    }
+      title: "খাদ্য ও পুষ্টি",
+      points: [
+        "আয়রন সমৃদ্ধ খাবার",
+        "প্রোটিন জাতীয় খাবার",
+        "ভিটামিন C",
+        "প্রচুর পানি পান",
+      ],
+      color: "from-green-500 to-emerald-500",
+      bgColor: "from-green-50 to-emerald-50",
+      borderColor: "border-green-300",
+    },
   ];
 
   const warningSignals = [
-    'অতিরিক্ত রক্তক্ষরণ',
-    'তীব্র পেট ব্যথা',
-    'উচ্চ জ্বর',
-    'দুর্গন্ধযুক্ত স্রাব',
-    '২৪ ঘণ্টার বেশি জ্বর',
-    'শ্বাসকষ্ট',
-    'অজ্ঞান হওয়া',
-    'তীব্র বমি'
+    "অতিরিক্ত রক্তক্ষরণ",
+    "তীব্র পেট ব্যথা",
+    "উচ্চ জ্বর",
+    "দুর্গন্ধযুক্ত স্রাব",
+    "২৪ ঘণ্টার বেশি জ্বর",
+    "শ্বাসকষ্ট",
+    "অজ্ঞান হওয়া",
+    "তীব্র বমি",
   ];
 
   const recoveryTimeline = [
-    { time: 'প্রথম ২৪ ঘণ্টা', activity: 'সম্পূর্ণ বিশ্রাম, পানি পান, হালকা খাবার' },
-    { time: 'প্রথম সপ্তাহ', activity: 'বিশ্রাম, নিয়মিত ওষুধ, পুষ্টিকর খাবার' },
-    { time: 'দ্বিতীয় সপ্তাহ', activity: 'হালকা কাজ শুরু, ডাক্তারের পরামর্শ' },
-    { time: 'তৃতীয় সপ্তাহ', activity: 'স্বাভাবিক জীবনযাত্রা, ফলোআপ চেকআপ' }
+    {
+      time: "প্রথম ২৪ ঘণ্টা",
+      activity: "সম্পূর্ণ বিশ্রাম, পানি পান, হালকা খাবার",
+    },
+    { time: "প্রথম সপ্তাহ", activity: "বিশ্রাম, নিয়মিত ওষুধ, পুষ্টিকর খাবার" },
+    { time: "দ্বিতীয় সপ্তাহ", activity: "হালকা কাজ শুরু, ডাক্তারের পরামর্শ" },
+    { time: "তৃতীয় সপ্তাহ", activity: "স্বাভাবিক জীবনযাত্রা, ফলোআপ চেকআপ" },
   ];
 
   const supportOrganizations = [
     {
-      name: 'জাতীয় জরুরি সেবা',
-      number: '৯৯৯',
-      description: 'সব ধরনের জরুরি অবস্থার জন্য',
-      color: 'from-red-500 to-orange-500'
+      name: "জাতীয় জরুরি সেবা",
+      number: "৯৯৯",
+      description: "সব ধরনের জরুরি অবস্থার জন্য",
+      color: "from-red-500 to-orange-500",
     },
     {
-      name: 'স্বাস্থ্য বাতায়ন',
-      number: '১৬২৬৩',
-      description: 'স্বাস্থ্য সেবা ও পরামর্শের জন্য',
-      color: 'from-green-500 to-teal-500'
+      name: "স্বাস্থ্য বাতায়ন",
+      number: "১৬২৬৩",
+      description: "স্বাস্থ্য সেবা ও পরামর্শের জন্য",
+      color: "from-green-500 to-teal-500",
     },
     {
-      name: 'মহিলা সহায়তা',
-      number: '১০৯',
-      description: 'মহিলাদের জন্য বিশেষ সহায়তা',
-      color: 'from-purple-500 to-indigo-500'
+      name: "মহিলা সহায়তা",
+      number: "১০৯",
+      description: "মহিলাদের জন্য বিশেষ সহায়তা",
+      color: "from-purple-500 to-indigo-500",
     },
     {
-      name: 'মানসিক স্বাস্থ্য হেল্পলাইন',
-      number: '০৯৬১১৬৭৭৭৭৭',
-      description: 'মানসিক সহায়তা ও কাউন্সেলিং',
-      color: 'from-blue-500 to-cyan-500'
-    }
+      name: "মানসিক স্বাস্থ্য হেল্পলাইন",
+      number: "০৯৬১১৬৭৭৭৭৭",
+      description: "মানসিক সহায়তা ও কাউন্সেলিং",
+      color: "from-blue-500 to-cyan-500",
+    },
   ];
 
   const sendCareInfoToChat = (careTitle: string, points: string[]) => {
-    const message = `${careTitle} সম্পর্কে বিস্তারিত জানতে চাই। বিশেষ করে: ${points.join(', ')}`;
-    setChatMessages(prev => [...prev, message]);
+    const message = `${careTitle} সম্পর্কে বিস্তারিত জানতে চাই। বিশেষ করে: ${points.join(", ")}`;
+    setChatMessages((prev) => [...prev, message]);
   };
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white mb-6">
-            <Heart className="w-10 h-10" />
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-full bg-gradient-to-r from-orange-500 to-red-500 text-white mb-4 sm:mb-6">
+            <Heart className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">গর্ভপাত সহায়তা</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('abortion.subtitle')}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
+            গর্ভপাত সহায়তা
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
+            {t("abortion.subtitle")}
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Support Info */}
           <div className="lg:col-span-2 space-y-6">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-3xl shadow-2xl border border-gray-100"
+            >
+              <Swiper
+                pagination={{
+                  dynamicBullets: true,
+                }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
+                modules={[Pagination, Autoplay]}
+                className="mySwiper rounded-3xl"
+                loop={true}
+                speed={1600}
+              >
+                <SwiperSlide className="">
+                  <img src={img1} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="">
+                  <img src={img2} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="">
+                  <img src={img3} alt="" />
+                </SwiperSlide>
+                {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
+              </Swiper>
+            </motion.div>
             {/* Compact Post Abortion Care */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -110,7 +168,9 @@ const AbortionSupportPage: React.FC = () => {
               transition={{ delay: 0.2 }}
               className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
             >
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">গর্ভপাত পরবর্তী যত্ন</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">
+                গর্ভপাত পরবর্তী যত্ন
+              </h2>
               <div className="grid md:grid-cols-3 gap-4">
                 {postAbortionCare.map((care, index) => (
                   <motion.div
@@ -129,24 +189,29 @@ const AbortionSupportPage: React.FC = () => {
                     >
                       <Heart className="w-6 h-6" />
                     </motion.div>
-                    
+
                     <h3 className="text-lg font-bold text-gray-800 mb-3 group-hover:text-orange-600 transition-colors">
                       {care.title}
                     </h3>
                     <div className="space-y-2">
                       {care.points.map((point, i) => (
-                        <div key={i} className="text-gray-600 text-sm bg-white/60 rounded-lg p-2">
+                        <div
+                          key={i}
+                          className="text-gray-600 text-sm bg-white/60 rounded-lg p-2"
+                        >
                           • {point}
                         </div>
                       ))}
                     </div>
-                    
+
                     <motion.div
                       className="mt-3 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                       whileHover={{ scale: 1.1 }}
                     >
                       <Plus className="w-4 h-4 text-orange-600 mr-1" />
-                      <span className="text-orange-600 text-sm font-medium">চ্যাটবটে জিজ্ঞাসা করুন</span>
+                      <span className="text-orange-600 text-sm font-medium">
+                        চ্যাটবটে জিজ্ঞাসা করুন
+                      </span>
                     </motion.div>
                   </motion.div>
                 ))}
@@ -160,7 +225,9 @@ const AbortionSupportPage: React.FC = () => {
               transition={{ delay: 0.4 }}
               className="bg-red-50 rounded-2xl shadow-lg p-6 border border-red-200"
             >
-              <h2 className="text-xl font-bold text-red-800 mb-4">সতর্কতা সংকেত</h2>
+              <h2 className="text-xl font-bold text-red-800 mb-4">
+                সতর্কতা সংকেত
+              </h2>
               <div className="grid md:grid-cols-2 gap-3">
                 {warningSignals.map((signal, index) => (
                   <motion.div
@@ -187,7 +254,9 @@ const AbortionSupportPage: React.FC = () => {
               transition={{ delay: 0.6 }}
               className="bg-blue-50 rounded-2xl shadow-lg p-6 border border-blue-200"
             >
-              <h2 className="text-xl font-bold text-blue-800 mb-4">সুস্থতার সময়সূচি</h2>
+              <h2 className="text-xl font-bold text-blue-800 mb-4">
+                সুস্থতার সময়সূচি
+              </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 {recoveryTimeline.map((item, index) => (
                   <motion.div
@@ -201,7 +270,9 @@ const AbortionSupportPage: React.FC = () => {
                       {index + 1}
                     </div>
                     <div>
-                      <h3 className="font-bold text-blue-700 mb-1">{item.time}</h3>
+                      <h3 className="font-bold text-blue-700 mb-1">
+                        {item.time}
+                      </h3>
                       <p className="text-blue-600 text-sm">{item.activity}</p>
                     </div>
                   </motion.div>
@@ -216,7 +287,9 @@ const AbortionSupportPage: React.FC = () => {
               transition={{ delay: 0.8 }}
               className="bg-green-50 rounded-2xl shadow-lg p-6 border border-green-200"
             >
-              <h2 className="text-xl font-bold text-green-800 mb-4">সহায়তা সংস্থা</h2>
+              <h2 className="text-xl font-bold text-green-800 mb-4">
+                সহায়তা সংস্থা
+              </h2>
               <div className="grid md:grid-cols-2 gap-4">
                 {supportOrganizations.map((org, index) => (
                   <motion.div
@@ -228,8 +301,12 @@ const AbortionSupportPage: React.FC = () => {
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div>
-                        <h3 className="font-bold text-green-800 text-sm">{org.name}</h3>
-                        <p className="text-green-600 text-xs">{org.description}</p>
+                        <h3 className="font-bold text-green-800 text-sm">
+                          {org.name}
+                        </h3>
+                        <p className="text-green-600 text-xs">
+                          {org.description}
+                        </p>
                       </div>
                       <motion.a
                         href={`tel:${org.number}`}

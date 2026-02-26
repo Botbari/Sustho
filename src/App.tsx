@@ -21,6 +21,8 @@ import AmbulancePage from "./pages/AmbulancePage";
 import FeedbackPage from "./pages/FeedbackPage";
 import NotificationPage from "./pages/NotificationPage";
 import PricePage from "./pages/PricePage";
+import TreeHealthPage from "./pages/TreeHealthPage";
+import SusthoCardPage from "./pages/SusthoCardPage";
 
 function App() {
   return (
@@ -60,6 +62,8 @@ function App() {
               <Route path="/feedback" element={<FeedbackPage />} />
               <Route path="/notification" element={<NotificationPage />} />
               <Route path="/price" element={<PricePage />} />
+              <Route path="/tree-health" element={<TreeHealthPage />} />
+              <Route path="/sustho-card" element={<SusthoCardPage />} />
             </Routes>
           </Layout>
         </div>

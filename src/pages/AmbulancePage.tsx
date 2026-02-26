@@ -1,14 +1,52 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Truck, MapPin, Phone, Clock, Star, Send, Mic, MicOff, Loader2, User, Bot, Navigation, Search, Filter, Heart, Snowflake, Activity, AlertTriangle, Play, Volume2, ThumbsUp, ThumbsDown, Share2, Copy, CheckCircle, X, Plus, Calendar, Users, Shield } from 'lucide-react';
-import { generateHealthResponse } from '../utils/geminiApi';
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Truck,
+  MapPin,
+  Phone,
+  Clock,
+  Star,
+  Send,
+  Mic,
+  MicOff,
+  Loader2,
+  User,
+  Bot,
+  Navigation,
+  Search,
+  Filter,
+  Heart,
+  Snowflake,
+  Activity,
+  AlertTriangle,
+  Play,
+  Volume2,
+  ThumbsUp,
+  ThumbsDown,
+  Share2,
+  Copy,
+  CheckCircle,
+  X,
+  Plus,
+  Calendar,
+  Users,
+  Shield,
+} from "lucide-react";
+import { generateHealthResponse } from "../utils/openaiApi";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination, Autoplay } from "swiper/modules";
+import img1 from "../assets/image/diseases.jpg";
+import img2 from "../assets/image/diseases1.jpg";
+import img3 from "../assets/image/diseases2.jpg";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 interface Message {
   id: string;
   text: string;
-  sender: 'user' | 'bot';
+  sender: "user" | "bot";
   timestamp: Date;
-  type: 'text' | 'voice';
+  type: "text" | "voice";
 }
 
 interface AmbulanceService {
@@ -36,47 +74,54 @@ interface BookingForm {
 }
 
 const AmbulancePage: React.FC = () => {
-  const [userLocation, setUserLocation] = useState<{lat: number, lng: number, address: string} | null>(null);
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+    address: string;
+  } | null>(null);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationShared, setLocationShared] = useState(false);
-  const [shareMessage, setShareMessage] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [shareMessage, setShareMessage] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
-  const [feedback, setFeedback] = useState<{rating: number, comment: string} | null>(null);
+  const [feedback, setFeedback] = useState<{
+    rating: number;
+    comment: string;
+  } | null>(null);
   const [showAddAmbulanceModal, setShowAddAmbulanceModal] = useState(false);
   const [newAmbulance, setNewAmbulance] = useState({
-    name: '',
-    phone: '',
-    area: '',
-    type: 'Regular',
-    price: '',
+    name: "",
+    phone: "",
+    area: "",
+    type: "Regular",
+    price: "",
     available24: true,
     rating: 4.5,
-    responseTime: '১৫-২০ মিনিট'
+    responseTime: "১৫-২০ মিনিট",
   });
-  
+
   const [bookingForm, setBookingForm] = useState<BookingForm>({
-    name: '',
-    phone: '',
-    address: '',
-    ambulanceType: '',
-    patientCondition: '',
-    urgency: 'জরুরি',
-    notes: ''
+    name: "",
+    phone: "",
+    address: "",
+    ambulanceType: "",
+    patientCondition: "",
+    urgency: "জরুরি",
+    notes: "",
   });
 
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
+      id: "1",
       text: `আস্সালামু আলাইকুম! আমি AmbulanceBot। আমি আপনাকে এম্বুলেন্স সেবা খুঁজে দিতে পারি। আপনি বলতে পারেন "আমার এলাকায় এম্বুলেন্স লাগবে" বা "ঢাকা মেডিকেলের জন্য এম্বুলেন্স চাই"। আমি তাৎক্ষণিক সাহায্য করব।`,
-      sender: 'bot',
+      sender: "bot",
       timestamp: new Date(),
-      type: 'text'
-    }
+      type: "text",
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -85,177 +130,211 @@ const AmbulancePage: React.FC = () => {
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const districts = [
-    'ঢাকা', 'চট্টগ্রাম', 'রাজশাহী', 'সিলেট', 'খুলনা', 'বরিশাল', 'রংপুর', 'ময়মনসিংহ'
+    "ঢাকা",
+    "চট্টগ্রাম",
+    "রাজশাহী",
+    "সিলেট",
+    "খুলনা",
+    "বরিশাল",
+    "রংপুর",
+    "ময়মনসিংহ",
   ];
 
   const ambulanceTypes = [
     {
-      type: 'Regular Ambulance',
-      icon: '🚐',
-      description: 'সাধারণ রোগী পরিবহনের জন্য',
-      features: ['বেসিক মেডিকেল সরঞ্জাম', 'অক্সিজেন সিলিন্ডার', 'স্ট্রেচার'],
-      price: '৫০০-১০০০ টাকা',
-      color: 'from-blue-500 to-cyan-500'
+      type: "Regular Ambulance",
+      icon: "🚐",
+      description: "সাধারণ রোগী পরিবহনের জন্য",
+      features: ["বেসিক মেডিকেল সরঞ্জাম", "অক্সিজেন সিলিন্ডার", "স্ট্রেচার"],
+      price: "৫০০-১০০০ টাকা",
+      color: "from-blue-500 to-cyan-500",
     },
     {
-      type: 'AC Ambulance',
-      icon: '❄️',
-      description: 'শীতাতপ নিয়ন্ত্রিত এম্বুলেন্স',
-      features: ['এয়ার কন্ডিশন', 'কমফোর্ট সিট', 'পরিষ্কার পরিবেশ'],
-      price: '১০০০-১৫০০ টাকা',
-      color: 'from-cyan-500 to-blue-500'
+      type: "AC Ambulance",
+      icon: "❄️",
+      description: "শীতাতপ নিয়ন্ত্রিত এম্বুলেন্স",
+      features: ["এয়ার কন্ডিশন", "কমফোর্ট সিট", "পরিষ্কার পরিবেশ"],
+      price: "১০০০-১৫০০ টাকা",
+      color: "from-cyan-500 to-blue-500",
     },
     {
-      type: 'ICU/CCU Ambulance',
-      icon: '❤️‍🩹',
-      description: 'গুরুতর রোগীর জন্য',
-      features: ['ভেন্টিলেটর', 'কার্ডিয়াক মনিটর', 'ডিফিব্রিলেটর', 'প্রশিক্ষিত নার্স'],
-      price: '২০০০-৫০০০ টাকা',
-      color: 'from-red-500 to-pink-500'
+      type: "ICU/CCU Ambulance",
+      icon: "❤️‍🩹",
+      description: "গুরুতর রোগীর জন্য",
+      features: [
+        "ভেন্টিলেটর",
+        "কার্ডিয়াক মনিটর",
+        "ডিফিব্রিলেটর",
+        "প্রশিক্ষিত নার্স",
+      ],
+      price: "২০০০-৫০০০ টাকা",
+      color: "from-red-500 to-pink-500",
     },
     {
-      type: 'Dead Body Freezer Van',
-      icon: '⚰️',
-      description: 'মৃতদেহ পরিবহনের জন্য',
-      features: ['ফ্রিজার সুবিধা', 'সম্মানজনক পরিবহন', 'পরিবার সহায়তা'],
-      price: '১৫০০-৩০০০ টাকা',
-      color: 'from-gray-500 to-slate-500'
-    }
+      type: "Dead Body Freezer Van",
+      icon: "⚰️",
+      description: "মৃতদেহ পরিবহনের জন্য",
+      features: ["ফ্রিজার সুবিধা", "সম্মানজনক পরিবহন", "পরিবার সহায়তা"],
+      price: "১৫০০-৩০০০ টাকা",
+      color: "from-gray-500 to-slate-500",
+    },
   ];
 
   const ambulanceServices: AmbulanceService[] = [
     {
       id: 1,
-      name: 'ঢাকা মেডিকেল এম্বুলেন্স',
-      phone: '০১৭১২৩৪৫৬৭৮',
-      district: 'ঢাকা',
-      area: 'ধানমন্ডি, নিউমার্কেট',
+      name: "ঢাকা মেডিকেল এম্বুলেন্স",
+      phone: "০১৭১২৩৪৫৬৭৮",
+      district: "ঢাকা",
+      area: "ধানমন্ডি, নিউমার্কেট",
       available24x7: true,
-      types: ['Regular', 'AC', 'ICU'],
+      types: ["Regular", "AC", "ICU"],
       rating: 4.8,
-      responseTime: '১০-১৫ মিনিট',
-      price: '৫০০-২০০০ টাকা',
-      verified: true
+      responseTime: "১০-১৫ মিনিট",
+      price: "৫০০-২০০০ টাকা",
+      verified: true,
     },
     {
       id: 2,
-      name: 'রেড ক্রিসেন্ট এম্বুলেন্স',
-      phone: '০১৮৮৭৬৫৪ৣ২১',
-      district: 'ঢাকা',
-      area: 'মিরপুর, উত্তরা',
+      name: "রেড ক্রিসেন্ট এম্বুলেন্স",
+      phone: "০১৮৮৭৬৫৪ৣ২১",
+      district: "ঢাকা",
+      area: "মিরপুর, উত্তরা",
       available24x7: true,
-      types: ['Regular', 'ICU', 'Freezer'],
+      types: ["Regular", "ICU", "Freezer"],
       rating: 4.9,
-      responseTime: '৮-১২ মিনিট',
-      price: '৪০০-১৮০০ টাকা',
-      verified: true
+      responseTime: "৮-১২ মিনিট",
+      price: "৪০০-১৮০০ টাকা",
+      verified: true,
     },
     {
       id: 3,
-      name: 'চট্টগ্রাম মেডিকেল এম্বুলেন্স',
-      phone: '০১৯৯৮৮৭৭৬৬৫',
-      district: 'চট্টগ্রাম',
-      area: 'আগ্রাবাদ, নাসিরাবাদ',
+      name: "চট্টগ্রাম মেডিকেল এম্বুলেন্স",
+      phone: "০১৯৯৮৮৭৭৬৬৫",
+      district: "চট্টগ্রাম",
+      area: "আগ্রাবাদ, নাসিরাবাদ",
       available24x7: true,
-      types: ['Regular', 'AC'],
+      types: ["Regular", "AC"],
       rating: 4.6,
-      responseTime: '১৫-২০ মিনিট',
-      price: '৬০০-১২০০ টাকা',
-      verified: true
+      responseTime: "১৫-২০ মিনিট",
+      price: "৬০০-১২০০ টাকা",
+      verified: true,
     },
     {
       id: 4,
-      name: 'সিলেট জেনারেল এম্বুলেন্স',
-      phone: '০১৫৫৪৪৩৩২২১',
-      district: 'সিলেট',
-      area: 'জিন্দাবাজার, আম্বরখানা',
+      name: "সিলেট জেনারেল এম্বুলেন্স",
+      phone: "০১৫৫৪৪৩৩২২১",
+      district: "সিলেট",
+      area: "জিন্দাবাজার, আম্বরখানা",
       available24x7: false,
-      types: ['Regular', 'AC'],
+      types: ["Regular", "AC"],
       rating: 4.4,
-      responseTime: '২০-২৫ মিনিট',
-      price: '৭০০-১৫০০ টাকা',
-      verified: false
+      responseTime: "২০-২৫ মিনিট",
+      price: "৭০০-১৫০০ টাকা",
+      verified: false,
     },
     {
       id: 5,
-      name: 'রাজশাহী মেডিকেল এম্বুলেন্স',
-      phone: '০১৬৬৫৫৪৪৩৩২',
-      district: 'রাজশাহী',
-      area: 'সাহেব বাজার, রেলওয়ে',
+      name: "রাজশাহী মেডিকেল এম্বুলেন্স",
+      phone: "০১৬৬৫৫৪৪৩৩২",
+      district: "রাজশাহী",
+      area: "সাহেব বাজার, রেলওয়ে",
       available24x7: true,
-      types: ['Regular', 'ICU'],
+      types: ["Regular", "ICU"],
       rating: 4.7,
-      responseTime: '১২-১৮ মিনিট',
-      price: '৫৫০-২২০০ টাকা',
-      verified: true
+      responseTime: "১২-১৮ মিনিট",
+      price: "৫৫০-২২০০ টাকা",
+      verified: true,
     },
     {
       id: 6,
-      name: 'খুলনা সিটি এম্বুলেন্স',
-      phone: '০১৭৭৬৬৫৫৪৪৩',
-      district: 'খুলনা',
-      area: 'রয়েল, সোনাডাঙ্গা',
+      name: "খুলনা সিটি এম্বুলেন্স",
+      phone: "০১৭৭৬৬৫৫৪৪৩",
+      district: "খুলনা",
+      area: "রয়েল, সোনাডাঙ্গা",
       available24x7: true,
-      types: ['Regular', 'AC', 'Freezer'],
+      types: ["Regular", "AC", "Freezer"],
       rating: 4.5,
-      responseTime: '১৫-২২ মিনিট',
-      price: '৬৫০-১৮০০ টাকা',
-      verified: true
-    }
+      responseTime: "১৫-২২ মিনিট",
+      price: "৬৫০-১৮০০ টাকা",
+      verified: true,
+    },
   ];
 
   const emergencyTips = [
     {
-      title: '৯৯৯-এ কল করার নিয়ম',
-      tips: ['শান্ত থাকুন', 'স্পষ্ট করে বলুন', 'ঠিকানা দিন', 'রোগীর অবস্থা বর্ণনা করুন'],
+      title: "৯৯৯-এ কল করার নিয়ম",
+      tips: [
+        "শান্ত থাকুন",
+        "স্পষ্ট করে বলুন",
+        "ঠিকানা দিন",
+        "রোগীর অবস্থা বর্ণনা করুন",
+      ],
       icon: Phone,
-      color: 'from-red-500 to-orange-500'
+      color: "from-red-500 to-orange-500",
     },
     {
-      title: 'এম্বুলেন্স আসার আগে',
-      tips: ['রোগীকে নিরাপদ রাখুন', 'শ্বাসপথ পরিষ্কার রাখুন', 'রক্তক্ষরণ বন্ধ করুন', 'জরুরি কাগজপত্র প্রস্তুত রাখুন'],
+      title: "এম্বুলেন্স আসার আগে",
+      tips: [
+        "রোগীকে নিরাপদ রাখুন",
+        "শ্বাসপথ পরিষ্কার রাখুন",
+        "রক্তক্ষরণ বন্ধ করুন",
+        "জরুরি কাগজপত্র প্রস্তুত রাখুন",
+      ],
       icon: Heart,
-      color: 'from-green-500 to-emerald-500'
+      color: "from-green-500 to-emerald-500",
     },
     {
-      title: 'জ্যামে ফেঁসে গেলে',
-      tips: ['বিকল্প রাস্তা খোঁজুন', 'ট্রাফিক পুলিশকে জানান', 'হর্ন বাজান', 'জরুরি লেন ব্যবহার করুন'],
+      title: "জ্যামে ফেঁসে গেলে",
+      tips: [
+        "বিকল্প রাস্তা খোঁজুন",
+        "ট্রাফিক পুলিশকে জানান",
+        "হর্ন বাজান",
+        "জরুরি লেন ব্যবহার করুন",
+      ],
       icon: AlertTriangle,
-      color: 'from-yellow-500 to-orange-500'
-    }
+      color: "from-yellow-500 to-orange-500",
+    },
   ];
 
   const videoGuides = [
     {
-      title: 'কীভাবে ৯৯৯-এ কল করবেন?',
-      duration: '২:৩০',
-      thumbnail: '📞',
-      description: 'জরুরি অবস্থায় সঠিক তথ্য দিয়ে কল করার পদ্ধতি'
+      title: "কীভাবে ৯৯৯-এ কল করবেন?",
+      duration: "২:৩০",
+      thumbnail: "📞",
+      description: "জরুরি অবস্থায় সঠিক তথ্য দিয়ে কল করার পদ্ধতি",
     },
     {
-      title: 'প্রাথমিক চিকিৎসা',
-      duration: '৫:১৫',
-      thumbnail: '🩹',
-      description: 'এম্বুলেন্স আসার আগে করণীয় প্রাথমিক চিকিৎসা'
+      title: "প্রাথমিক চিকিৎসা",
+      duration: "৫:১৫",
+      thumbnail: "🩹",
+      description: "এম্বুলেন্স আসার আগে করণীয় প্রাথমিক চিকিৎসা",
     },
     {
-      title: 'এম্বুলেন্স টাইপ চেনার উপায়',
-      duration: '৩:৪৫',
-      thumbnail: '🚐',
-      description: 'কোন অবস্থায় কোন ধরনের এম্বুলেন্স দরকার'
-    }
+      title: "এম্বুলেন্স টাইপ চেনার উপায়",
+      duration: "৩:৪৫",
+      thumbnail: "🚐",
+      description: "কোন অবস্থায় কোন ধরনের এম্বুলেন্স দরকার",
+    },
   ];
 
-  const filteredServices = ambulanceServices.filter(service => {
-    const matchesDistrict = selectedDistrict === 'all' || service.district === selectedDistrict;
-    const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         service.area.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredServices = ambulanceServices.filter((service) => {
+    const matchesDistrict =
+      selectedDistrict === "all" || service.district === selectedDistrict;
+    const matchesSearch =
+      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.area.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesDistrict && matchesSearch;
   });
 
   const handleSubmitAmbulance = () => {
-    if (!newAmbulance.name || !newAmbulance.phone || !newAmbulance.area || !newAmbulance.price) {
-      alert('সব প্রয়োজনীয় তথ্য পূরণ করুন');
+    if (
+      !newAmbulance.name ||
+      !newAmbulance.phone ||
+      !newAmbulance.area ||
+      !newAmbulance.price
+    ) {
+      alert("সব প্রয়োজনীয় তথ্য পূরণ করুন");
       return;
     }
 
@@ -269,25 +348,25 @@ const AmbulancePage: React.FC = () => {
       available24: newAmbulance.available24,
       rating: newAmbulance.rating,
       responseTime: newAmbulance.responseTime,
-      verified: false
+      verified: false,
     };
 
-    setAmbulanceServices(prev => [ambulance, ...prev]);
+    setAmbulanceServices((prev) => [ambulance, ...prev]);
     setNewAmbulance({
-      name: '',
-      phone: '',
-      area: '',
-      type: 'Regular',
-      price: '',
+      name: "",
+      phone: "",
+      area: "",
+      type: "Regular",
+      price: "",
       available24: true,
       rating: 4.5,
-      responseTime: '১৫-২০ মিনিট'
+      responseTime: "১৫-২০ মিনিট",
     });
     setShowAddAmbulanceModal(false);
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -296,43 +375,46 @@ const AmbulancePage: React.FC = () => {
 
   const generateResponse = async (userMessage: string) => {
     setIsLoading(true);
-    
+
     try {
       // Custom responses for ambulance-related queries
-      let response = '';
+      let response = "";
       const lowerMessage = userMessage.toLowerCase();
-      
-      if (lowerMessage.includes('এম্বুলেন্স') || lowerMessage.includes('ambulance')) {
-        if (lowerMessage.includes('ঢাকা')) {
+
+      if (
+        lowerMessage.includes("এম্বুলেন্স") ||
+        lowerMessage.includes("ambulance")
+      ) {
+        if (lowerMessage.includes("ঢাকা")) {
           response = `ঢাকায় এম্বুলেন্স সেবা:\n\n🚐 ঢাকা মেডিকেল এম্বুলেন্স\n📞 ০১৭১২৩৪৫৬৭৮\n⭐ রেটিং: ৪.৮/৫\n⏰ রেসপন্স টাইম: ১০-১৫ মিনিট\n💰 মূল্য: ৫০০-২০০০ টাকা\n\n🚐 রেড ক্রিসেন্ট এম্বুলেন্স\n📞 ০১৮৮৭৬৫৪৩২১\n⭐ রেটিং: ৪.৯/৫\n⏰ রেসপন্স টাইম: ৮-১২ মিনিট\n💰 মূল্য: ৪০০-১৮০০ টাকা\n\nজরুরি অবস্থায় ৯৯৯ নম্বরে কল করুন।`;
-        } else if (lowerMessage.includes('চট্টগ্রাম')) {
+        } else if (lowerMessage.includes("চট্টগ্রাম")) {
           response = `চট্টগ্রামে এম্বুলেন্স সেবা:\n\n🚐 চট্টগ্রাম মেডিকেল এম্বুলেন্স\n📞 ০১৯৯৮৮৭৭৬৬৫\n⭐ রেটিং: ৪.৬/৫\n⏰ রেসপন্স টাইম: ১৫-২০ মিনিট\n💰 মূল্য: ৬০০-১২০০ টাকা\n\nজরুরি অবস্থায় ৯৯৯ নম্বরে কল করুন।`;
         } else {
           response = `আপনার এলাকার এম্বুলেন্স সেবা খুঁজে দিচ্ছি...\n\n🚨 জরুরি নম্বর: ৯৯৯\n🏥 স্বাস্থ্য বাতায়ন: ১৬২৬৩\n\nনিচের তালিকা থেকে আপনার এলাকার এম্বুলেন্স সেবা দেখুন। আপনি চাইলে আপনার লোকেশন শেয়ার করতে পারেন নিকটস্থ সেবা পেতে।`;
         }
       } else {
         // Use Gemini API for other queries
-        response = await generateHealthResponse(userMessage, 'general-health');
+        response = await generateHealthResponse(userMessage, "general-health");
       }
-      
+
       const botMessage: Message = {
         id: Date.now().toString(),
         text: response,
-        sender: 'bot',
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      
-      setMessages(prev => [...prev, botMessage]);
+
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       const errorMessage: Message = {
         id: Date.now().toString(),
-        text: 'দুঃখিত, কিছু সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
-        sender: 'bot',
+        text: "দুঃখিত, কিছু সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -340,17 +422,17 @@ const AmbulancePage: React.FC = () => {
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
-    
+
     const userMessage: Message = {
       id: Date.now().toString(),
       text: input,
-      sender: 'user',
+      sender: "user",
       timestamp: new Date(),
-      type: 'text'
+      type: "text",
     };
-    
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
     await generateResponse(input);
   };
 
@@ -359,41 +441,45 @@ const AmbulancePage: React.FC = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
-      
+
       mediaRecorder.start();
       setIsRecording(true);
       setRecordingTime(0);
-      
+
       recordingIntervalRef.current = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime((prev) => prev + 1);
       }, 1000);
-      
+
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) {
           const userMessage: Message = {
             id: Date.now().toString(),
-            text: 'ভয়েস মেসেজ পাঠিয়েছি',
-            sender: 'user',
+            text: "ভয়েস মেসেজ পাঠিয়েছি",
+            sender: "user",
             timestamp: new Date(),
-            type: 'voice'
+            type: "voice",
           };
-          
-          setMessages(prev => [...prev, userMessage]);
-          generateResponse('আমি একটি ভয়েস মেসেজ পাঠিয়েছি। এম্বুলেন্স সেবা সম্পর্কে পরামর্শ দিন।');
+
+          setMessages((prev) => [...prev, userMessage]);
+          generateResponse(
+            "আমি একটি ভয়েস মেসেজ পাঠিয়েছি। এম্বুলেন্স সেবা সম্পর্কে পরামর্শ দিন।",
+          );
         }
       };
     } catch (error) {
-      console.error('Error starting recording:', error);
+      console.error("Error starting recording:", error);
     }
   };
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
       setIsRecording(false);
       setRecordingTime(0);
-      
+
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
       }
@@ -403,14 +489,14 @@ const AmbulancePage: React.FC = () => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const getCurrentLocation = () => {
     setIsGettingLocation(true);
-    
+
     if (!navigator.geolocation) {
-      alert('আপনার ব্রাউজার জিওলোকেশন সাপোর্ট করে না');
+      alert("আপনার ব্রাউজার জিওলোকেশন সাপোর্ট করে না");
       setIsGettingLocation(false);
       return;
     }
@@ -418,53 +504,53 @@ const AmbulancePage: React.FC = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        
+
         try {
           const mockAddress = `${latitude.toFixed(6)}, ${longitude.toFixed(6)} (আনুমানিক ঠিকানা)`;
-          
+
           setUserLocation({
             lat: latitude,
             lng: longitude,
-            address: mockAddress
+            address: mockAddress,
           });
-          
+
           setIsGettingLocation(false);
         } catch (error) {
-          console.error('Error getting address:', error);
+          console.error("Error getting address:", error);
           setUserLocation({
             lat: latitude,
             lng: longitude,
-            address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
+            address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
           });
           setIsGettingLocation(false);
         }
       },
       (error) => {
-        console.error('Error getting location:', error);
-        alert('লোকেশন পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+        console.error("Error getting location:", error);
+        alert("লোকেশন পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
         setIsGettingLocation(false);
       },
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 60000
-      }
+        maximumAge: 60000,
+      },
     );
   };
 
   const shareLocation = () => {
     if (!userLocation) return;
-    
+
     const locationText = `🚨 জরুরি এম্বুলেন্স প্রয়োজন!\n📍 আমার অবস্থান: ${userLocation.address}\n🌐 Google Maps: https://maps.google.com/?q=${userLocation.lat},${userLocation.lng}\n\nদয়া করে এম্বুলেন্স পাঠান!`;
-    
+
     setShareMessage(locationText);
     setLocationShared(true);
-    
+
     navigator.clipboard.writeText(locationText).then(() => {
       if (navigator.share) {
         navigator.share({
-          title: 'জরুরি এম্বুলেন্স প্রয়োজন',
-          text: locationText
+          title: "জরুরি এম্বুলেন্স প্রয়োজন",
+          text: locationText,
         });
       }
     });
@@ -473,35 +559,40 @@ const AmbulancePage: React.FC = () => {
   const copyLocationText = () => {
     if (shareMessage) {
       navigator.clipboard.writeText(shareMessage).then(() => {
-        alert('লোকেশন কপি হয়েছে! এখন যেকোনো জায়গায় পেস্ট করুন।');
+        alert("লোকেশন কপি হয়েছে! এখন যেকোনো জায়গায় পেস্ট করুন।");
       });
     }
   };
 
   const handleBookingSubmit = () => {
-    if (!bookingForm.name || !bookingForm.phone || !bookingForm.address || !bookingForm.ambulanceType) {
-      alert('সব প্রয়োজনীয় তথ্য পূরণ করুন');
+    if (
+      !bookingForm.name ||
+      !bookingForm.phone ||
+      !bookingForm.address ||
+      !bookingForm.ambulanceType
+    ) {
+      alert("সব প্রয়োজনীয় তথ্য পূরণ করুন");
       return;
     }
 
     setBookingSubmitted(true);
     setShowBookingForm(false);
-    
+
     // Reset form
     setBookingForm({
-      name: '',
-      phone: '',
-      address: '',
-      ambulanceType: '',
-      patientCondition: '',
-      urgency: 'জরুরি',
-      notes: ''
+      name: "",
+      phone: "",
+      address: "",
+      ambulanceType: "",
+      patientCondition: "",
+      urgency: "জরুরি",
+      notes: "",
     });
   };
 
   const submitFeedback = (rating: number, comment: string) => {
     setFeedback({ rating, comment });
-    alert('ধন্যবাদ! আপনার ফিডব্যাক গ্রহণ করা হয়েছে।');
+    alert("ধন্যবাদ! আপনার ফিডব্যাক গ্রহণ করা হয়েছে।");
   };
 
   const renderStars = (rating: number) => {
@@ -510,38 +601,72 @@ const AmbulancePage: React.FC = () => {
         key={i}
         className={`w-4 h-4 ${
           i < Math.floor(rating)
-            ? 'text-yellow-400 fill-current'
-            : 'text-gray-300'
+            ? "text-yellow-400 fill-current"
+            : "text-gray-300"
         }`}
       />
     ));
   };
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <motion.div 
-            className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white mb-6 shadow-2xl"
+          <motion.div
+            className="inline-flex items-center justify-center w-16 h-16 sm:w-20 md:w-24 sm:h-20 md:h-24 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white mb-4 sm:mb-6 shadow-2xl"
             whileHover={{ scale: 1.1, rotate: 10 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
-            <Truck className="w-12 h-12" />
+            <Truck className="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12" />
           </motion.div>
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">AmbulanceBot</h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            জরুরি অবস্থায় তাৎক্ষণিক এম্বুলেন্স সেবা খুঁজে পান। AI সহায়তা ও লাইভ লোকেশন শেয়ার করুন।
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 px-2">
+            AmbulanceBot
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-2">
+            জরুরি অবস্থায় তাৎক্ষণিক এম্বুলেন্স সেবা খুঁজে পান। AI সহায়তা ও
+            লাইভ লোকেশন শেয়ার করুন।
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6 lg:space-y-8">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100"
+            >
+              <Swiper
+                pagination={{
+                  dynamicBullets: true,
+                }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false,
+                }}
+                modules={[Pagination, Autoplay]}
+                className="mySwiper rounded-3xl"
+                loop={true}
+                speed={1600}
+              >
+                <SwiperSlide className="">
+                  <img src={img1} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="">
+                  <img src={img2} alt="" />
+                </SwiperSlide>
+                <SwiperSlide className="">
+                  <img src={img3} alt="" />
+                </SwiperSlide>
+                {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}
+              </Swiper>
+            </motion.div>
             {/* Auto Location Share Section */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -556,10 +681,14 @@ const AmbulancePage: React.FC = () => {
                 >
                   <MapPin className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-red-800 mb-2">জরুরি লোকেশন শেয়ার</h2>
-                <p className="text-red-600">তাৎক্ষণিক এম্বুলেন্স সেবার জন্য আপনার অবস্থান শেয়ার করুন</p>
+                <h2 className="text-3xl font-bold text-red-800 mb-2">
+                  জরুরি লোকেশন শেয়ার
+                </h2>
+                <p className="text-red-600">
+                  তাৎক্ষণিক এম্বুলেন্স সেবার জন্য আপনার অবস্থান শেয়ার করুন
+                </p>
               </div>
-              
+
               {!userLocation ? (
                 <div className="text-center">
                   <motion.button
@@ -596,10 +725,15 @@ const AmbulancePage: React.FC = () => {
                         <CheckCircle className="w-6 h-6" />
                       </motion.div>
                       <div className="flex-1">
-                        <h3 className="font-bold text-red-800 mb-2">আপনার বর্তমান অবস্থান:</h3>
-                        <p className="text-red-700 mb-2">{userLocation.address}</p>
+                        <h3 className="font-bold text-red-800 mb-2">
+                          আপনার বর্তমান অবস্থান:
+                        </h3>
+                        <p className="text-red-700 mb-2">
+                          {userLocation.address}
+                        </p>
                         <p className="text-red-600 text-sm">
-                          Latitude: {userLocation.lat.toFixed(6)}, Longitude: {userLocation.lng.toFixed(6)}
+                          Latitude: {userLocation.lat.toFixed(6)}, Longitude:{" "}
+                          {userLocation.lng.toFixed(6)}
                         </p>
                       </div>
                     </div>
@@ -636,7 +770,9 @@ const AmbulancePage: React.FC = () => {
                       className="bg-green-50 rounded-2xl p-6 border border-green-200"
                     >
                       <div className="flex items-start justify-between mb-4">
-                        <h3 className="font-bold text-green-800">শেয়ার করার জন্য প্রস্তুত:</h3>
+                        <h3 className="font-bold text-green-800">
+                          শেয়ার করার জন্য প্রস্তুত:
+                        </h3>
                         <motion.button
                           onClick={copyLocationText}
                           className="bg-green-500 text-white px-4 py-2 rounded-xl font-medium hover:bg-green-600 transition-all flex items-center space-x-2"
@@ -672,10 +808,14 @@ const AmbulancePage: React.FC = () => {
                 >
                   <Search className="w-8 h-8" />
                 </motion.div>
-                <h2 className="text-3xl font-bold text-gray-800 mb-2">এম্বুলেন্স সেবা খুঁজুন</h2>
-                <p className="text-gray-600">আপনার এলাকার এম্বুলেন্স সেবা খুঁজে নিন</p>
+                <h2 className="text-3xl font-bold text-gray-800 mb-2">
+                  এম্বুলেন্স সেবা খুঁজুন
+                </h2>
+                <p className="text-gray-600">
+                  আপনার এলাকার এম্বুলেন্স সেবা খুঁজে নিন
+                </p>
               </div>
-              
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -693,8 +833,10 @@ const AmbulancePage: React.FC = () => {
                   className="px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="all">সব জেলা</option>
-                  {districts.map(district => (
-                    <option key={district} value={district}>{district}</option>
+                  {districts.map((district) => (
+                    <option key={district} value={district}>
+                      {district}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -709,8 +851,12 @@ const AmbulancePage: React.FC = () => {
             >
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h2 className="text-xl font-bold text-gray-800">এম্বুলেন্স সেবা ডিরেক্টরি</h2>
-                  <p className="text-gray-600 text-sm">আপনার এলাকার এম্বুলেন্স সেবা</p>
+                  <h2 className="text-xl font-bold text-gray-800">
+                    এম্বুলেন্স সেবা ডিরেক্টরি
+                  </h2>
+                  <p className="text-gray-600 text-sm">
+                    আপনার এলাকার এম্বুলেন্স সেবা
+                  </p>
                 </div>
                 <motion.button
                   onClick={() => setShowAddAmbulanceModal(true)}
@@ -722,7 +868,7 @@ const AmbulancePage: React.FC = () => {
                   <span>এম্বুলেন্স যোগ করুন</span>
                 </motion.button>
               </div>
-              
+
               <div className="grid md:grid-cols-3 gap-4">
                 {filteredServices.map((service, index) => (
                   <motion.div
@@ -735,7 +881,9 @@ const AmbulancePage: React.FC = () => {
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <h3 className="text-base font-bold text-gray-800 mb-1">{service.name}</h3>
+                        <h3 className="text-base font-bold text-gray-800 mb-1">
+                          {service.name}
+                        </h3>
                         <div className="flex items-center space-x-2 mb-1">
                           <span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">
                             {service.types[0]}
@@ -753,7 +901,7 @@ const AmbulancePage: React.FC = () => {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="space-y-1 text-xs mb-3">
                       <div className="flex items-center text-gray-600">
                         <MapPin className="w-3 h-3 mr-1 text-red-500" />
@@ -772,7 +920,7 @@ const AmbulancePage: React.FC = () => {
                         <span>{service.responseTime}</span>
                       </div>
                     </div>
-                    
+
                     <div className="flex space-x-1">
                       <motion.a
                         href={`tel:${service.phone}`}
@@ -802,8 +950,10 @@ const AmbulancePage: React.FC = () => {
               transition={{ delay: 0.5 }}
               className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100"
             >
-              <h2 className="text-xl font-bold text-gray-800 mb-4">এম্বুলেন্সের ধরন</h2>
-              
+              <h2 className="text-xl font-bold text-gray-800 mb-4">
+                এম্বুলেন্সের ধরন
+              </h2>
+
               <div className="grid md:grid-cols-4 gap-4">
                 {ambulanceTypes.map((type, index) => (
                   <motion.div
@@ -814,13 +964,17 @@ const AmbulancePage: React.FC = () => {
                     className={`text-center bg-gradient-to-br ${type.color} rounded-xl p-4 border border-gray-200 hover:shadow-md transition-all duration-300`}
                     whileHover={{ scale: 1.02, y: -2 }}
                   >
-                    <div className="text-2xl mb-2">
-                      {type.icon}
-                    </div>
-                    <h3 className="font-bold text-gray-800 mb-2 text-sm">{type.type}</h3>
-                    <p className="text-gray-600 text-xs mb-2">{type.description}</p>
+                    <div className="text-2xl mb-2">{type.icon}</div>
+                    <h3 className="font-bold text-gray-800 mb-2 text-sm">
+                      {type.type}
+                    </h3>
+                    <p className="text-gray-600 text-xs mb-2">
+                      {type.description}
+                    </p>
                     <div className="bg-white/60 rounded-lg p-2">
-                      <p className="text-gray-700 font-medium text-xs">{type.price}</p>
+                      <p className="text-gray-700 font-medium text-xs">
+                        {type.price}
+                      </p>
                     </div>
                   </motion.div>
                 ))}
@@ -834,8 +988,10 @@ const AmbulancePage: React.FC = () => {
               transition={{ delay: 0.6 }}
               className="bg-yellow-50 rounded-2xl shadow-lg p-6 border border-yellow-200"
             >
-              <h2 className="text-xl font-bold text-yellow-800 mb-4">জরুরি টিপস</h2>
-              
+              <h2 className="text-xl font-bold text-yellow-800 mb-4">
+                জরুরি টিপস
+              </h2>
+
               <div className="grid md:grid-cols-3 gap-4">
                 {emergencyTips.map((tip, index) => (
                   <motion.div
@@ -845,13 +1001,20 @@ const AmbulancePage: React.FC = () => {
                     transition={{ delay: 0.1 * index }}
                     className="bg-white/60 rounded-xl p-4 backdrop-blur-sm border border-yellow-200"
                   >
-                    <div className={`w-8 h-8 bg-gradient-to-r ${tip.color} rounded-lg flex items-center justify-center text-white mb-3 shadow-md`}>
+                    <div
+                      className={`w-8 h-8 bg-gradient-to-r ${tip.color} rounded-lg flex items-center justify-center text-white mb-3 shadow-md`}
+                    >
                       <tip.icon className="w-4 h-4" />
                     </div>
-                    <h3 className="font-bold text-yellow-800 mb-3 text-sm">{tip.title}</h3>
+                    <h3 className="font-bold text-yellow-800 mb-3 text-sm">
+                      {tip.title}
+                    </h3>
                     <div className="space-y-1">
                       {tip.tips.map((item, i) => (
-                        <div key={i} className="text-yellow-700 text-xs flex items-center">
+                        <div
+                          key={i}
+                          className="text-yellow-700 text-xs flex items-center"
+                        >
                           <span className="w-2 h-2 bg-yellow-500 rounded-full mr-2"></span>
                           {item}
                         </div>
@@ -869,8 +1032,10 @@ const AmbulancePage: React.FC = () => {
               transition={{ delay: 0.7 }}
               className="bg-purple-50 rounded-2xl shadow-lg p-6 border border-purple-200"
             >
-              <h2 className="text-xl font-bold text-purple-800 mb-4">ভিডিও গাইড</h2>
-              
+              <h2 className="text-xl font-bold text-purple-800 mb-4">
+                ভিডিও গাইড
+              </h2>
+
               <div className="grid md:grid-cols-3 gap-4">
                 {videoGuides.map((video, index) => (
                   <motion.div
@@ -889,10 +1054,16 @@ const AmbulancePage: React.FC = () => {
                         <Play className="w-5 h-5 ml-1" />
                       </motion.div>
                     </div>
-                    <h3 className="font-bold text-purple-800 mb-2 text-sm">{video.title}</h3>
-                    <p className="text-purple-600 text-xs mb-2">{video.description}</p>
+                    <h3 className="font-bold text-purple-800 mb-2 text-sm">
+                      {video.title}
+                    </h3>
+                    <p className="text-purple-600 text-xs mb-2">
+                      {video.description}
+                    </p>
                     <div className="flex items-center justify-between">
-                      <span className="text-purple-500 font-medium text-xs">{video.duration}</span>
+                      <span className="text-purple-500 font-medium text-xs">
+                        {video.duration}
+                      </span>
                       <motion.button
                         className="bg-purple-500 text-white px-3 py-1 rounded-lg font-medium text-xs hover:bg-purple-600 transition-all flex items-center space-x-1"
                         whileHover={{ scale: 1.05 }}
@@ -920,7 +1091,7 @@ const AmbulancePage: React.FC = () => {
               <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden min-h-[600px]">
                 <div className="bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 text-white p-6 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-r from-red-400/20 to-yellow-400/20 animate-pulse" />
-                  
+
                   <div className="relative flex items-center space-x-4">
                     <motion.div
                       className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm shadow-2xl"
@@ -931,7 +1102,9 @@ const AmbulancePage: React.FC = () => {
                     </motion.div>
                     <div>
                       <h3 className="text-2xl font-bold mb-2">AmbulanceBot</h3>
-                      <p className="text-red-100 text-sm">এম্বুলেন্স সেবা সহায়ক</p>
+                      <p className="text-red-100 text-sm">
+                        এম্বুলেন্স সেবা সহায়ক
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -944,42 +1117,56 @@ const AmbulancePage: React.FC = () => {
                         initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                        className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                        transition={{
+                          type: "spring",
+                          stiffness: 500,
+                          damping: 30,
+                        }}
+                        className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                       >
-                        <div className={`flex items-start space-x-3 max-w-xs ${
-                          message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                        }`}>
-                          <motion.div 
+                        <div
+                          className={`flex items-start space-x-3 max-w-xs ${
+                            message.sender === "user"
+                              ? "flex-row-reverse space-x-reverse"
+                              : ""
+                          }`}
+                        >
+                          <motion.div
                             className={`w-8 h-8 rounded-xl flex items-center justify-center shadow-lg ${
-                            message.sender === 'user' 
-                              ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white' 
-                              : 'bg-gradient-to-r from-yellow-500 to-orange-500 text-white'
+                              message.sender === "user"
+                                ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
+                                : "bg-gradient-to-r from-yellow-500 to-orange-500 text-white"
                             }`}
                             whileHover={{ scale: 1.1 }}
                           >
-                            {message.sender === 'user' ? (
+                            {message.sender === "user" ? (
                               <User className="w-4 h-4" />
                             ) : (
                               <Bot className="w-4 h-4" />
                             )}
                           </motion.div>
 
-                          <motion.div 
+                          <motion.div
                             className={`rounded-2xl p-3 shadow-lg backdrop-blur-sm ${
-                            message.sender === 'user'
-                              ? 'bg-gradient-to-r from-red-500 to-orange-500 text-white'
-                              : 'bg-white/80 text-gray-800 border border-gray-200'
+                              message.sender === "user"
+                                ? "bg-gradient-to-r from-red-500 to-orange-500 text-white"
+                                : "bg-white/80 text-gray-800 border border-gray-200"
                             }`}
                             whileHover={{ scale: 1.02 }}
                           >
-                            <p className="text-xs leading-relaxed whitespace-pre-line">{message.text}</p>
-                            <p className={`text-xs mt-2 ${
-                              message.sender === 'user' ? 'text-red-100' : 'text-gray-500'
-                            }`}>
-                              {message.timestamp.toLocaleTimeString('bn-BD', { 
-                                hour: '2-digit', 
-                                minute: '2-digit' 
+                            <p className="text-xs leading-relaxed whitespace-pre-line">
+                              {message.text}
+                            </p>
+                            <p
+                              className={`text-xs mt-2 ${
+                                message.sender === "user"
+                                  ? "text-red-100"
+                                  : "text-gray-500"
+                              }`}
+                            >
+                              {message.timestamp.toLocaleTimeString("bn-BD", {
+                                hour: "2-digit",
+                                minute: "2-digit",
                               })}
                             </p>
                           </motion.div>
@@ -1001,7 +1188,9 @@ const AmbulancePage: React.FC = () => {
                         <div className="bg-white/80 rounded-2xl p-3 shadow-lg backdrop-blur-sm border border-gray-200">
                           <div className="flex items-center space-x-2">
                             <Loader2 className="w-3 h-3 animate-spin text-red-500" />
-                            <span className="text-xs text-gray-600">উত্তর তৈরি করছি...</span>
+                            <span className="text-xs text-gray-600">
+                              উত্তর তৈরি করছি...
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -1018,12 +1207,14 @@ const AmbulancePage: React.FC = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       className="mb-3 flex items-center justify-center space-x-2 text-red-500 bg-red-50 rounded-xl p-2"
                     >
-                      <motion.div 
+                      <motion.div
                         className="w-2 h-2 bg-red-500 rounded-full"
                         animate={{ scale: [1, 1.2, 1] }}
                         transition={{ repeat: Infinity, duration: 1 }}
                       />
-                      <span className="text-xs font-medium">রেকর্ড করছি... {formatTime(recordingTime)}</span>
+                      <span className="text-xs font-medium">
+                        রেকর্ড করছি... {formatTime(recordingTime)}
+                      </span>
                     </motion.div>
                   )}
 
@@ -1033,7 +1224,9 @@ const AmbulancePage: React.FC = () => {
                         type="text"
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                        onKeyPress={(e) =>
+                          e.key === "Enter" && handleSendMessage()
+                        }
                         placeholder="এম্বুলেন্স সেবা সম্পর্কে প্রশ্ন করুন..."
                         className="w-full p-3 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent transition-all text-sm"
                         disabled={isLoading}
@@ -1042,9 +1235,9 @@ const AmbulancePage: React.FC = () => {
 
                     <motion.button
                       className={`p-2 rounded-xl transition-colors ${
-                        isRecording 
-                          ? 'bg-red-500 text-white hover:bg-red-600' 
-                          : 'text-orange-600 hover:bg-orange-50'
+                        isRecording
+                          ? "bg-red-500 text-white hover:bg-red-600"
+                          : "text-orange-600 hover:bg-orange-50"
                       }`}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
@@ -1052,7 +1245,11 @@ const AmbulancePage: React.FC = () => {
                       onMouseUp={stopRecording}
                       onMouseLeave={stopRecording}
                     >
-                      {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
+                      {isRecording ? (
+                        <MicOff className="w-4 h-4" />
+                      ) : (
+                        <Mic className="w-4 h-4" />
+                      )}
                     </motion.button>
 
                     <motion.button
@@ -1116,7 +1313,7 @@ const AmbulancePage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setShowAddAmbulanceModal(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1136,8 +1333,12 @@ const AmbulancePage: React.FC = () => {
                         <Truck className="w-8 h-8" />
                       </motion.div>
                       <div>
-                        <h3 className="text-3xl font-bold">এম্বুলেন্স সেবা যোগ করুন</h3>
-                        <p className="text-blue-100 text-lg">নতুন এম্বুলেন্স সেবা নিবন্ধন করুন</p>
+                        <h3 className="text-3xl font-bold">
+                          এম্বুলেন্স সেবা যোগ করুন
+                        </h3>
+                        <p className="text-blue-100 text-lg">
+                          নতুন এম্বুলেন্স সেবা নিবন্ধন করুন
+                        </p>
                       </div>
                     </div>
                     <motion.button
@@ -1156,36 +1357,59 @@ const AmbulancePage: React.FC = () => {
                   <div className="grid md:grid-cols-2 gap-6">
                     {/* Service Information */}
                     <div className="space-y-6">
-                      <h4 className="text-2xl font-bold text-gray-800 mb-4">সেবার তথ্য</h4>
-                      
+                      <h4 className="text-2xl font-bold text-gray-800 mb-4">
+                        সেবার তথ্য
+                      </h4>
+
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">সেবার নাম *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          সেবার নাম *
+                        </label>
                         <input
                           type="text"
                           value={newAmbulance.name}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, name: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              name: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="যেমন: ঢাকা এম্বুলেন্স সেবা"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">ফোন নম্বর *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          ফোন নম্বর *
+                        </label>
                         <input
                           type="tel"
                           value={newAmbulance.phone}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, phone: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              phone: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="০১৭xxxxxxxx"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">এলাকা *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          এলাকা *
+                        </label>
                         <input
                           type="text"
                           value={newAmbulance.area}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, area: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              area: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="যেমন: ঢাকা, চট্টগ্রাম"
                         />
@@ -1194,13 +1418,22 @@ const AmbulancePage: React.FC = () => {
 
                     {/* Service Details */}
                     <div className="space-y-6">
-                      <h4 className="text-2xl font-bold text-gray-800 mb-4">সেবার বিবরণ</h4>
-                      
+                      <h4 className="text-2xl font-bold text-gray-800 mb-4">
+                        সেবার বিবরণ
+                      </h4>
+
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">এম্বুলেন্সের ধরন *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          এম্বুলেন্সের ধরন *
+                        </label>
                         <select
                           value={newAmbulance.type}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, type: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              type: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                         >
                           <option value="Regular">Regular Ambulance</option>
@@ -1211,22 +1444,36 @@ const AmbulancePage: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">মূল্য *</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          মূল্য *
+                        </label>
                         <input
                           type="text"
                           value={newAmbulance.price}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, price: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              price: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="যেমন: ৫০০-১০০০ টাকা"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-lg font-medium text-gray-700 mb-2">রেসপন্স টাইম</label>
+                        <label className="block text-lg font-medium text-gray-700 mb-2">
+                          রেসপন্স টাইম
+                        </label>
                         <input
                           type="text"
                           value={newAmbulance.responseTime}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, responseTime: e.target.value }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              responseTime: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border-2 border-gray-200 rounded-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:border-blue-500"
                           placeholder="যেমন: ১৫-২০ মিনিট"
                         />
@@ -1237,10 +1484,18 @@ const AmbulancePage: React.FC = () => {
                           type="checkbox"
                           id="available24"
                           checked={newAmbulance.available24}
-                          onChange={(e) => setNewAmbulance(prev => ({ ...prev, available24: e.target.checked }))}
+                          onChange={(e) =>
+                            setNewAmbulance((prev) => ({
+                              ...prev,
+                              available24: e.target.checked,
+                            }))
+                          }
                           className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                         />
-                        <label htmlFor="available24" className="ml-3 text-lg font-medium text-gray-700">
+                        <label
+                          htmlFor="available24"
+                          className="ml-3 text-lg font-medium text-gray-700"
+                        >
                           ২৪/৭ উপলব্ধ
                         </label>
                       </div>
@@ -1284,7 +1539,7 @@ const AmbulancePage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setShowBookingForm(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8, y: 50 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -1303,7 +1558,9 @@ const AmbulancePage: React.FC = () => {
                       </motion.div>
                       <div>
                         <h3 className="text-2xl font-bold">এম্বুলেন্স বুকিং</h3>
-                        <p className="text-blue-100">আগে থেকে এম্বুলেন্স বুক করুন</p>
+                        <p className="text-blue-100">
+                          আগে থেকে এম্বুলেন্স বুক করুন
+                        </p>
                       </div>
                     </div>
                     <motion.button
@@ -1320,35 +1577,58 @@ const AmbulancePage: React.FC = () => {
                 <div className="p-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                      <h4 className="text-xl font-bold text-gray-800">ব্যক্তিগত তথ্য</h4>
-                      
+                      <h4 className="text-xl font-bold text-gray-800">
+                        ব্যক্তিগত তথ্য
+                      </h4>
+
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">নাম *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          নাম *
+                        </label>
                         <input
                           type="text"
                           value={bookingForm.name}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, name: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              name: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="আপনার পূর্ণ নাম"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">মোবাইল নম্বর *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          মোবাইল নম্বর *
+                        </label>
                         <input
                           type="tel"
                           value={bookingForm.phone}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, phone: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              phone: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="০১৭xxxxxxxx"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">ঠিকানা *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          ঠিকানা *
+                        </label>
                         <textarea
                           value={bookingForm.address}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, address: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              address: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 h-20 resize-none"
                           placeholder="বিস্তারিত ঠিকানা লিখুন"
                         />
@@ -1356,27 +1636,45 @@ const AmbulancePage: React.FC = () => {
                     </div>
 
                     <div className="space-y-4">
-                      <h4 className="text-xl font-bold text-gray-800">সেবার তথ্য</h4>
-                      
+                      <h4 className="text-xl font-bold text-gray-800">
+                        সেবার তথ্য
+                      </h4>
+
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">এম্বুলেন্সের ধরন *</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          এম্বুলেন্সের ধরন *
+                        </label>
                         <select
                           value={bookingForm.ambulanceType}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, ambulanceType: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              ambulanceType: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           <option value="">নির্বাচন করুন</option>
-                          {ambulanceTypes.map(type => (
-                            <option key={type.type} value={type.type}>{type.type}</option>
+                          {ambulanceTypes.map((type) => (
+                            <option key={type.type} value={type.type}>
+                              {type.type}
+                            </option>
                           ))}
                         </select>
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">জরুরি অবস্থা</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          জরুরি অবস্থা
+                        </label>
                         <select
                           value={bookingForm.urgency}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, urgency: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              urgency: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                         >
                           <option value="জরুরি">জরুরি</option>
@@ -1386,21 +1684,35 @@ const AmbulancePage: React.FC = () => {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">রোগীর অবস্থা</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          রোগীর অবস্থা
+                        </label>
                         <input
                           type="text"
                           value={bookingForm.patientCondition}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, patientCondition: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              patientCondition: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
                           placeholder="যেমন: হার্ট অ্যাটাক, দুর্ঘটনা"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">অতিরিক্ত তথ্য</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          অতিরিক্ত তথ্য
+                        </label>
                         <textarea
                           value={bookingForm.notes}
-                          onChange={(e) => setBookingForm(prev => ({ ...prev, notes: e.target.value }))}
+                          onChange={(e) =>
+                            setBookingForm((prev) => ({
+                              ...prev,
+                              notes: e.target.value,
+                            }))
+                          }
                           className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 h-20 resize-none"
                           placeholder="অন্য কোন বিশেষ তথ্য"
                         />
@@ -1444,7 +1756,7 @@ const AmbulancePage: React.FC = () => {
                 className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                 onClick={() => setBookingSubmitted(false)}
               />
-              
+
               <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -1459,9 +1771,12 @@ const AmbulancePage: React.FC = () => {
                   >
                     <CheckCircle className="w-10 h-10" />
                   </motion.div>
-                  <h3 className="text-2xl font-bold text-green-800 mb-4">বুকিং সফল!</h3>
+                  <h3 className="text-2xl font-bold text-green-800 mb-4">
+                    বুকিং সফল!
+                  </h3>
                   <p className="text-green-600 text-lg mb-6">
-                    আপনার এম্বুলেন্স বুকিং সফলভাবে সম্পন্ন হয়েছে। আমরা শীঘ্রই আপনার সাথে যোগাযোগ করব।
+                    আপনার এম্বুলেন্স বুকিং সফলভাবে সম্পন্ন হয়েছে। আমরা শীঘ্রই
+                    আপনার সাথে যোগাযোগ করব।
                   </p>
                   <motion.button
                     onClick={() => setBookingSubmitted(false)}

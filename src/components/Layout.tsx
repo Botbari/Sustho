@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Menu, X, Home, Globe } from 'lucide-react';
+import { Heart, Menu, X, Home, Globe, Coins } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { label } from 'framer-motion/client';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -15,7 +16,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   const menuItems = [
     { path: '/', label: t('nav.home'), icon: Home },
-    { path: '/health-disease', label: t('nav.health-disease') },
+    { path: '/health-disease', label: t('nav.health-disease') }, 
+    { path: '/tree-health', label: t('nav.tree-health') },
     { path: '/pregnancy-support', label: t('nav.pregnancy-support') },
     { path: '/period-support', label: t('nav.period-support') },
     { path: '/animal-bite', label: t('nav.animal-bite') },
@@ -30,9 +32,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { path: '/ambulance', label: t('nav.ambulance') },
     { path: '/contact', label: t('nav.contact') },
     { path: '/about', label: t('nav.about') },
+    { path: '/sustho-card', label: t('nav.sustho-card')},
     { path: '/feedback', label: t('nav.feedback') },
     { path: '/notification', label: t('nav.notification') },
-    { path: '/price', label: t('nav.price') },
+    { path: '/price', label: t('nav.price') }
+
   ];
 
   return (
@@ -109,8 +113,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               >
                 <Globe className="w-4 h-4" />
                 <span>{language === 'bn' ? 'English' : 'বাংলা'}</span>
+                
               </motion.button>
-              
+          
+                        <Link
+                to="/sustho-card"
+                className={`px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
+                  location.pathname === '/sustho-card'
+                    ? 'bg-gradient-to-r from-blue-600 to-green-600 text-white shadow-lg'
+                    : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+                }`}
+              >
+                {t('nav.sustho-card')}
+              </Link>
+             
             </nav>
 
             {/* Mobile Menu Button */}
