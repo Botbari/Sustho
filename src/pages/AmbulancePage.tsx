@@ -1,7 +1,38 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Truck, MapPin, Phone, Clock, Star, Send, Mic, MicOff, Loader2, User, Bot, Navigation, Search, Filter, Heart, Snowflake, Activity, AlertTriangle, Play, Volume2, ThumbsUp, ThumbsDown, Share2, Copy, CheckCircle, X, Plus, Calendar, Users, Shield } from 'lucide-react';
-import { generateHealthResponse } from '../utils/geminiApi';
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Truck,
+  MapPin,
+  Phone,
+  Clock,
+  Star,
+  Send,
+  Mic,
+  MicOff,
+  Loader2,
+  User,
+  Bot,
+  Navigation,
+  Search,
+  Filter,
+  Heart,
+  Snowflake,
+  Activity,
+  AlertTriangle,
+  Play,
+  Volume2,
+  ThumbsUp,
+  ThumbsDown,
+  Share2,
+  Copy,
+  CheckCircle,
+  X,
+  Plus,
+  Calendar,
+  Users,
+  Shield,
+} from "lucide-react";
+import { generateHealthResponse } from "../utils/openaiApi";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination, Autoplay } from "swiper/modules";
@@ -13,9 +44,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 interface Message {
   id: string;
   text: string;
-  sender: 'user' | 'bot';
+  sender: "user" | "bot";
   timestamp: Date;
-  type: 'text' | 'voice';
+  type: "text" | "voice";
 }
 
 interface AmbulanceService {
@@ -43,47 +74,54 @@ interface BookingForm {
 }
 
 const AmbulancePage: React.FC = () => {
-  const [userLocation, setUserLocation] = useState<{lat: number, lng: number, address: string} | null>(null);
+  const [userLocation, setUserLocation] = useState<{
+    lat: number;
+    lng: number;
+    address: string;
+  } | null>(null);
   const [isGettingLocation, setIsGettingLocation] = useState(false);
   const [locationShared, setLocationShared] = useState(false);
-  const [shareMessage, setShareMessage] = useState('');
-  const [selectedDistrict, setSelectedDistrict] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [shareMessage, setShareMessage] = useState("");
+  const [selectedDistrict, setSelectedDistrict] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
-  const [feedback, setFeedback] = useState<{rating: number, comment: string} | null>(null);
+  const [feedback, setFeedback] = useState<{
+    rating: number;
+    comment: string;
+  } | null>(null);
   const [showAddAmbulanceModal, setShowAddAmbulanceModal] = useState(false);
   const [newAmbulance, setNewAmbulance] = useState({
-    name: '',
-    phone: '',
-    area: '',
-    type: 'Regular',
-    price: '',
+    name: "",
+    phone: "",
+    area: "",
+    type: "Regular",
+    price: "",
     available24: true,
     rating: 4.5,
-    responseTime: '১৫-২০ মিনিট'
+    responseTime: "১৫-২০ মিনিট",
   });
-  
+
   const [bookingForm, setBookingForm] = useState<BookingForm>({
-    name: '',
-    phone: '',
-    address: '',
-    ambulanceType: '',
-    patientCondition: '',
-    urgency: 'জরুরি',
-    notes: ''
+    name: "",
+    phone: "",
+    address: "",
+    ambulanceType: "",
+    patientCondition: "",
+    urgency: "জরুরি",
+    notes: "",
   });
 
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
+      id: "1",
       text: `আস্সালামু আলাইকুম! আমি AmbulanceBot। আমি আপনাকে এম্বুলেন্স সেবা খুঁজে দিতে পারি। আপনি বলতে পারেন "আমার এলাকায় এম্বুলেন্স লাগবে" বা "ঢাকা মেডিকেলের জন্য এম্বুলেন্স চাই"। আমি তাৎক্ষণিক সাহায্য করব।`,
-      sender: 'bot',
+      sender: "bot",
       timestamp: new Date(),
-      type: 'text'
-    }
+      type: "text",
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -92,177 +130,211 @@ const AmbulancePage: React.FC = () => {
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const districts = [
-    'ঢাকা', 'চট্টগ্রাম', 'রাজশাহী', 'সিলেট', 'খুলনা', 'বরিশাল', 'রংপুর', 'ময়মনসিংহ'
+    "ঢাকা",
+    "চট্টগ্রাম",
+    "রাজশাহী",
+    "সিলেট",
+    "খুলনা",
+    "বরিশাল",
+    "রংপুর",
+    "ময়মনসিংহ",
   ];
 
   const ambulanceTypes = [
     {
-      type: 'Regular Ambulance',
-      icon: '🚐',
-      description: 'সাধারণ রোগী পরিবহনের জন্য',
-      features: ['বেসিক মেডিকেল সরঞ্জাম', 'অক্সিজেন সিলিন্ডার', 'স্ট্রেচার'],
-      price: '৫০০-১০০০ টাকা',
-      color: 'from-blue-500 to-cyan-500'
+      type: "Regular Ambulance",
+      icon: "🚐",
+      description: "সাধারণ রোগী পরিবহনের জন্য",
+      features: ["বেসিক মেডিকেল সরঞ্জাম", "অক্সিজেন সিলিন্ডার", "স্ট্রেচার"],
+      price: "৫০০-১০০০ টাকা",
+      color: "from-blue-500 to-cyan-500",
     },
     {
-      type: 'AC Ambulance',
-      icon: '❄️',
-      description: 'শীতাতপ নিয়ন্ত্রিত এম্বুলেন্স',
-      features: ['এয়ার কন্ডিশন', 'কমফোর্ট সিট', 'পরিষ্কার পরিবেশ'],
-      price: '১০০০-১৫০০ টাকা',
-      color: 'from-cyan-500 to-blue-500'
+      type: "AC Ambulance",
+      icon: "❄️",
+      description: "শীতাতপ নিয়ন্ত্রিত এম্বুলেন্স",
+      features: ["এয়ার কন্ডিশন", "কমফোর্ট সিট", "পরিষ্কার পরিবেশ"],
+      price: "১০০০-১৫০০ টাকা",
+      color: "from-cyan-500 to-blue-500",
     },
     {
-      type: 'ICU/CCU Ambulance',
-      icon: '❤️‍🩹',
-      description: 'গুরুতর রোগীর জন্য',
-      features: ['ভেন্টিলেটর', 'কার্ডিয়াক মনিটর', 'ডিফিব্রিলেটর', 'প্রশিক্ষিত নার্স'],
-      price: '২০০০-৫০০০ টাকা',
-      color: 'from-red-500 to-pink-500'
+      type: "ICU/CCU Ambulance",
+      icon: "❤️‍🩹",
+      description: "গুরুতর রোগীর জন্য",
+      features: [
+        "ভেন্টিলেটর",
+        "কার্ডিয়াক মনিটর",
+        "ডিফিব্রিলেটর",
+        "প্রশিক্ষিত নার্স",
+      ],
+      price: "২০০০-৫০০০ টাকা",
+      color: "from-red-500 to-pink-500",
     },
     {
-      type: 'Dead Body Freezer Van',
-      icon: '⚰️',
-      description: 'মৃতদেহ পরিবহনের জন্য',
-      features: ['ফ্রিজার সুবিধা', 'সম্মানজনক পরিবহন', 'পরিবার সহায়তা'],
-      price: '১৫০০-৩০০০ টাকা',
-      color: 'from-gray-500 to-slate-500'
-    }
+      type: "Dead Body Freezer Van",
+      icon: "⚰️",
+      description: "মৃতদেহ পরিবহনের জন্য",
+      features: ["ফ্রিজার সুবিধা", "সম্মানজনক পরিবহন", "পরিবার সহায়তা"],
+      price: "১৫০০-৩০০০ টাকা",
+      color: "from-gray-500 to-slate-500",
+    },
   ];
 
   const ambulanceServices: AmbulanceService[] = [
     {
       id: 1,
-      name: 'ঢাকা মেডিকেল এম্বুলেন্স',
-      phone: '০১৭১২৩৪৫৬৭৮',
-      district: 'ঢাকা',
-      area: 'ধানমন্ডি, নিউমার্কেট',
+      name: "ঢাকা মেডিকেল এম্বুলেন্স",
+      phone: "০১৭১২৩৪৫৬৭৮",
+      district: "ঢাকা",
+      area: "ধানমন্ডি, নিউমার্কেট",
       available24x7: true,
-      types: ['Regular', 'AC', 'ICU'],
+      types: ["Regular", "AC", "ICU"],
       rating: 4.8,
-      responseTime: '১০-১৫ মিনিট',
-      price: '৫০০-২০০০ টাকা',
-      verified: true
+      responseTime: "১০-১৫ মিনিট",
+      price: "৫০০-২০০০ টাকা",
+      verified: true,
     },
     {
       id: 2,
-      name: 'রেড ক্রিসেন্ট এম্বুলেন্স',
-      phone: '০১৮৮৭৬৫৪ৣ২১',
-      district: 'ঢাকা',
-      area: 'মিরপুর, উত্তরা',
+      name: "রেড ক্রিসেন্ট এম্বুলেন্স",
+      phone: "০১৮৮৭৬৫৪ৣ২১",
+      district: "ঢাকা",
+      area: "মিরপুর, উত্তরা",
       available24x7: true,
-      types: ['Regular', 'ICU', 'Freezer'],
+      types: ["Regular", "ICU", "Freezer"],
       rating: 4.9,
-      responseTime: '৮-১২ মিনিট',
-      price: '৪০০-১৮০০ টাকা',
-      verified: true
+      responseTime: "৮-১২ মিনিট",
+      price: "৪০০-১৮০০ টাকা",
+      verified: true,
     },
     {
       id: 3,
-      name: 'চট্টগ্রাম মেডিকেল এম্বুলেন্স',
-      phone: '০১৯৯৮৮৭৭৬৬৫',
-      district: 'চট্টগ্রাম',
-      area: 'আগ্রাবাদ, নাসিরাবাদ',
+      name: "চট্টগ্রাম মেডিকেল এম্বুলেন্স",
+      phone: "০১৯৯৮৮৭৭৬৬৫",
+      district: "চট্টগ্রাম",
+      area: "আগ্রাবাদ, নাসিরাবাদ",
       available24x7: true,
-      types: ['Regular', 'AC'],
+      types: ["Regular", "AC"],
       rating: 4.6,
-      responseTime: '১৫-২০ মিনিট',
-      price: '৬০০-১২০০ টাকা',
-      verified: true
+      responseTime: "১৫-২০ মিনিট",
+      price: "৬০০-১২০০ টাকা",
+      verified: true,
     },
     {
       id: 4,
-      name: 'সিলেট জেনারেল এম্বুলেন্স',
-      phone: '০১৫৫৪৪৩৩২২১',
-      district: 'সিলেট',
-      area: 'জিন্দাবাজার, আম্বরখানা',
+      name: "সিলেট জেনারেল এম্বুলেন্স",
+      phone: "০১৫৫৪৪৩৩২২১",
+      district: "সিলেট",
+      area: "জিন্দাবাজার, আম্বরখানা",
       available24x7: false,
-      types: ['Regular', 'AC'],
+      types: ["Regular", "AC"],
       rating: 4.4,
-      responseTime: '২০-২৫ মিনিট',
-      price: '৭০০-১৫০০ টাকা',
-      verified: false
+      responseTime: "২০-২৫ মিনিট",
+      price: "৭০০-১৫০০ টাকা",
+      verified: false,
     },
     {
       id: 5,
-      name: 'রাজশাহী মেডিকেল এম্বুলেন্স',
-      phone: '০১৬৬৫৫৪৪৩৩২',
-      district: 'রাজশাহী',
-      area: 'সাহেব বাজার, রেলওয়ে',
+      name: "রাজশাহী মেডিকেল এম্বুলেন্স",
+      phone: "০১৬৬৫৫৪৪৩৩২",
+      district: "রাজশাহী",
+      area: "সাহেব বাজার, রেলওয়ে",
       available24x7: true,
-      types: ['Regular', 'ICU'],
+      types: ["Regular", "ICU"],
       rating: 4.7,
-      responseTime: '১২-১৮ মিনিট',
-      price: '৫৫০-২২০০ টাকা',
-      verified: true
+      responseTime: "১২-১৮ মিনিট",
+      price: "৫৫০-২২০০ টাকা",
+      verified: true,
     },
     {
       id: 6,
-      name: 'খুলনা সিটি এম্বুলেন্স',
-      phone: '০১৭৭৬৬৫৫৪৪৩',
-      district: 'খুলনা',
-      area: 'রয়েল, সোনাডাঙ্গা',
+      name: "খুলনা সিটি এম্বুলেন্স",
+      phone: "০১৭৭৬৬৫৫৪৪৩",
+      district: "খুলনা",
+      area: "রয়েল, সোনাডাঙ্গা",
       available24x7: true,
-      types: ['Regular', 'AC', 'Freezer'],
+      types: ["Regular", "AC", "Freezer"],
       rating: 4.5,
-      responseTime: '১৫-২২ মিনিট',
-      price: '৬৫০-১৮০০ টাকা',
-      verified: true
-    }
+      responseTime: "১৫-২২ মিনিট",
+      price: "৬৫০-১৮০০ টাকা",
+      verified: true,
+    },
   ];
 
   const emergencyTips = [
     {
-      title: '৯৯৯-এ কল করার নিয়ম',
-      tips: ['শান্ত থাকুন', 'স্পষ্ট করে বলুন', 'ঠিকানা দিন', 'রোগীর অবস্থা বর্ণনা করুন'],
+      title: "৯৯৯-এ কল করার নিয়ম",
+      tips: [
+        "শান্ত থাকুন",
+        "স্পষ্ট করে বলুন",
+        "ঠিকানা দিন",
+        "রোগীর অবস্থা বর্ণনা করুন",
+      ],
       icon: Phone,
-      color: 'from-red-500 to-orange-500'
+      color: "from-red-500 to-orange-500",
     },
     {
-      title: 'এম্বুলেন্স আসার আগে',
-      tips: ['রোগীকে নিরাপদ রাখুন', 'শ্বাসপথ পরিষ্কার রাখুন', 'রক্তক্ষরণ বন্ধ করুন', 'জরুরি কাগজপত্র প্রস্তুত রাখুন'],
+      title: "এম্বুলেন্স আসার আগে",
+      tips: [
+        "রোগীকে নিরাপদ রাখুন",
+        "শ্বাসপথ পরিষ্কার রাখুন",
+        "রক্তক্ষরণ বন্ধ করুন",
+        "জরুরি কাগজপত্র প্রস্তুত রাখুন",
+      ],
       icon: Heart,
-      color: 'from-green-500 to-emerald-500'
+      color: "from-green-500 to-emerald-500",
     },
     {
-      title: 'জ্যামে ফেঁসে গেলে',
-      tips: ['বিকল্প রাস্তা খোঁজুন', 'ট্রাফিক পুলিশকে জানান', 'হর্ন বাজান', 'জরুরি লেন ব্যবহার করুন'],
+      title: "জ্যামে ফেঁসে গেলে",
+      tips: [
+        "বিকল্প রাস্তা খোঁজুন",
+        "ট্রাফিক পুলিশকে জানান",
+        "হর্ন বাজান",
+        "জরুরি লেন ব্যবহার করুন",
+      ],
       icon: AlertTriangle,
-      color: 'from-yellow-500 to-orange-500'
-    }
+      color: "from-yellow-500 to-orange-500",
+    },
   ];
 
   const videoGuides = [
     {
-      title: 'কীভাবে ৯৯৯-এ কল করবেন?',
-      duration: '২:৩০',
-      thumbnail: '📞',
-      description: 'জরুরি অবস্থায় সঠিক তথ্য দিয়ে কল করার পদ্ধতি'
+      title: "কীভাবে ৯৯৯-এ কল করবেন?",
+      duration: "২:৩০",
+      thumbnail: "📞",
+      description: "জরুরি অবস্থায় সঠিক তথ্য দিয়ে কল করার পদ্ধতি",
     },
     {
-      title: 'প্রাথমিক চিকিৎসা',
-      duration: '৫:১৫',
-      thumbnail: '🩹',
-      description: 'এম্বুলেন্স আসার আগে করণীয় প্রাথমিক চিকিৎসা'
+      title: "প্রাথমিক চিকিৎসা",
+      duration: "৫:১৫",
+      thumbnail: "🩹",
+      description: "এম্বুলেন্স আসার আগে করণীয় প্রাথমিক চিকিৎসা",
     },
     {
-      title: 'এম্বুলেন্স টাইপ চেনার উপায়',
-      duration: '৩:৪৫',
-      thumbnail: '🚐',
-      description: 'কোন অবস্থায় কোন ধরনের এম্বুলেন্স দরকার'
-    }
+      title: "এম্বুলেন্স টাইপ চেনার উপায়",
+      duration: "৩:৪৫",
+      thumbnail: "🚐",
+      description: "কোন অবস্থায় কোন ধরনের এম্বুলেন্স দরকার",
+    },
   ];
 
-  const filteredServices = ambulanceServices.filter(service => {
-    const matchesDistrict = selectedDistrict === 'all' || service.district === selectedDistrict;
-    const matchesSearch = service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         service.area.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredServices = ambulanceServices.filter((service) => {
+    const matchesDistrict =
+      selectedDistrict === "all" || service.district === selectedDistrict;
+    const matchesSearch =
+      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.area.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesDistrict && matchesSearch;
   });
 
   const handleSubmitAmbulance = () => {
-    if (!newAmbulance.name || !newAmbulance.phone || !newAmbulance.area || !newAmbulance.price) {
-      alert('সব প্রয়োজনীয় তথ্য পূরণ করুন');
+    if (
+      !newAmbulance.name ||
+      !newAmbulance.phone ||
+      !newAmbulance.area ||
+      !newAmbulance.price
+    ) {
+      alert("সব প্রয়োজনীয় তথ্য পূরণ করুন");
       return;
     }
 
@@ -276,25 +348,25 @@ const AmbulancePage: React.FC = () => {
       available24: newAmbulance.available24,
       rating: newAmbulance.rating,
       responseTime: newAmbulance.responseTime,
-      verified: false
+      verified: false,
     };
 
-    setAmbulanceServices(prev => [ambulance, ...prev]);
+    setAmbulanceServices((prev) => [ambulance, ...prev]);
     setNewAmbulance({
-      name: '',
-      phone: '',
-      area: '',
-      type: 'Regular',
-      price: '',
+      name: "",
+      phone: "",
+      area: "",
+      type: "Regular",
+      price: "",
       available24: true,
       rating: 4.5,
-      responseTime: '১৫-২০ মিনিট'
+      responseTime: "১৫-২০ মিনিট",
     });
     setShowAddAmbulanceModal(false);
   };
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -303,43 +375,46 @@ const AmbulancePage: React.FC = () => {
 
   const generateResponse = async (userMessage: string) => {
     setIsLoading(true);
-    
+
     try {
       // Custom responses for ambulance-related queries
-      let response = '';
+      let response = "";
       const lowerMessage = userMessage.toLowerCase();
-      
-      if (lowerMessage.includes('এম্বুলেন্স') || lowerMessage.includes('ambulance')) {
-        if (lowerMessage.includes('ঢাকা')) {
+
+      if (
+        lowerMessage.includes("এম্বুলেন্স") ||
+        lowerMessage.includes("ambulance")
+      ) {
+        if (lowerMessage.includes("ঢাকা")) {
           response = `ঢাকায় এম্বুলেন্স সেবা:\n\n🚐 ঢাকা মেডিকেল এম্বুলেন্স\n📞 ০১৭১২৩৪৫৬৭৮\n⭐ রেটিং: ৪.৮/৫\n⏰ রেসপন্স টাইম: ১০-১৫ মিনিট\n💰 মূল্য: ৫০০-২০০০ টাকা\n\n🚐 রেড ক্রিসেন্ট এম্বুলেন্স\n📞 ০১৮৮৭৬৫৪৩২১\n⭐ রেটিং: ৪.৯/৫\n⏰ রেসপন্স টাইম: ৮-১২ মিনিট\n💰 মূল্য: ৪০০-১৮০০ টাকা\n\nজরুরি অবস্থায় ৯৯৯ নম্বরে কল করুন।`;
-        } else if (lowerMessage.includes('চট্টগ্রাম')) {
+        } else if (lowerMessage.includes("চট্টগ্রাম")) {
           response = `চট্টগ্রামে এম্বুলেন্স সেবা:\n\n🚐 চট্টগ্রাম মেডিকেল এম্বুলেন্স\n📞 ০১৯৯৮৮৭৭৬৬৫\n⭐ রেটিং: ৪.৬/৫\n⏰ রেসপন্স টাইম: ১৫-২০ মিনিট\n💰 মূল্য: ৬০০-১২০০ টাকা\n\nজরুরি অবস্থায় ৯৯৯ নম্বরে কল করুন।`;
         } else {
           response = `আপনার এলাকার এম্বুলেন্স সেবা খুঁজে দিচ্ছি...\n\n🚨 জরুরি নম্বর: ৯৯৯\n🏥 স্বাস্থ্য বাতায়ন: ১৬২৬৩\n\nনিচের তালিকা থেকে আপনার এলাকার এম্বুলেন্স সেবা দেখুন। আপনি চাইলে আপনার লোকেশন শেয়ার করতে পারেন নিকটস্থ সেবা পেতে।`;
         }
       } else {
         // Use Gemini API for other queries
-        response = await generateHealthResponse(userMessage, 'general-health');
+        response = await generateHealthResponse(userMessage, "general-health");
       }
-      
+
       const botMessage: Message = {
         id: Date.now().toString(),
         text: response,
-        sender: 'bot',
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      
-      setMessages(prev => [...prev, botMessage]);
+
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       const errorMessage: Message = {
         id: Date.now().toString(),
-        text: 'দুঃখিত, কিছু সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
-        sender: 'bot',
+        text: "দুঃখিত, কিছু সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -347,17 +422,17 @@ const AmbulancePage: React.FC = () => {
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
-    
+
     const userMessage: Message = {
       id: Date.now().toString(),
       text: input,
-      sender: 'user',
+      sender: "user",
       timestamp: new Date(),
-      type: 'text'
+      type: "text",
     };
-    
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
     await generateResponse(input);
   };
 
@@ -366,41 +441,45 @@ const AmbulancePage: React.FC = () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
-      
+
       mediaRecorder.start();
       setIsRecording(true);
       setRecordingTime(0);
-      
+
       recordingIntervalRef.current = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime((prev) => prev + 1);
       }, 1000);
-      
+
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) {
           const userMessage: Message = {
             id: Date.now().toString(),
-            text: 'ভয়েস মেসেজ পাঠিয়েছি',
-            sender: 'user',
+            text: "ভয়েস মেসেজ পাঠিয়েছি",
+            sender: "user",
             timestamp: new Date(),
-            type: 'voice'
+            type: "voice",
           };
-          
-          setMessages(prev => [...prev, userMessage]);
-          generateResponse('আমি একটি ভয়েস মেসেজ পাঠিয়েছি। এম্বুলেন্স সেবা সম্পর্কে পরামর্শ দিন।');
+
+          setMessages((prev) => [...prev, userMessage]);
+          generateResponse(
+            "আমি একটি ভয়েস মেসেজ পাঠিয়েছি। এম্বুলেন্স সেবা সম্পর্কে পরামর্শ দিন।",
+          );
         }
       };
     } catch (error) {
-      console.error('Error starting recording:', error);
+      console.error("Error starting recording:", error);
     }
   };
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
       setIsRecording(false);
       setRecordingTime(0);
-      
+
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
       }
@@ -410,14 +489,14 @@ const AmbulancePage: React.FC = () => {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   const getCurrentLocation = () => {
     setIsGettingLocation(true);
-    
+
     if (!navigator.geolocation) {
-      alert('আপনার ব্রাউজার জিওলোকেশন সাপোর্ট করে না');
+      alert("আপনার ব্রাউজার জিওলোকেশন সাপোর্ট করে না");
       setIsGettingLocation(false);
       return;
     }
@@ -425,53 +504,53 @@ const AmbulancePage: React.FC = () => {
     navigator.geolocation.getCurrentPosition(
       async (position) => {
         const { latitude, longitude } = position.coords;
-        
+
         try {
           const mockAddress = `${latitude.toFixed(6)}, ${longitude.toFixed(6)} (আনুমানিক ঠিকানা)`;
-          
+
           setUserLocation({
             lat: latitude,
             lng: longitude,
-            address: mockAddress
+            address: mockAddress,
           });
-          
+
           setIsGettingLocation(false);
         } catch (error) {
-          console.error('Error getting address:', error);
+          console.error("Error getting address:", error);
           setUserLocation({
             lat: latitude,
             lng: longitude,
-            address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`
+            address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
           });
           setIsGettingLocation(false);
         }
       },
       (error) => {
-        console.error('Error getting location:', error);
-        alert('লোকেশন পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।');
+        console.error("Error getting location:", error);
+        alert("লোকেশন পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।");
         setIsGettingLocation(false);
       },
       {
         enableHighAccuracy: true,
         timeout: 10000,
-        maximumAge: 60000
-      }
+        maximumAge: 60000,
+      },
     );
   };
 
   const shareLocation = () => {
     if (!userLocation) return;
-    
+
     const locationText = `🚨 জরুরি এম্বুলেন্স প্রয়োজন!\n📍 আমার অবস্থান: ${userLocation.address}\n🌐 Google Maps: https://maps.google.com/?q=${userLocation.lat},${userLocation.lng}\n\nদয়া করে এম্বুলেন্স পাঠান!`;
-    
+
     setShareMessage(locationText);
     setLocationShared(true);
-    
+
     navigator.clipboard.writeText(locationText).then(() => {
       if (navigator.share) {
         navigator.share({
-          title: 'জরুরি এম্বুলেন্স প্রয়োজন',
-          text: locationText
+          title: "জরুরি এম্বুলেন্স প্রয়োজন",
+          text: locationText,
         });
       }
     });
@@ -480,35 +559,40 @@ const AmbulancePage: React.FC = () => {
   const copyLocationText = () => {
     if (shareMessage) {
       navigator.clipboard.writeText(shareMessage).then(() => {
-        alert('লোকেশন কপি হয়েছে! এখন যেকোনো জায়গায় পেস্ট করুন।');
+        alert("লোকেশন কপি হয়েছে! এখন যেকোনো জায়গায় পেস্ট করুন।");
       });
     }
   };
 
   const handleBookingSubmit = () => {
-    if (!bookingForm.name || !bookingForm.phone || !bookingForm.address || !bookingForm.ambulanceType) {
-      alert('সব প্রয়োজনীয় তথ্য পূরণ করুন');
+    if (
+      !bookingForm.name ||
+      !bookingForm.phone ||
+      !bookingForm.address ||
+      !bookingForm.ambulanceType
+    ) {
+      alert("সব প্রয়োজনীয় তথ্য পূরণ করুন");
       return;
     }
 
     setBookingSubmitted(true);
     setShowBookingForm(false);
-    
+
     // Reset form
     setBookingForm({
-      name: '',
-      phone: '',
-      address: '',
-      ambulanceType: '',
-      patientCondition: '',
-      urgency: 'জরুরি',
-      notes: ''
+      name: "",
+      phone: "",
+      address: "",
+      ambulanceType: "",
+      patientCondition: "",
+      urgency: "জরুরি",
+      notes: "",
     });
   };
 
   const submitFeedback = (rating: number, comment: string) => {
     setFeedback({ rating, comment });
-    alert('ধন্যবাদ! আপনার ফিডব্যাক গ্রহণ করা হয়েছে।');
+    alert("ধন্যবাদ! আপনার ফিডব্যাক গ্রহণ করা হয়েছে।");
   };
 
   const renderStars = (rating: number) => {
@@ -517,46 +601,46 @@ const AmbulancePage: React.FC = () => {
         key={i}
         className={`w-4 h-4 ${
           i < Math.floor(rating)
-            ? 'text-yellow-400 fill-current'
-            : 'text-gray-300'
+            ? "text-yellow-400 fill-current"
+            : "text-gray-300"
         }`}
       />
     ));
   };
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
           <motion.div
-            className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white mb-6 shadow-2xl"
+            className="inline-flex items-center justify-center w-16 h-16 sm:w-20 md:w-24 sm:h-20 md:h-24 rounded-full bg-gradient-to-r from-red-500 to-orange-500 text-white mb-4 sm:mb-6 shadow-2xl"
             whileHover={{ scale: 1.1, rotate: 10 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
-            <Truck className="w-12 h-12" />
+            <Truck className="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12" />
           </motion.div>
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 px-2">
             AmbulanceBot
           </h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-2">
             জরুরি অবস্থায় তাৎক্ষণিক এম্বুলেন্স সেবা খুঁজে পান। AI সহায়তা ও
             লাইভ লোকেশন শেয়ার করুন।
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-4 sm:space-y-6 lg:space-y-8">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-3xl shadow-2xl border border-gray-100"
+              className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl border border-gray-100"
             >
               <Swiper
                 pagination={{
@@ -571,13 +655,13 @@ const AmbulancePage: React.FC = () => {
                 loop={true}
                 speed={1600}
               >
-                <SwiperSlide className="h-[400px]">
+                <SwiperSlide className="">
                   <img src={img1} alt="" />
                 </SwiperSlide>
-                <SwiperSlide className="h-[400px]">
+                <SwiperSlide className="">
                   <img src={img2} alt="" />
                 </SwiperSlide>
-                <SwiperSlide className="h-[400px]">
+                <SwiperSlide className="">
                   <img src={img3} alt="" />
                 </SwiperSlide>
                 {/* <SwiperSlide className="h-[500px]">Slide 2</SwiperSlide> */}

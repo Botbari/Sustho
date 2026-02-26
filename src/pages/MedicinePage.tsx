@@ -1,95 +1,125 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Pill, Search, AlertTriangle, Info } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Pill, Search, AlertTriangle, Info } from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const MedicinePage: React.FC = () => {
   const { t } = useLanguage();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const medicines = [
     {
-      name: t('language') === 'bn' ? 'প্যারাসিটামল' : 'Paracetamol',
-      category: t('language') === 'bn' ? 'ব্যথানাশক' : 'Pain Reliever',
-      uses: t('language') === 'bn' ? ['জ্বর', 'মাথা ব্যথা', 'শরীর ব্যথা'] : ['Fever', 'Headache', 'Body Pain'],
-      dosage: t('language') === 'bn' ? 'প্রাপ্তবয়স্ক: ৫০০মিগ্রা ৬-৮ ঘণ্টা পর পর' : 'Adult: 500mg every 6-8 hours',
-      sideEffects: t('language') === 'bn' ? ['পেট ব্যথা', 'বমি ভাব'] : ['Stomach pain', 'Nausea'],
-      warnings: t('language') === 'bn' ? ['অতিরিক্ত সেবন লিভারের ক্ষতি করতে পারে'] : ['Overdose can damage liver']
+      name: t("language") === "bn" ? "প্যারাসিটামল" : "Paracetamol",
+      category: t("language") === "bn" ? "ব্যথানাশক" : "Pain Reliever",
+      uses:
+        t("language") === "bn"
+          ? ["জ্বর", "মাথা ব্যথা", "শরীর ব্যথা"]
+          : ["Fever", "Headache", "Body Pain"],
+      dosage:
+        t("language") === "bn"
+          ? "প্রাপ্তবয়স্ক: ৫০০মিগ্রা ৬-৮ ঘণ্টা পর পর"
+          : "Adult: 500mg every 6-8 hours",
+      sideEffects:
+        t("language") === "bn"
+          ? ["পেট ব্যথা", "বমি ভাব"]
+          : ["Stomach pain", "Nausea"],
+      warnings:
+        t("language") === "bn"
+          ? ["অতিরিক্ত সেবন লিভারের ক্ষতি করতে পারে"]
+          : ["Overdose can damage liver"],
     },
     {
-      name: t('language') === 'bn' ? 'অ্যামোক্সিসিলিন' : 'Amoxicillin',
-      category: t('language') === 'bn' ? 'অ্যান্টিবায়োটিক' : 'Antibiotic',
-      uses: t('language') === 'bn' ? ['সংক্রমণ', 'গলা ব্যথা', 'নিউমোনিয়া'] : ['Infection', 'Sore throat', 'Pneumonia'],
-      dosage: t('language') === 'bn' ? 'প্রাপ্তবয়স্ক: ২৫০-৫০০মিগ্রা ৮ ঘণ্টা পর পর' : 'Adult: 250-500mg every 8 hours',
-      sideEffects: t('language') === 'bn' ? ['ডায়রিয়া', 'বমি', 'অ্যালার্জি'] : ['Diarrhea', 'Vomiting', 'Allergy'],
-      warnings: t('language') === 'bn' ? ['সম্পূর্ণ কোর্স শেষ করুন', 'ডাক্তারের পরামর্শ ছাড়া সেবন করবেন না'] : ['Complete the full course', 'Do not take without doctor\'s advice']
+      name: t("language") === "bn" ? "অ্যামোক্সিসিলিন" : "Amoxicillin",
+      category: t("language") === "bn" ? "অ্যান্টিবায়োটিক" : "Antibiotic",
+      uses:
+        t("language") === "bn"
+          ? ["সংক্রমণ", "গলা ব্যথা", "নিউমোনিয়া"]
+          : ["Infection", "Sore throat", "Pneumonia"],
+      dosage:
+        t("language") === "bn"
+          ? "প্রাপ্তবয়স্ক: ২৫০-৫০০মিগ্রা ৮ ঘণ্টা পর পর"
+          : "Adult: 250-500mg every 8 hours",
+      sideEffects:
+        t("language") === "bn"
+          ? ["ডায়রিয়া", "বমি", "অ্যালার্জি"]
+          : ["Diarrhea", "Vomiting", "Allergy"],
+      warnings:
+        t("language") === "bn"
+          ? ["সম্পূর্ণ কোর্স শেষ করুন", "ডাক্তারের পরামর্শ ছাড়া সেবন করবেন না"]
+          : ["Complete the full course", "Do not take without doctor's advice"],
     },
     {
-      name: 'ওআরএস',
-      category: 'তরল পরিপূরক',
-      uses: ['ডায়রিয়া', 'বমি', 'পানিশূন্যতা'],
-      dosage: 'প্রয়োজন অনুযায়ী বার বার',
-      sideEffects: ['খুব কম'],
-      warnings: ['তাজা পানিতে গুলে নিন']
+      name: "ওআরএস",
+      category: "তরল পরিপূরক",
+      uses: ["ডায়রিয়া", "বমি", "পানিশূন্যতা"],
+      dosage: "প্রয়োজন অনুযায়ী বার বার",
+      sideEffects: ["খুব কম"],
+      warnings: ["তাজা পানিতে গুলে নিন"],
     },
     {
-      name: 'অ্যান্টাসিড',
-      category: 'পেটের ওষুধ',
-      uses: ['অম্বল', 'পেট ব্যথা', 'বুক জ্বালা'],
-      dosage: 'খাবারের ১ ঘণ্টা পর',
-      sideEffects: ['কোষ্ঠকাঠিন্য', 'ডায়রিয়া'],
-      warnings: ['অন্যান্য ওষুধের সাথে ব্যবধান রাখুন']
+      name: "অ্যান্টাসিড",
+      category: "পেটের ওষুধ",
+      uses: ["অম্বল", "পেট ব্যথা", "বুক জ্বালা"],
+      dosage: "খাবারের ১ ঘণ্টা পর",
+      sideEffects: ["কোষ্ঠকাঠিন্য", "ডায়রিয়া"],
+      warnings: ["অন্যান্য ওষুধের সাথে ব্যবধান রাখুন"],
     },
     {
-      name: 'আয়রন ট্যাবলেট',
-      category: 'ভিটামিন ও খনিজ',
-      uses: ['রক্তশূন্যতা', 'আয়রনের অভাব'],
-      dosage: 'দৈনিক ১টি খাবারের সাথে',
-      sideEffects: ['কোষ্ঠকাঠিন্য', 'বমি ভাব'],
-      warnings: ['খালি পেটে খাবেন না']
-    }
+      name: "আয়রন ট্যাবলেট",
+      category: "ভিটামিন ও খনিজ",
+      uses: ["রক্তশূন্যতা", "আয়রনের অভাব"],
+      dosage: "দৈনিক ১টি খাবারের সাথে",
+      sideEffects: ["কোষ্ঠকাঠিন্য", "বমি ভাব"],
+      warnings: ["খালি পেটে খাবেন না"],
+    },
   ];
 
   const categories = [
-    { id: 'all', name: 'সব' },
-    { id: 'ব্যথানাশক', name: 'ব্যথানাশক' },
-    { id: 'অ্যান্টিবায়োটিক', name: 'অ্যান্টিবায়োটিক' },
-    { id: 'তরল পরিপূরক', name: 'তরল পরিপূরক' },
-    { id: 'পেটের ওষুধ', name: 'পেটের ওষুধ' },
-    { id: 'ভিটামিন ও খনিজ', name: 'ভিটামিন ও খনিজ' }
+    { id: "all", name: "সব" },
+    { id: "ব্যথানাশক", name: "ব্যথানাশক" },
+    { id: "অ্যান্টিবায়োটিক", name: "অ্যান্টিবায়োটিক" },
+    { id: "তরল পরিপূরক", name: "তরল পরিপূরক" },
+    { id: "পেটের ওষুধ", name: "পেটের ওষুধ" },
+    { id: "ভিটামিন ও খনিজ", name: "ভিটামিন ও খনিজ" },
   ];
 
-  const filteredMedicines = medicines.filter(medicine => {
-    const matchesSearch = medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         medicine.uses.some(use => use.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesCategory = selectedCategory === 'all' || medicine.category === selectedCategory;
+  const filteredMedicines = medicines.filter((medicine) => {
+    const matchesSearch =
+      medicine.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      medicine.uses.some((use) =>
+        use.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    const matchesCategory =
+      selectedCategory === "all" || medicine.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
   const safetyTips = [
-    'ডাক্তারের পরামর্শ ছাড়া কোন ওষুধ খাবেন না',
-    'নির্দিষ্ট সময়ে নির্দিষ্ট পরিমাণে খান',
-    'এক্সপায়ার ডেট চেক করুন',
-    'শিশুদের নাগালের বাইরে রাখুন',
-    'ওষুধের পার্শ্বপ্রতিক্রিয়া সম্পর্কে জানুন'
+    "ডাক্তারের পরামর্শ ছাড়া কোন ওষুধ খাবেন না",
+    "নির্দিষ্ট সময়ে নির্দিষ্ট পরিমাণে খান",
+    "এক্সপায়ার ডেট চেক করুন",
+    "শিশুদের নাগালের বাইরে রাখুন",
+    "ওষুধের পার্শ্বপ্রতিক্রিয়া সম্পর্কে জানুন",
   ];
 
   return (
-    <div className="min-h-screen py-8 px-4">
+    <div className="min-h-screen py-6 sm:py-8 px-3 sm:px-4">
       <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-12"
+          className="text-center mb-8 sm:mb-12"
         >
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-teal-500 to-green-500 text-white mb-6">
-            <Pill className="w-10 h-10" />
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-full bg-gradient-to-r from-teal-500 to-green-500 text-white mb-4 sm:mb-6">
+            <Pill className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">ওষুধ পরামর্শ</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            {t('medicine.subtitle')}
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
+            ওষুধ পরামর্শ
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-2">
+            {t("medicine.subtitle")}
           </p>
         </motion.div>
 
@@ -98,14 +128,18 @@ const MedicinePage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-white rounded-3xl shadow-xl p-6 mb-8 border border-gray-100"
+          className="bg-white rounded-2xl sm:rounded-3xl shadow-xl p-4 sm:p-6 mb-6 sm:mb-8 border border-gray-100"
         >
-          <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder={t('language') === 'bn' ? 'ওষুধের নাম বা রোগের নাম লিখুন...' : 'Enter medicine name or disease name...'}
+                placeholder={
+                  t("language") === "bn"
+                    ? "ওষুধের নাম বা রোগের নাম লিখুন..."
+                    : "Enter medicine name or disease name..."
+                }
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -116,7 +150,7 @@ const MedicinePage: React.FC = () => {
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="px-4 py-3 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-teal-500"
             >
-              {categories.map(category => (
+              {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
                 </option>
@@ -126,7 +160,7 @@ const MedicinePage: React.FC = () => {
         </motion.div>
 
         {/* Medicine List */}
-        <div className="grid lg:grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
           {filteredMedicines.map((medicine, index) => (
             <motion.div
               key={index}
@@ -136,7 +170,9 @@ const MedicinePage: React.FC = () => {
               className="bg-white rounded-3xl shadow-xl p-6 border border-gray-100"
             >
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-xl font-bold text-gray-800">{medicine.name}</h3>
+                <h3 className="text-xl font-bold text-gray-800">
+                  {medicine.name}
+                </h3>
                 <span className="px-3 py-1 bg-teal-100 text-teal-800 rounded-full text-sm font-medium">
                   {medicine.category}
                 </span>
@@ -150,7 +186,10 @@ const MedicinePage: React.FC = () => {
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {medicine.uses.map((use, i) => (
-                      <span key={i} className="px-2 py-1 bg-blue-100 text-blue-800 rounded-lg text-sm">
+                      <span
+                        key={i}
+                        className="px-2 py-1 bg-blue-100 text-blue-800 rounded-lg text-sm"
+                      >
                         {use}
                       </span>
                     ))}
@@ -163,7 +202,9 @@ const MedicinePage: React.FC = () => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-700 mb-2">পার্শ্বপ্রতিক্রিয়া:</h4>
+                  <h4 className="font-semibold text-gray-700 mb-2">
+                    পার্শ্বপ্রতিক্রিয়া:
+                  </h4>
                   <ul className="text-gray-600 text-sm space-y-1">
                     {medicine.sideEffects.map((effect, i) => (
                       <li key={i} className="flex items-center">

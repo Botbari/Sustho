@@ -1,67 +1,89 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Heart, Users, Shield, Zap, Award, Target, Eye, Lightbulb, Globe, Stethoscope, Bot, Sparkles, Clock } from 'lucide-react';
-import { useLanguage } from '../contexts/LanguageContext';
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  Heart,
+  Users,
+  Shield,
+  Zap,
+  Award,
+  Target,
+  Eye,
+  Lightbulb,
+  Globe,
+  Stethoscope,
+  Bot,
+  Sparkles,
+  Clock,
+} from "lucide-react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const AboutPage: React.FC = () => {
   const { t } = useLanguage();
 
   const stats = [
     {
-      number: t('language') === 'bn' ? '১০০+' : '100+',
-      label: t('language') === 'bn' ? 'স্বাস্থ্য বিষয়' : 'Health Topics',
+      number: t("language") === "bn" ? "১০০+" : "100+",
+      label: t("language") === "bn" ? "স্বাস্থ্য বিষয়" : "Health Topics",
       icon: Heart,
-      color: 'from-red-500 to-pink-500'
+      color: "from-red-500 to-pink-500",
     },
     {
-      number: '24/7',
-      label: t('language') === 'bn' ? 'সেবার সময়' : 'Service Hours',
+      number: "24/7",
+      label: t("language") === "bn" ? "সেবার সময়" : "Service Hours",
       icon: Clock,
-      color: 'from-blue-500 to-cyan-500'
+      color: "from-blue-500 to-cyan-500",
     },
     {
-      number: t('language') === 'bn' ? '৫০০+' : '500+',
-      label: t('language') === 'bn' ? 'সন্তুষ্ট ব্যবহারকারী' : 'Satisfied Users',
+      number: t("language") === "bn" ? "৫০০+" : "500+",
+      label:
+        t("language") === "bn" ? "সন্তুষ্ট ব্যবহারকারী" : "Satisfied Users",
       icon: Users,
-      color: 'from-green-500 to-emerald-500'
+      color: "from-green-500 to-emerald-500",
     },
     {
-      number: t('language') === 'bn' ? '৯৯%' : '99%',
-      label: t('language') === 'bn' ? 'নির্ভুলতা' : 'Accuracy',
+      number: t("language") === "bn" ? "৯৯%" : "99%",
+      label: t("language") === "bn" ? "নির্ভুলতা" : "Accuracy",
       icon: Award,
-      color: 'from-purple-500 to-indigo-500'
-    }
+      color: "from-purple-500 to-indigo-500",
+    },
   ];
 
   const features = [
     {
       icon: Bot,
-      title: t('feature.ai-advice.title'),
-      description: t('feature.ai-advice.desc'),
-      color: 'from-blue-500 to-indigo-500',
-      bgColor: 'from-blue-50 to-indigo-50'
+      title: t("feature.ai-advice.title"),
+      description: t("feature.ai-advice.desc"),
+      color: "from-blue-500 to-indigo-500",
+      bgColor: "from-blue-50 to-indigo-50",
     },
     {
       icon: Shield,
-      title: t('language') === 'bn' ? 'নিরাপদ ও গোপনীয়' : 'Safe & Confidential',
-      description: t('language') === 'bn' ? 'আপনার ব্যক্তিগত তথ্য সম্পূর্ণ নিরাপদ এবং গোপনীয় রাখা হয়' : 'Your personal information is kept completely safe and confidential',
-      color: 'from-green-500 to-emerald-500',
-      bgColor: 'from-green-50 to-emerald-50'
+      title:
+        t("language") === "bn" ? "নিরাপদ ও গোপনীয়" : "Safe & Confidential",
+      description:
+        t("language") === "bn"
+          ? "আপনার ব্যক্তিগত তথ্য সম্পূর্ণ নিরাপদ এবং গোপনীয় রাখা হয়"
+          : "Your personal information is kept completely safe and confidential",
+      color: "from-green-500 to-emerald-500",
+      bgColor: "from-green-50 to-emerald-50",
     },
     {
       icon: Zap,
-      title: t('feature.24-7.title'),
-      description: t('feature.24-7.desc'),
-      color: 'from-yellow-500 to-orange-500',
-      bgColor: 'from-yellow-50 to-orange-50'
+      title: t("feature.24-7.title"),
+      description: t("feature.24-7.desc"),
+      color: "from-yellow-500 to-orange-500",
+      bgColor: "from-yellow-50 to-orange-50",
     },
     {
       icon: Globe,
-      title: t('language') === 'bn' ? 'সর্বত্র উপলব্ধ' : 'Available Everywhere',
-      description: t('language') === 'bn' ? 'ইন্টারনেট সংযোগ থাকলেই যেকোনো জায়গা থেকে সেবা নিতে পারেন' : 'Get services from anywhere with internet connection',
-      color: 'from-purple-500 to-pink-500',
-      bgColor: 'from-purple-50 to-pink-50'
-    }
+      title: t("language") === "bn" ? "সর্বত্র উপলব্ধ" : "Available Everywhere",
+      description:
+        t("language") === "bn"
+          ? "ইন্টারনেট সংযোগ থাকলেই যেকোনো জায়গা থেকে সেবা নিতে পারেন"
+          : "Get services from anywhere with internet connection",
+      color: "from-purple-500 to-pink-500",
+      bgColor: "from-purple-50 to-pink-50",
+    },
   ];
 
   const team = [
@@ -94,19 +116,28 @@ const AboutPage: React.FC = () => {
   const values = [
     {
       icon: Target,
-      title: t('language') === 'bn' ? 'আমাদের লক্ষ্য' : 'Our Goal',
-      description: t('language') === 'bn' ? 'প্রতিটি বাংলাদেশীর হাতের মুঠোয় মানসম্পন্ন স্বাস্থ্য সেবা পৌঁছে দেওয়া' : 'Delivering quality healthcare to every Bangladeshi'
+      title: t("language") === "bn" ? "আমাদের লক্ষ্য" : "Our Goal",
+      description:
+        t("language") === "bn"
+          ? "প্রতিটি বাংলাদেশীর হাতের মুঠোয় মানসম্পন্ন স্বাস্থ্য সেবা পৌঁছে দেওয়া"
+          : "Delivering quality healthcare to every Bangladeshi",
     },
     {
       icon: Eye,
-      title: t('language') === 'bn' ? 'আমাদের দৃষ্টিভঙ্গি' : 'Our Vision',
-      description: t('language') === 'bn' ? 'একটি সুস্থ বাংলাদেশ গড়ে তোলা যেখানে সবার জন্য স্বাস্থ্য সেবা সহজলভ্য' : 'Building a healthy Bangladesh where healthcare is accessible to all'
+      title: t("language") === "bn" ? "আমাদের দৃষ্টিভঙ্গি" : "Our Vision",
+      description:
+        t("language") === "bn"
+          ? "একটি সুস্থ বাংলাদেশ গড়ে তোলা যেখানে সবার জন্য স্বাস্থ্য সেবা সহজলভ্য"
+          : "Building a healthy Bangladesh where healthcare is accessible to all",
     },
     {
       icon: Lightbulb,
-      title: t('language') === 'bn' ? 'আমাদের মূল্যবোধ' : 'Our Values',
-      description: t('language') === 'bn' ? 'সততা, নির্ভরযোগ্যতা, গোপনীয়তা এবং মানবিক সেবার প্রতি অঙ্গীকার' : 'Commitment to honesty, reliability, privacy and humanitarian service'
-    }
+      title: t("language") === "bn" ? "আমাদের মূল্যবোধ" : "Our Values",
+      description:
+        t("language") === "bn"
+          ? "সততা, নির্ভরযোগ্যতা, গোপনীয়তা এবং মানবিক সেবার প্রতি অঙ্গীকার"
+          : "Commitment to honesty, reliability, privacy and humanitarian service",
+    },
   ];
 
   return (
@@ -118,16 +149,18 @@ const AboutPage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-16"
         >
-          <motion.div 
-            className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white mb-6 shadow-2xl"
+          <motion.div
+            className="inline-flex items-center justify-center w-16 h-16 sm:w-20 md:w-24 sm:h-20 md:h-24 rounded-full bg-gradient-to-r from-blue-500 to-green-500 text-white mb-4 sm:mb-6 shadow-2xl"
             whileHover={{ scale: 1.1, rotate: 10 }}
             transition={{ type: "spring", stiffness: 400 }}
           >
-            <Heart className="w-12 h-12" />
+            <Heart className="w-8 h-8 sm:w-10 md:w-12 sm:h-10 md:h-12" />
           </motion.div>
-          <h1 className="text-5xl font-bold text-gray-800 mb-4">আমাদের সম্পর্কে</h1>
-          <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            {t('about.subtitle')}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-800 mb-4 px-2">
+            আমাদের সম্পর্কে
+          </h1>
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed px-2">
+            {t("about.subtitle")}
           </p>
         </motion.div>
 
@@ -136,18 +169,20 @@ const AboutPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="bg-gradient-to-r from-blue-50 via-purple-50 to-green-50 rounded-3xl shadow-2xl p-12 mb-16 border border-blue-200"
+          className="bg-gradient-to-r from-blue-50 via-purple-50 to-green-50 rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 md:p-12 mb-12 sm:mb-16 border border-blue-200"
         >
           <div className="text-center">
             <motion.div
-              className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-r from-blue-500 to-green-500 text-white mb-6 shadow-2xl"
+              className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-blue-500 to-green-500 text-white mb-4 sm:mb-6 shadow-2xl"
               whileHover={{ scale: 1.1, rotate: 5 }}
             >
-              <Sparkles className="w-10 h-10" />
+              <Sparkles className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
             </motion.div>
-            <h2 className="text-4xl font-bold text-gray-800 mb-6">আমাদের মিশন</h2>
-            <p className="text-xl text-gray-700 leading-relaxed max-w-4xl mx-auto">
-              {t('about.mission.desc')}
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">
+              আমাদের মিশন
+            </h2>
+            <p className="text-base sm:text-lg md:text-xl text-gray-700 leading-relaxed max-w-4xl mx-auto px-2">
+              {t("about.mission.desc")}
             </p>
           </div>
         </motion.div>
@@ -157,7 +192,7 @@ const AboutPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
-          className="grid md:grid-cols-4 gap-8 mb-16"
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-12 sm:mb-16"
         >
           {stats.map((stat, index) => (
             <motion.div
@@ -174,7 +209,9 @@ const AboutPage: React.FC = () => {
               >
                 <stat.icon className="w-8 h-8" />
               </motion.div>
-              <h3 className="text-3xl font-bold text-gray-800 mb-2">{stat.number}</h3>
+              <h3 className="text-3xl font-bold text-gray-800 mb-2">
+                {stat.number}
+              </h3>
               <p className="text-gray-600 font-medium">{stat.label}</p>
             </motion.div>
           ))}
@@ -187,12 +224,16 @@ const AboutPage: React.FC = () => {
           transition={{ delay: 0.4 }}
           className="mb-16"
         >
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">আমাদের বিশেষত্ব</h2>
-            <p className="text-xl text-gray-600">{t('about.features.subtitle')}</p>
+          <div className="text-center mb-8 sm:mb-12">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
+              আমাদের বিশেষত্ব
+            </h2>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 px-2">
+              {t("about.features.subtitle")}
+            </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 gap-8">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             {features.map((feature, index) => (
               <motion.div
                 key={index}
@@ -208,8 +249,12 @@ const AboutPage: React.FC = () => {
                 >
                   <feature.icon className="w-8 h-8" />
                 </motion.div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">{feature.title}</h3>
-                <p className="text-gray-700 leading-relaxed">{feature.description}</p>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-700 leading-relaxed">
+                  {feature.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -220,20 +265,24 @@ const AboutPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-3xl shadow-2xl p-12 mb-16 border border-purple-200"
+          className="bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 md:p-12 mb-12 sm:mb-16 border border-purple-200"
         >
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 sm:mb-12">
             <motion.div
-              className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white mb-6 shadow-2xl"
+              className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-purple-500 to-indigo-500 text-white mb-4 sm:mb-6 shadow-2xl"
               whileHover={{ scale: 1.1, rotate: 5 }}
             >
-              <Heart className="w-10 h-10" />
+              <Heart className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
             </motion.div>
-            <h2 className="text-4xl font-bold text-purple-800 mb-4">আমাদের মূল্যবোধ</h2>
-            <p className="text-xl text-purple-600">যে নীতিমালায় আমরা কাজ করি</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-purple-800 mb-4">
+              আমাদের মূল্যবোধ
+            </h2>
+            <p className="text-base sm:text-lg md:text-xl text-purple-600">
+              যে নীতিমালায় আমরা কাজ করি
+            </p>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {values.map((value, index) => (
               <motion.div
                 key={index}
@@ -249,8 +298,12 @@ const AboutPage: React.FC = () => {
                 >
                   <value.icon className="w-8 h-8" />
                 </motion.div>
-                <h3 className="text-xl font-bold text-purple-800 mb-4">{value.title}</h3>
-                <p className="text-purple-700 leading-relaxed">{value.description}</p>
+                <h3 className="text-xl font-bold text-purple-800 mb-4">
+                  {value.title}
+                </h3>
+                <p className="text-purple-700 leading-relaxed">
+                  {value.description}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -263,18 +316,22 @@ const AboutPage: React.FC = () => {
           transition={{ delay: 0.6 }}
           className="mb-16"
         >
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 sm:mb-12">
             <motion.div
-              className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-gradient-to-r from-green-500 to-emerald-500 text-white mb-6 shadow-2xl"
+              className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-2xl sm:rounded-3xl bg-gradient-to-r from-green-500 to-emerald-500 text-white mb-4 sm:mb-6 shadow-2xl"
               whileHover={{ scale: 1.1, rotate: 5 }}
             >
-              <Users className="w-10 h-10" />
+              <Users className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
             </motion.div>
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">{t('about.team.title')}</h2>
-            <p className="text-xl text-gray-600">{t('about.team.subtitle')}</p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 px-2">
+              {t("about.team.title")}
+            </h2>
+            <p className="text-base sm:text-lg md:text-xl text-gray-600 px-2">
+              {t("about.team.subtitle")}
+            </p>
           </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {team.map((member, index) => (
               <motion.div
                 key={index}
@@ -288,16 +345,22 @@ const AboutPage: React.FC = () => {
                   className="w-24 h-24 rounded-full overflow-hidden mx-auto mb-4 shadow-lg"
                   whileHover={{ scale: 1.1 }}
                 >
-                  <img 
-                    src={member.image} 
+                  <img
+                    src={member.image}
                     alt={member.name}
                     className="w-full h-full object-cover"
                   />
                 </motion.div>
-                <h3 className="text-lg font-bold text-gray-800 mb-2">{member.name}</h3>
+                <h3 className="text-lg font-bold text-gray-800 mb-2">
+                  {member.name}
+                </h3>
                 <p className="text-blue-600 font-medium mb-2">{member.role}</p>
-                <p className="text-gray-600 text-sm mb-1">{member.qualification}</p>
-                <p className="text-gray-500 text-sm">অভিজ্ঞতা: {member.experience}</p>
+                <p className="text-gray-600 text-sm mb-1">
+                  {member.qualification}
+                </p>
+                <p className="text-gray-500 text-sm">
+                  অভিজ্ঞতা: {member.experience}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -308,25 +371,27 @@ const AboutPage: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
-          className="bg-gradient-to-r from-blue-600 to-green-600 rounded-3xl shadow-2xl p-12 text-center text-white"
+          className="bg-gradient-to-r from-blue-600 to-green-600 rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 md:p-12 text-center text-white"
         >
           <motion.div
-            className="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-white/20 text-white mb-6 shadow-2xl backdrop-blur-sm"
+            className="inline-flex items-center justify-center w-14 h-14 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-2xl sm:rounded-3xl bg-white/20 text-white mb-4 sm:mb-6 shadow-2xl backdrop-blur-sm"
             whileHover={{ scale: 1.1, rotate: 5 }}
           >
-            <Stethoscope className="w-10 h-10" />
+            <Stethoscope className="w-7 h-7 sm:w-8 md:w-10 sm:h-8 md:h-10" />
           </motion.div>
-          <h2 className="text-4xl font-bold mb-4">আজই শুরু করুন</h2>
-          <p className="text-xl mb-8 text-blue-100">
-            {t('about.cta.desc')}
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+            আজই শুরু করুন
+          </h2>
+          <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 text-blue-100 px-2">
+            {t("about.cta.desc")}
           </p>
           <motion.button
             className="bg-white text-blue-600 px-8 py-4 rounded-2xl font-bold text-lg hover:shadow-2xl transition-all"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => window.location.href = '/'}
+            onClick={() => (window.location.href = "/")}
           >
-            {t('about.cta.button')}
+            {t("about.cta.button")}
           </motion.button>
         </motion.div>
       </div>

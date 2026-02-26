@@ -1,15 +1,15 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Mic, Image, MicOff, Loader2, User, Bot } from 'lucide-react';
-import { generateHealthResponse, analyzeImage } from '../utils/geminiApi';
-import { renderFormatted } from '../utils/format';
+import React, { useState, useRef, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Send, Mic, Image, MicOff, Loader2, User, Bot } from "lucide-react";
+import { generateHealthResponse, analyzeImage } from "../utils/openaiApi";
+import { renderFormatted } from "../utils/format";
 
 interface Message {
   id: string;
   text: string;
-  sender: 'user' | 'bot';
+  sender: "user" | "bot";
   timestamp: Date;
-  type: 'text' | 'image' | 'voice';
+  type: "text" | "image" | "voice";
   imageUrl?: string;
 }
 
@@ -20,17 +20,22 @@ interface AIChatProps {
   externalMessages?: string[];
 }
 
-const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMessages = [] }) => {
+const AIChat: React.FC<AIChatProps> = ({
+  title,
+  placeholder,
+  context,
+  externalMessages = [],
+}) => {
   const [messages, setMessages] = useState<Message[]>([
     {
-      id: '1',
+      id: "1",
       text: `আস্সালামু আলাইকুম! আমি ${title} বিষয়ে আপনার সহায়তা করতে এসেছি। আপনি টেক্সট, ছবি অথবা ভয়েস মেসেজের মাধ্যমে আমার সাথে কথা বলতে পারেন।`,
-      sender: 'bot',
+      sender: "bot",
       timestamp: new Date(),
-      type: 'text'
-    }
+      type: "text",
+    },
   ]);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
@@ -40,7 +45,7 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -54,41 +59,41 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
       const userMessage: Message = {
         id: Date.now().toString(),
         text: lastMessage,
-        sender: 'user',
+        sender: "user",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      
-      setMessages(prev => [...prev, userMessage]);
+
+      setMessages((prev) => [...prev, userMessage]);
       generateResponse(lastMessage);
     }
   }, [externalMessages]);
 
   const generateResponse = async (userMessage: string, imageUrl?: string) => {
     setIsLoading(true);
-    
+
     try {
       // Use Google Gemini API for real AI responses
       const response = await generateHealthResponse(userMessage, context);
-      
+
       const botMessage: Message = {
         id: Date.now().toString(),
         text: response,
-        sender: 'bot',
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      
-      setMessages(prev => [...prev, botMessage]);
+
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       const errorMessage: Message = {
         id: Date.now().toString(),
-        text: 'দুঃখিত, কিছু সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
-        sender: 'bot',
+        text: "দুঃখিত, কিছু সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -96,17 +101,17 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
-    
+
     const userMessage: Message = {
       id: Date.now().toString(),
       text: input,
-      sender: 'user',
+      sender: "user",
       timestamp: new Date(),
-      type: 'text'
+      type: "text",
     };
-    
-    setMessages(prev => [...prev, userMessage]);
-    setInput('');
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput("");
     await generateResponse(input);
   };
 
@@ -117,14 +122,14 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
       const userMessage: Message = {
         id: Date.now().toString(),
         text: `ছবি আপলোড করেছি: ${file.name}`,
-        sender: 'user',
+        sender: "user",
         timestamp: new Date(),
-        type: 'image',
-        imageUrl
+        type: "image",
+        imageUrl,
       };
-      
-      setMessages(prev => [...prev, userMessage]);
-      
+
+      setMessages((prev) => [...prev, userMessage]);
+
       // Analyze the uploaded image
       analyzeImageAndRespond(file);
     }
@@ -132,28 +137,28 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
 
   const analyzeImageAndRespond = async (file: File) => {
     setIsLoading(true);
-    
+
     try {
       const response = await analyzeImage(file, context);
-      
+
       const botMessage: Message = {
         id: Date.now().toString(),
         text: response,
-        sender: 'bot',
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      
-      setMessages(prev => [...prev, botMessage]);
+
+      setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       const errorMessage: Message = {
         id: Date.now().toString(),
-        text: 'দুঃখিত, ছবি বিশ্লেষণ করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।',
-        sender: 'bot',
+        text: "দুঃখিত, ছবি বিশ্লেষণ করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+        sender: "bot",
         timestamp: new Date(),
-        type: 'text'
+        type: "text",
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
@@ -164,41 +169,45 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const mediaRecorder = new MediaRecorder(stream);
       mediaRecorderRef.current = mediaRecorder;
-      
+
       mediaRecorder.start();
       setIsRecording(true);
       setRecordingTime(0);
-      
+
       recordingIntervalRef.current = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime((prev) => prev + 1);
       }, 1000);
-      
+
       mediaRecorder.ondataavailable = (e) => {
         if (e.data.size > 0) {
           const userMessage: Message = {
             id: Date.now().toString(),
-            text: 'ভয়েস মেসেজ পাঠিয়েছি',
-            sender: 'user',
+            text: "ভয়েস মেসেজ পাঠিয়েছি",
+            sender: "user",
             timestamp: new Date(),
-            type: 'voice'
+            type: "voice",
           };
-          
-          setMessages(prev => [...prev, userMessage]);
-          generateResponse('আমি একটি ভয়েস মেসেজ পাঠিয়েছি। অনুগ্রহ করে সাধারণ স্বাস্থ্য পরামর্শ দিন।');
+
+          setMessages((prev) => [...prev, userMessage]);
+          generateResponse(
+            "আমি একটি ভয়েস মেসেজ পাঠিয়েছি। অনুগ্রহ করে সাধারণ স্বাস্থ্য পরামর্শ দিন।",
+          );
         }
       };
     } catch (error) {
-      console.error('Error starting recording:', error);
+      console.error("Error starting recording:", error);
     }
   };
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      mediaRecorderRef.current.stream
+        .getTracks()
+        .forEach((track) => track.stop());
       setIsRecording(false);
       setRecordingTime(0);
-      
+
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current);
       }
@@ -208,7 +217,7 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -241,21 +250,25 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
               transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
             >
-              <div className={`flex items-start space-x-3 max-w-xs lg:max-w-md ${
-                message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-              }`}>
+              <div
+                className={`flex items-start space-x-3 max-w-xs lg:max-w-md ${
+                  message.sender === "user"
+                    ? "flex-row-reverse space-x-reverse"
+                    : ""
+                }`}
+              >
                 {/* Avatar */}
-                <motion.div 
+                <motion.div
                   className={`w-10 h-10 rounded-2xl flex items-center justify-center shadow-lg ${
-                  message.sender === 'user' 
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white' 
-                    : 'bg-gradient-to-r from-green-500 to-emerald-500 text-white'
+                    message.sender === "user"
+                      ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white"
+                      : "bg-gradient-to-r from-green-500 to-emerald-500 text-white"
                   }`}
                   whileHover={{ scale: 1.1 }}
                 >
-                  {message.sender === 'user' ? (
+                  {message.sender === "user" ? (
                     <User className="w-5 h-5" />
                   ) : (
                     <Bot className="w-5 h-5" />
@@ -263,37 +276,44 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
                 </motion.div>
 
                 {/* Message */}
-                <motion.div 
+                <motion.div
                   className={`rounded-3xl p-4 shadow-lg backdrop-blur-sm ${
-                  message.sender === 'user'
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
-                    : 'bg-white/80 text-gray-800 border border-gray-200'
+                    message.sender === "user"
+                      ? "bg-gradient-to-r from-blue-500 to-purple-500 text-white"
+                      : "bg-white/80 text-gray-800 border border-gray-200"
                   }`}
                   whileHover={{ scale: 1.02 }}
                   style={{
-                    boxShadow: message.sender === 'user' 
-                      ? '0 10px 25px rgba(59, 130, 246, 0.3)' 
-                      : '0 10px 25px rgba(0, 0, 0, 0.1)'
+                    boxShadow:
+                      message.sender === "user"
+                        ? "0 10px 25px rgba(59, 130, 246, 0.3)"
+                        : "0 10px 25px rgba(0, 0, 0, 0.1)",
                   }}
                 >
-                  {message.type === 'image' && message.imageUrl && (
-                    <img 
-                      src={message.imageUrl} 
-                      alt="Uploaded" 
+                  {message.type === "image" && message.imageUrl && (
+                    <img
+                      src={message.imageUrl}
+                      alt="Uploaded"
                       className="w-full h-32 object-cover rounded-2xl mb-3"
                     />
                   )}
-                  {message.sender === 'bot' ? (
-                    <div className="text-sm leading-relaxed">{renderFormatted(message.text)}</div>
+                  {message.sender === "bot" ? (
+                    <div className="text-sm leading-relaxed">
+                      {renderFormatted(message.text)}
+                    </div>
                   ) : (
                     <p className="text-sm leading-relaxed">{message.text}</p>
                   )}
-                  <p className={`text-xs mt-2 ${
-                    message.sender === 'user' ? 'text-blue-100' : 'text-gray-500'
-                  }`}>
-                    {message.timestamp.toLocaleTimeString('bn-BD', { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
+                  <p
+                    className={`text-xs mt-2 ${
+                      message.sender === "user"
+                        ? "text-blue-100"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {message.timestamp.toLocaleTimeString("bn-BD", {
+                      hour: "2-digit",
+                      minute: "2-digit",
                     })}
                   </p>
                 </motion.div>
@@ -316,7 +336,9 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
               <div className="bg-white/80 rounded-3xl p-4 shadow-lg backdrop-blur-sm border border-gray-200">
                 <div className="flex items-center space-x-2">
                   <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
-                  <span className="text-sm text-gray-600">উত্তর তৈরি করছি...</span>
+                  <span className="text-sm text-gray-600">
+                    উত্তর তৈরি করছি...
+                  </span>
                 </div>
               </div>
             </div>
@@ -335,12 +357,14 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
             animate={{ opacity: 1, scale: 1 }}
             className="mb-4 flex items-center justify-center space-x-3 text-red-500 bg-red-50 rounded-2xl p-3"
           >
-            <motion.div 
+            <motion.div
               className="w-3 h-3 bg-red-500 rounded-full"
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ repeat: Infinity, duration: 1 }}
             />
-            <span className="text-sm font-medium">রেকর্ড করছি... {formatTime(recordingTime)}</span>
+            <span className="text-sm font-medium">
+              রেকর্ড করছি... {formatTime(recordingTime)}
+            </span>
           </motion.div>
         )}
 
@@ -360,7 +384,7 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+              onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
               placeholder="আপনার স্বাস্থ্য সমস্যার কথা বলুন..."
               className="w-full p-4 bg-gray-50 border border-gray-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               disabled={isLoading}
@@ -369,9 +393,9 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
 
           <motion.button
             className={`p-3 rounded-2xl transition-colors ${
-              isRecording 
-                ? 'bg-red-500 text-white hover:bg-red-600' 
-                : 'text-green-600 hover:bg-green-50'
+              isRecording
+                ? "bg-red-500 text-white hover:bg-red-600"
+                : "text-green-600 hover:bg-green-50"
             }`}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
@@ -379,7 +403,11 @@ const AIChat: React.FC<AIChatProps> = ({ title, placeholder, context, externalMe
             onMouseUp={stopRecording}
             onMouseLeave={stopRecording}
           >
-            {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            {isRecording ? (
+              <MicOff className="w-5 h-5" />
+            ) : (
+              <Mic className="w-5 h-5" />
+            )}
           </motion.button>
 
           <motion.button
